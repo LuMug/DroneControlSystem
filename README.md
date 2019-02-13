@@ -3,11 +3,11 @@
 - Luca Muggiasca (docente responsabile)
 
 ## Informazioni
-Iniziato il: ---
+Iniziato il: 13.02.19
 
 Data di consegna: ---
 
-- [Quaderno dei compiti](muggiasca_qdc_pilotaggioDrone.pdf)
+- [Quaderno dei compiti](Documentazione/Extra/muggiasca_qdc_pilotaggioDrone.pdf)
 
 - [Trello Project Management](https://trello.com/b/tc1QgVuj/dronecontrolsystem)
 
