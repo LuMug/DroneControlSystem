@@ -46,7 +46,6 @@
 
 1. [Allegati](#allegati)
 
-
 ## Introduzione
 
 ### Informazioni sul progetto
@@ -97,8 +96,8 @@
 
 ### Scopo
 
-  Lo scopo di questo progetto è di creare un sistema che permette di controllare il drone *DJI Tello* tramite un dispositivo chiamato *Leap Motion* (un sensore che permette il tracking dei movimenti delle mani in modo preciso). Non disponendo di un drone *DJI Tello* verrà simulato il funzionamento tramite un'altra applicazione la quale mostrerà in 4 riquadri le quali rappresenteranno in 2d le seguenti informazioni: imbardata, beccheggio, rollio ed altitudine.
-  Entrambe le applicazioni devono essere scritte nel linguaggio Java ed il drone deve venir controllato utilizzando entrambe le maniuna mano si occupa dell'altitudine ed altre funzioni utili alla guida). L'interfaccia di controllo visualizzerà in streaming il video riportato dal drone.
+  Lo scopo di questo progetto è di creare un sistema che permette di controllare il drone *DJI Tello* tramite un dispositivo chiamato [Leap Motion](https://www.leapmotion.com "Leap Motion official website") (un sensore che permette il tracking dei movimenti delle mani in modo preciso). Non disponendo di un drone *DJI Tello* verrà simulato il funzionamento tramite un'altra applicazione la quale mostrerà in 4 riquadri le quali rappresenteranno in 2d le seguenti informazioni: imbardata, beccheggio, rollio ed altitudine.
+  Entrambe le applicazioni devono essere scritte nel linguaggio Java ed il drone deve venir controllato utilizzando entrambe le mani. Una mano si occupa dell'altitudine ed altre funzioni utili alla guida mentre l'altra si occupa dei movimenti del drone, ovvero imbardata, beccheggio e rollio. L'interfaccia di controllo visualizzerà in streaming il video riportato dal drone.
 
 ## Analisi
 
@@ -163,6 +162,10 @@
   considerati cruciali. Non si deve scordare che i requisiti non
   rappresentano delle attività bensì delle caratteristiche che il prodotto
   dovrà possedere.
+
+  > -->DA RIMUOVERE QUELLO CHE STA SOPRA!
+
+  
 
 
   |ID  |REQ-012                                         |
