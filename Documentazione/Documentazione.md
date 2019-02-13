@@ -51,15 +51,8 @@
 
 ### Informazioni sul progetto
 
-  In questo capitolo raccogliere le informazioni relative al progetto, ad esempio:
-
-  -   Allievo/i e docente/i coinvolti nel progetto e rispettivi ruoli,
-
-  -   scuola ,sezione, materia/e,
-
-  -   date di inizio e termine di consegna,
-
-  -   …
+  Il progetto è gestito e realizzato dall’allievo Luca Di Bello, Fadil Smajlbasic, Jari Näser, Andrea Rauso (studenti di informatica all’Arti e Mestieri di Trevano) sotto la supervisione del professor Luca Muggiasca. Avremo a disposizione un dispositivo chiamato "Leap Motion", il quale permette il tracking di precisione delle mani e dei loro movimenti.
+  La realizzazione del progetto inizia il 13 febbraio 2018 (13/02/19) e dovrà essere consegnato entro il <INSERT DATA HERE>.
 
 ### Abstract
 
