@@ -1,4 +1,4 @@
-# Progetto ALPIS - SAMTrevano
+# Progetto Drone Control System - SAMTrevano
 
 - Luca Muggiasca (docente responsabile)
 
