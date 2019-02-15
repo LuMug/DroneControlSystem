@@ -1,4 +1,5 @@
 
+import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /*
@@ -35,5 +36,10 @@ import javax.swing.JPanel;
  * @version 15.02.2019 - xx.xx.xxxx
  */
 public class Simulator extends JPanel{
+    private static final int PORT = 6347;
     
+    @Override
+    public void paint(Graphics g){
+        
+    }
 }
