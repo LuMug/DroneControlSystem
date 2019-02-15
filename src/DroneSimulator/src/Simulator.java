@@ -37,6 +37,7 @@ import javax.swing.JPanel;
  */
 public class Simulator extends JPanel{
     private static final int PORT = 6347;
+    private static final String ADDRESS = "127.0.0.1";
     
     @Override
     public void paint(Graphics g){
