@@ -50,30 +50,30 @@ public class Simulator extends JPanel{
     }
     
     public static void main(String[] args) {
-        //LISTENING
         try {
             //Start listening socket
             DatagramSocket serverSocket = new DatagramSocket(COMMAND_PORT);
 
-            //Create buffer size
+            //Create buffer array with right size
             byte[] buffer = new byte[BUFFER_SIZE];
 
-            //Prepare a Packet to store the recived one
+            //Prepare packet to store the recived one
             DatagramPacket recivePacket = new DatagramPacket(buffer, buffer.length);
 
             System.out.println("Started listener on " + serverSocket.getLocalSocketAddress());
-            
-            //Waiting for a packet
+           
             while (true) {
                 try{
-                    // Wait to receive a datagram
+                    //Waiting for a Packet and to receive a datagram
                     serverSocket.receive(recivePacket);
                     
-                    //LEGGERE PACCHETTO
+                    //Read Packet content
+                    
+                    //----------------- EXAMPLE -----------------
                     String msg = new String(recivePacket.getData());
                     System.err.println("Command recieved: " + msg);
                     
-                    // Reset the length of the packet before reusing it.
+                    //Reset the length of the packet before re-using it.
                     recivePacket.setLength(buffer.length);
                 }
                 catch(IOException ioe){
