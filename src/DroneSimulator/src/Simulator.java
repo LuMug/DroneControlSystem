@@ -31,9 +31,9 @@ import javax.swing.JPanel;
  */
 
 /**
- * La classe Simulator si occupa di ricevere i dati dal Leap Motion sottoforma
- * di pacchetti UDP e di stamparli su SimulatorFrame simulando un drone 
- * DJI Tello.
+ * La classe Simulator si occupa di ricevere i dati dalla classe Controller
+ * sottoforma di pacchetti UDP e di stamparli su SimulatorFrame simulando un 
+ * drone DJI Tello.
  * 
  * @author Jari Näser
  * @author Andrea Rauso
@@ -42,7 +42,7 @@ import javax.swing.JPanel;
 public class Simulator extends JPanel{
     private static final int COMMAND_PORT = 8889;
     //private static final String ADDRESS = "192.168.10.1";
-    private static final int BUFFER_SIZE = 2048;
+    private static final int BUFFER_SIZE = 64;
     
     @Override
     public void paint(Graphics g){
