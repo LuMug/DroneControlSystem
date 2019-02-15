@@ -40,16 +40,16 @@ import javax.swing.JPanel;
  * @version 15.02.2019 - xx.xx.xxxx
  */
 public class Simulator extends JPanel{
-    private final int COMMAND_PORT = 8889;
+    private static final int COMMAND_PORT = 8889;
     //private static final String ADDRESS = "192.168.10.1";
-    private final int BUFFER_SIZE = 2048;
+    private static final int BUFFER_SIZE = 2048;
     
     @Override
     public void paint(Graphics g){
         
     }
     
-    public void run(){
+    public static void main(String[] args) {
         //LISTENING
         try {
             //Start listening socket
