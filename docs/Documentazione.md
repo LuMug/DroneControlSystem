@@ -55,6 +55,8 @@
 
 ### Abstract
 
+  In this documentation we describe on 
+
   E’ una breve e accurata rappresentazione dei contenuti di un documento,
   senza notazioni critiche o valutazioni. Lo scopo di un abstract efficace
   dovrebbe essere quello di far conoscere all’utente il contenuto di base
