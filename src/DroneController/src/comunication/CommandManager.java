@@ -47,4 +47,39 @@ public class CommandManager {
         }
     }
     
+    public void listenData(int port,int bufferSize){
+        try {
+            //Start listening socket
+            DatagramSocket serverSocket = new DatagramSocket(port);
+
+            //Create buffer size
+            byte[] buffer = new byte[bufferSize];
+
+            //Prepare a Packet to store the recived one
+            DatagramPacket recivePacket = new DatagramPacket(buffer, buffer.length);
+
+            System.out.println("Started listener on " + serverSocket.getLocalSocketAddress());
+            
+            //Waiting for a packet
+            while (true) {
+                try{
+                    // Wait to receive a datagram
+                    serverSocket.receive(recivePacket);
+                    
+                    //LEGGERE PACCHETTO
+                    String msg = new String(recivePacket.getData());
+                    System.err.println("Response recived: " + msg);
+                    
+                    // Reset the length of the packet before reusing it.
+                    recivePacket.setLength(buffer.length);
+                }
+                catch(IOException ioe){
+                    System.out.println("IOException in listener: " + ioe.getMessage());
+                }
+            }
+        }
+        catch (SocketException se) {
+            System.err.println("Can't create listen socket: " + se.getMessage());
+        }
+    }
 }

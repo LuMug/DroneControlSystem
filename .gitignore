@@ -5,3 +5,4 @@ src/.DS_Store
 /src/TrelloController/nbproject/private/
 /src/DroneSimulator/nbproject/private/
 /src/TrelloController/build/
+/src/DroneController/dist/
