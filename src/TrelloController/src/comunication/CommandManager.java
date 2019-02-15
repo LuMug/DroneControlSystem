@@ -9,32 +9,31 @@ import java.net.UnknownHostException;
 import settings.TelloComunicationData;
 
 /**
- * 
+ * TODO: <INSERT DESCRIPTION>
  * @author Luca Di Bello
  */
 public class CommandManager {
     
-    public void sendCommand(Command command){
+    public void sendCommand(String command){
         //Create a socket for sending the data
         try {
             //Creo il socket per la comunicazione
-            DatagramSocket sendSocket = new DatagramSocket();
+            DatagramSocket commandSocket = new DatagramSocket();
            
             //Creo il pacchetto
-            byte[] data = command.toString().getBytes();
+            byte[] commandData = command.getBytes();
             
             DatagramPacket packet = new DatagramPacket(
-                    data,
-                    data.length, 
+                    commandData,
+                    commandData.length, 
                     InetAddress.getByName(TelloComunicationData.TELLO_ADDRESS), 
                     TelloComunicationData.TELLO_COMMAND_SEND_PORT
             );
             
-            sendSocket.send(packet);
+            commandSocket.send(packet);
             
             System.out.println("Message sent to " + packet.getSocketAddress());
-            
-            sendSocket.close();
+            commandSocket.close();
         } catch (SocketException ex) {
             System.err.println("Can't create client socket: " + ex.getMessage());
         } catch (UnknownHostException uhe) {

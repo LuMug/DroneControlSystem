@@ -6,9 +6,9 @@
 package comunication;
 
 /**
- *
+ * This class describes a command that a DJI Tello can read and execute.
  * @author Luca Di Bello
  */
-public class Command {
+public class CommandBuilder {
     
 }
