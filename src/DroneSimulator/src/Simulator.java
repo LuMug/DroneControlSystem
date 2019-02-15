@@ -31,49 +31,49 @@ import javax.swing.JPanel;
  */
 
 /**
- * La classe Simulator si occupa di ricevere i dati dal Leap Motion sottoforma
- * di pacchetti UDP e di stamparli su SimulatorFrame simulando un drone 
- * DJI Tello.
+ * La classe Simulator si occupa di ricevere i dati dalla classe Controller
+ * sottoforma di pacchetti UDP e di stamparli su SimulatorFrame simulando un 
+ * drone DJI Tello.
  * 
  * @author Jari Näser
  * @author Andrea Rauso
  * @version 15.02.2019 - xx.xx.xxxx
  */
 public class Simulator extends JPanel{
-    private final int COMMAND_PORT = 8889;
-    private static final String ADDRESS = "192.168.10.1";
-    private final int BUFFER_SIZE = 2048;
+    private static final int COMMAND_PORT = 8889;
+    //private static final String ADDRESS = "192.168.10.1";
+    private static final int BUFFER_SIZE = 64;
     
     @Override
     public void paint(Graphics g){
         
     }
     
-    public void run(){
-        //LISTENING
+    public static void main(String[] args) {
         try {
             //Start listening socket
             DatagramSocket serverSocket = new DatagramSocket(COMMAND_PORT);
 
-            //Create buffer size
+            //Create buffer array with right size
             byte[] buffer = new byte[BUFFER_SIZE];
 
-            //Prepare a Packet to store the recived one
+            //Prepare packet to store the recived one
             DatagramPacket recivePacket = new DatagramPacket(buffer, buffer.length);
 
             System.out.println("Started listener on " + serverSocket.getLocalSocketAddress());
-            
-            //Waiting for a packet
+           
             while (true) {
                 try{
-                    // Wait to receive a datagram
+                    //Waiting for a Packet and to receive a datagram
                     serverSocket.receive(recivePacket);
                     
-                    //LEGGERE PACCHETTO
-                    String msg = new String(recivePacket.getData());
-                    System.err.println("Command recived: " + msg);
+                    //Read Packet content
                     
-                    // Reset the length of the packet before reusing it.
+                    //----------------- EXAMPLE -----------------
+                    String msg = new String(recivePacket.getData());
+                    System.err.println("Command recieved: " + msg);
+                    
+                    //Reset the length of the packet before re-using it.
                     recivePacket.setLength(buffer.length);
                 }
                 catch(IOException ioe){
@@ -81,7 +81,7 @@ public class Simulator extends JPanel{
                 }
             }
         } catch (SocketException se) {
-            System.err.println("Can't create listen socket: " + se.getMessage());
+            System.err.println("Can't create listener on socket: " + se.getMessage());
         }
     }
 }

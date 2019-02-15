@@ -4,5 +4,9 @@ src/.DS_Store
 
 /src/TrelloController/nbproject/private/
 /src/DroneSimulator/nbproject/private/
+<<<<<<< HEAD
 /src/TrelloController/build/
 /src/DroneController/dist/
+=======
+/src/DroneSimulator/build/
+>>>>>>> dbf907d8c9915fa09bf0c6ceddff833d63c81d42
