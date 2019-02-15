@@ -1,5 +1,9 @@
 
 import java.awt.Graphics;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import javax.swing.JPanel;
 
 /*
@@ -36,11 +40,48 @@ import javax.swing.JPanel;
  * @version 15.02.2019 - xx.xx.xxxx
  */
 public class Simulator extends JPanel{
-    private static final int PORT = 8889;
+    private final int COMMAND_PORT = 8889;
     private static final String ADDRESS = "192.168.10.1";
+    private final int BUFFER_SIZE = 2048;
     
     @Override
     public void paint(Graphics g){
         
+    }
+    
+    public void run(){
+        //LISTENING
+        try {
+            //Start listening socket
+            DatagramSocket serverSocket = new DatagramSocket(COMMAND_PORT);
+
+            //Create buffer size
+            byte[] buffer = new byte[BUFFER_SIZE];
+
+            //Prepare a Packet to store the recived one
+            DatagramPacket recivePacket = new DatagramPacket(buffer, buffer.length);
+
+            System.out.println("Started listener on " + serverSocket.getLocalSocketAddress());
+            
+            //Waiting for a packet
+            while (true) {
+                try{
+                    // Wait to receive a datagram
+                    serverSocket.receive(recivePacket);
+                    
+                    //LEGGERE PACCHETTO
+                    String msg = new String(recivePacket.getData());
+                    System.err.println("Command recived: " + msg);
+                    
+                    // Reset the length of the packet before reusing it.
+                    recivePacket.setLength(buffer.length);
+                }
+                catch(IOException ioe){
+                    System.out.println("IOException in listener: " + ioe.getMessage());
+                }
+            }
+        } catch (SocketException se) {
+            System.err.println("Can't create listen socket: " + se.getMessage());
+        }
     }
 }
