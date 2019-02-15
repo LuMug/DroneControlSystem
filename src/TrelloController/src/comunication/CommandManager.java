@@ -14,6 +14,10 @@ import settings.TelloComunicationData;
  */
 public class CommandManager {
     
+    /**
+     * This method sends a command to DJI Tello.
+     * @param command Command to send to the drone.
+     */
     public void sendCommand(String command){
         //Create a socket for sending the data
         try {
@@ -26,7 +30,7 @@ public class CommandManager {
             DatagramPacket packet = new DatagramPacket(
                     commandData,
                     commandData.length, 
-                    InetAddress.getByName(TelloComunicationData.TELLO_ADDRESS), 
+                    InetAddress.getByName(TelloComunicationData.JARI_ADDRESS), 
                     TelloComunicationData.TELLO_COMMAND_SEND_PORT
             );
             
@@ -42,4 +46,5 @@ public class CommandManager {
             System.out.println("Cannot send packet: " + ioex.getMessage());
         }
     }
+    
 }
