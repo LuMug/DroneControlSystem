@@ -23,8 +23,11 @@
  */
 
 /**
- *
- * @author jarinaser
+ * La classe SimulatorFrame si occupa di disegnare il metodo paint() di Simulator.
+ * 
+ * @author Jari Näser
+ * @author Andrea Rauso
+ * @version 15.02.2019 - xx.xx.xxxx
  */
 public class SimulatorFrame extends javax.swing.JFrame {
 
