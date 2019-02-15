@@ -41,7 +41,7 @@ import javax.swing.JPanel;
  */
 public class Simulator extends JPanel{
     private final int COMMAND_PORT = 8889;
-    private static final String ADDRESS = "192.168.10.1";
+    //private static final String ADDRESS = "192.168.10.1";
     private final int BUFFER_SIZE = 2048;
     
     @Override
@@ -71,7 +71,7 @@ public class Simulator extends JPanel{
                     
                     //LEGGERE PACCHETTO
                     String msg = new String(recivePacket.getData());
-                    System.err.println("Command recived: " + msg);
+                    System.err.println("Command recieved: " + msg);
                     
                     // Reset the length of the packet before reusing it.
                     recivePacket.setLength(buffer.length);
@@ -81,7 +81,7 @@ public class Simulator extends JPanel{
                 }
             }
         } catch (SocketException se) {
-            System.err.println("Can't create listen socket: " + se.getMessage());
+            System.err.println("Can't create listener on socket: " + se.getMessage());
         }
     }
 }
