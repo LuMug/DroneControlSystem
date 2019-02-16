@@ -8,7 +8,6 @@ import java.io.IOException;
  */
 public class LeapMotionReader {
     public static void main(String[] args) {
-        System.out.println(System.getProperty("java.library.path"));
         Controller controller = new Controller();
         LeapMotionListener listener = new LeapMotionListener();
         controller.addListener(listener);

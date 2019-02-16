@@ -2,7 +2,14 @@
 diari/.DS_Store
 src/.DS_Store
 
-/src/TrelloController/nbproject/private/
-/src/DroneSimulator/nbproject/private/
-/src/TrelloController/build/
-/src/DroneController/dist/
+# exclude NetBeans files #
+src/DroneController/
++ build/
++ dist/
++ nbproject/
+  build-impl.xml
+  + private/
+  + project.properties
+  + project.xml
++ test/
++ build.xml
