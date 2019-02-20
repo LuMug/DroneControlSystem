@@ -12,8 +12,23 @@ import settings.TelloComunicationData;
  * TODO: <INSERT DESCRIPTION>
  * @author Luca Di Bello
  */
-public class CommandManager {
+public class CommandManager{
+
+    DatagramSocket commandSocket;
     
+    
+    public CommandManager() {
+        try{
+            commandSocket = new DatagramSocket(TelloComunicationData.TELLO_COMMAND_LISTEN_PORT);
+            System.out.println("[SUCCESS] Listening on port " + TelloComunicationData.TELLO_COMMAND_LISTEN_PORT);
+        }
+        catch(SocketException ex){
+            System.err.println("Can't create client socket: " + ex.getMessage());
+        }
+    }
+    
+    
+
     /**
      * This method sends a command to DJI Tello.
      * @param command Command to send to the drone.
@@ -21,8 +36,7 @@ public class CommandManager {
     public void sendCommand(String command){
         //Create a socket for sending the data
         try {
-            //Creo il socket per la comunicazione
-            DatagramSocket commandSocket = new DatagramSocket();
+            //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
            
             //Creo il pacchetto
             byte[] commandData = command.getBytes();
@@ -34,52 +48,46 @@ public class CommandManager {
                     TelloComunicationData.TELLO_COMMAND_SEND_PORT
             );
             
+            /*
+            //FOR TESTING
+            DatagramPacket packet = new DatagramPacket(
+                    commandData,
+                    commandData.length, 
+                    InetAddress.getByName("127.0.0.1"), 
+                    5555
+            );
+            */
+            
             commandSocket.send(packet);
             
             System.out.println("Message sent to " + packet.getSocketAddress());
-            commandSocket.close();
-        } catch (SocketException ex) {
-            System.err.println("Can't create client socket: " + ex.getMessage());
-        } catch (UnknownHostException uhe) {
+            
+            //Wait for response
+            System.out.println("Wait for response from drone");
+            packet.setData(new byte[64]);
+            commandSocket.receive(packet);
+
+            String response = new String(packet.getData()).trim();
+            
+            System.out.println("Response read: " + response);
+           
+            if(response.equals("OK")){
+                System.out.println("OK .-.");
+            }
+            else{
+                System.err.println("ERROR T_T");
+            }
+        }
+        catch (UnknownHostException uhe) {
             System.out.println("Cannot resolve hostname: " + uhe.getMessage());
         } catch (IOException ioex) {
             System.out.println("Cannot send packet: " + ioex.getMessage());
         }
     }
     
-    public void listenData(int port,int bufferSize){
-        try {
-            //Start listening socket
-            DatagramSocket serverSocket = new DatagramSocket(port);
-
-            //Create buffer size
-            byte[] buffer = new byte[bufferSize];
-
-            //Prepare a Packet to store the recived one
-            DatagramPacket recivePacket = new DatagramPacket(buffer, buffer.length);
-
-            System.out.println("Started listener on " + serverSocket.getLocalSocketAddress());
-            
-            //Waiting for a packet
-            while (true) {
-                try{
-                    // Wait to receive a datagram
-                    serverSocket.receive(recivePacket);
-                    
-                    //LEGGERE PACCHETTO
-                    String msg = new String(recivePacket.getData());
-                    System.err.println("Response recived: " + msg);
-                    
-                    // Reset the length of the packet before reusing it.
-                    recivePacket.setLength(buffer.length);
-                }
-                catch(IOException ioe){
-                    System.out.println("IOException in listener: " + ioe.getMessage());
-                }
-            }
-        }
-        catch (SocketException se) {
-            System.err.println("Can't create listen socket: " + se.getMessage());
+    public void sendCommands(String[] commands){
+        for(String command : commands){
+            sendCommand(command);
         }
     }
 }

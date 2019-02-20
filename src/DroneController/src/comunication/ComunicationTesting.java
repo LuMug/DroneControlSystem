@@ -14,23 +14,14 @@ public class ComunicationTesting {
         manager = new CommandManager();
         
         //Metodi bloccanti, vanno startati in un thread
-        //startStateListening();
-        //startStateListening();
-        
         while(true){
             try{
-                manager.sendCommand("prova invio dati :)");
-                Thread.sleep(1000);
+                String[] commands = new String[]{CommandBuilder.ENABLE_COMMANDS,CommandBuilder.TAKEOFF,CommandBuilder.up(130)};
+                manager.sendCommands(commands);
+
+                Thread.sleep(2000);
             }
             catch(InterruptedException ex){}
         }
-    }
-    
-    public static void startVideoListening(){
-        manager.listenData(TelloComunicationData.TELLO_VIDEO_LISTEN_PORT, 2048);
-    }
-    
-    public static void startStateListening(){
-        manager.listenData(TelloComunicationData.TELLO_STATE_LISTEN_PORT, 2048);
     }
 }
