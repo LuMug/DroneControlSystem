@@ -41,7 +41,6 @@ import javax.swing.JPanel;
  */
 public class Simulator extends JPanel{
     private static final int COMMAND_PORT = 8889;
-    //private static final String ADDRESS = "192.168.10.1";
     private static final int BUFFER_SIZE = 64;
     
     @Override
@@ -73,8 +72,7 @@ public class Simulator extends JPanel{
                     String msg = new String(recivePacket.getData());
                     System.err.println("Command recieved: " + msg);
                     
-                    //Reset the length of the packet before re-using it.
-                    recivePacket.setLength(buffer.length);
+                    recivePacket.setData(new byte[buffer.length]);
                 }
                 catch(IOException ioe){
                     System.out.println("IOException in listener: " + ioe.getMessage());
