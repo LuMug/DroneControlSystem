@@ -13,3 +13,4 @@ src/DroneController/
   + project.xml
 + test/
 + build.xml
+/src/DroneSimulator/build/
