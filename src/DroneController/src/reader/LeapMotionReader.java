@@ -9,21 +9,28 @@ import java.io.IOException;
  */
 public class LeapMotionReader extends Listener {
 
+    private Frame frame;
+    private Controller controller;
+
+    public Frame getFrame() {
+        return frame;
+    }
+
     public static void main(String[] args) {
+        LeapMotionReader reader = new LeapMotionReader();
 
-        Controller controller = new Controller();
-        LeapMotionReader listener = new LeapMotionReader();
-        controller.addListener(listener);
+    }
 
-        System.out.println("Press Enter to quit...");
-        String frame = "";
-
+    public LeapMotionReader() {
+        controller = new Controller();
+        controller.addListener(this);
         try {
+
             System.in.read();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void onConnect(Controller controller) {
@@ -31,15 +38,60 @@ public class LeapMotionReader extends Listener {
     }
 
     public void onFrame(Controller controller) {
-        Frame frame = controller.frame();
+        frame = controller.frame();
+        System.out.println("rightHandZ: " + getHandY(getRightHand()));
+    }
 
-        System.out.println("Frame id: " + frame.id()
-                + ", fps: " + frame.timestamp()
-                + ", hands: " + frame.hands().count()
-                + ", fingers: " + frame.fingers().count()
-                + ", left Hand: " + frame.hands().get(0).palmPosition()
-                + ", rigth Hand: " + frame.hands().get(1).palmPosition());
+    public float getHandX(Hand hand) {
 
+        if (hand != null) {
+            return hand.palmPosition().getX();
+        } else {
+            return -99;
+        }
+    }
+
+    public float getHandY(Hand hand) {
+        if (hand != null) {
+            return hand.palmPosition().getY();
+        } else {
+            return -99;
+        }
+    }
+
+    public float getHandZ(Hand hand) {
+
+        if (hand != null) {
+            return hand.palmPosition().getZ();
+        } else {
+            return -99;
+        }
+    }
+
+    public Hand getRightHand() {
+        if (frame.hands().rightmost().isRight()) {
+            return frame.hands().rightmost();
+        } else {
+            return null;
+        }
+    }
+
+    public Hand getLeftHand() {
+        if (frame.hands().leftmost().isLeft()) {
+            return frame.hands().leftmost();
+        } else {
+            return null;
+        }
+    }
+
+    public float getDroneLiftAmount() {
+        Hand hand;
+
+        if ((hand = getLeftHand()) != null) {
+            return getHandZ(hand);
+        } else {
+            return -99;
+        }
     }
 
 }
