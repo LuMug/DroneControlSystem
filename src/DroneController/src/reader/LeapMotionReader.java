@@ -10,15 +10,20 @@ import java.io.IOException;
 public class LeapMotionReader extends Listener {
 
     private Frame frame;
+    private Controller controller;
+
+    public Frame getFrame() {
+        return frame;
+    }
 
     public static void main(String[] args) {
+        LeapMotionReader reader = new LeapMotionReader();
 
-        Controller controller = new Controller();
-        LeapMotionReader listener = new LeapMotionReader();
-        controller.addListener(listener);
+    }
 
-        System.out.println("Press Enter to quit...");
-
+    public LeapMotionReader() {
+        controller = new Controller();
+        controller.addListener(this);
         try {
 
             System.in.read();
@@ -26,7 +31,6 @@ public class LeapMotionReader extends Listener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void onConnect(Controller controller) {
@@ -35,7 +39,7 @@ public class LeapMotionReader extends Listener {
 
     public void onFrame(Controller controller) {
         frame = controller.frame();
-        System.out.println("leftHandZ: " + getHandY(getRightHand()));
+        System.out.println("rightHandZ: " + getHandY(getRightHand()));
     }
 
     public float getHandX(Hand hand) {
