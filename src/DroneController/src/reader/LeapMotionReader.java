@@ -39,7 +39,13 @@ public class LeapMotionReader extends Listener {
 
     public void onFrame(Controller controller) {
         frame = controller.frame();
-        System.out.println("rightHandZ: " + getHandY(getRightHand()));
+        
+        
+        System.out.println("leftHandY: " + getHandY(getLeftHand()) + " - rightHandY " + getHandY(getRightHand()));
+        System.out.println("pitch: " +  Math.toDegrees(getPitch()) + " roll: " + Math.toDegrees(getRoll()) + " yaw: " + Math.toDegrees(getYaw()));
+
+        System.out.println("leftHandY: " + getHandY(getLeftHand()) + " - rightHandY " + getHandY(getRightHand()));
+
     }
 
     public float getHandX(Hand hand) {
@@ -47,7 +53,7 @@ public class LeapMotionReader extends Listener {
         if (hand != null) {
             return hand.palmPosition().getX();
         } else {
-            return -99;
+            return 0;
         }
     }
 
@@ -55,7 +61,7 @@ public class LeapMotionReader extends Listener {
         if (hand != null) {
             return hand.palmPosition().getY();
         } else {
-            return -99;
+            return 0;
         }
     }
 
@@ -64,7 +70,7 @@ public class LeapMotionReader extends Listener {
         if (hand != null) {
             return hand.palmPosition().getZ();
         } else {
-            return -99;
+            return 0;
         }
     }
 
@@ -84,13 +90,40 @@ public class LeapMotionReader extends Listener {
         }
     }
 
+    public float getPitch() {
+        Hand hand = getRightHand();
+        if (hand != null) {
+            return hand.palmPosition().pitch();
+        } else {
+            return 0;
+        }
+    }
+
+    public float getRoll() {
+        Hand hand = getRightHand();
+        if (hand != null) {
+            return hand.palmPosition().roll();
+        } else {
+            return 0;
+        }
+    }
+
+    public float getYaw() {
+        Hand hand = getRightHand();
+        if (hand != null) {
+            return hand.palmPosition().yaw();
+        } else {
+            return 0;
+        }
+    }
+
     public float getDroneLiftAmount() {
         Hand hand;
 
         if ((hand = getLeftHand()) != null) {
             return getHandZ(hand);
         } else {
-            return -99;
+            return 0;
         }
     }
 
