@@ -42,8 +42,8 @@ import javax.swing.JPanel;
  */
 public class Simulator extends JPanel{
     private static final int COMMAND_PORT = 8889;
+    private static final String ADDRESS_TO_SEND = "192.168.43.16";
     private static final int BUFFER_SIZE = 64;
-    private static boolean commandSet = false;
     
     @Override
     public void paint(Graphics g){
@@ -75,37 +75,28 @@ public class Simulator extends JPanel{
                     
                     if((message.trim()).equals("command")){
                         System.out.println("COMMAND RECIEVED");
+                        System.err.println("Got command " + message.trim() + " from " + recivePacket.getSocketAddress());
                         byte[] response = "OK".getBytes();
                         try{
-                            //DatagramSocket socket = new DatagramSocket();
-                            //DatagramPacket packet = new DatagramPacket(response, response.length);
-                           
+
                             DatagramPacket packet = new DatagramPacket(
                                     response, 
                                     response.length, 
-                                    InetAddress.getByName("192.168.37.1"), 
-                                    8889
+                                    InetAddress.getByName(ADDRESS_TO_SEND), 
+                                    COMMAND_PORT
                             );
-                            
+                 
                             serverSocket.send(packet);
-                            //socket.send(packet);
+
                             System.out.println("Message <" + new String(response) + "> sent from " + serverSocket.getLocalSocketAddress() + " to " + packet.getSocketAddress());
                         }catch(SocketException se){
                             System.err.println("SocketException: " + se.getMessage());
                         }catch(IOException ioe){
                             System.err.println("IOException: " + ioe.getMessage());
                         }
-                        //commandSet = true;
+                     
                     }
-//                    if(commandSet){
-//                        switch(message.trim()){
-//                            case "takeoff":
-//                                System.out.println("Command");
-//                        }
-//                    }
-                    
-                    
-                    
+   
                 }
                 catch(IOException ioe){
                     System.out.println("IOException in listener: " + ioe.getMessage());
