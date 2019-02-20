@@ -2,6 +2,8 @@ package reader;
 
 import com.leapmotion.leap.*;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -11,6 +13,7 @@ public class LeapMotionReader extends Listener {
 
     private Frame frame;
     private Controller controller;
+    DecimalFormat df = new DecimalFormat("#.###");
 
     public Frame getFrame() {
         return frame;
@@ -24,6 +27,8 @@ public class LeapMotionReader extends Listener {
     public LeapMotionReader() {
         controller = new Controller();
         controller.addListener(this);
+
+        df.setRoundingMode(RoundingMode.CEILING);
         try {
 
             System.in.read();
@@ -39,10 +44,9 @@ public class LeapMotionReader extends Listener {
 
     public void onFrame(Controller controller) {
         frame = controller.frame();
-        
-        
+
         System.out.println("leftHandY: " + getHandY(getLeftHand()) + " - rightHandY " + getHandY(getRightHand()));
-        System.out.println("pitch: " +  Math.toDegrees(getPitch()) + " roll: " + Math.toDegrees(getRoll()) + " yaw: " + Math.toDegrees(getYaw()));
+        System.out.println("pitch: " + df.format(Math.toDegrees(getPitch())) + " roll: " + df.format(Math.toDegrees(getRoll())) + " yaw: " + df.format(Math.toDegrees(getYaw())));
 
         System.out.println("leftHandY: " + getHandY(getLeftHand()) + " - rightHandY " + getHandY(getRightHand()));
 
