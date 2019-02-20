@@ -14,9 +14,13 @@ public class LeapMotionListener extends Listener {
 
     public void onFrame(Controller controller) {
         Frame frame = controller.frame();
+        
         System.out.println("Frame id: " + frame.id()
-                   + ", timestamp: " + frame.timestamp()
+                   + ", fps: " + frame.timestamp()
                    + ", hands: " + frame.hands().count()
-                   + ", fingers: " + frame.fingers().count());
+                   + ", fingers: " + frame.fingers().count()
+                   + ", left Hand: " + frame.hands().get(0).palmPosition()
+                   + ", rigth Hand: " + frame.hands().get(1).palmPosition());
+        
     }
 }
