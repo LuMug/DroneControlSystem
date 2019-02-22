@@ -31,11 +31,6 @@ import java.net.DatagramSocket;
  */
 public class CommandReader{
     private static final String[] COMMANDS = {
-        "takeoff",
-        "land",
-        "streamon",
-        "streamoff",
-        "emergency",
         "up",
         "down",
         "left",
@@ -49,7 +44,18 @@ public class CommandReader{
         "curve",
         "speed",
         "rc",
-        "wifi ssid",
+        "wifi ssid"
+    };
+    
+    private static final String[] GUIDE_COMMANDS = {
+        "takeoff",
+        "land",
+        "streamon",
+        "streamoff",
+        "emergency"
+    };
+    
+    private static final String[] GET_COMMANDS = {
         "speed?",
         "battery?",
         "time?",
@@ -61,4 +67,210 @@ public class CommandReader{
         "tof?",
         "wifi?"
     };
+    
+    public boolean commandExists(String command){
+        if(command.charAt(command.length() - 1) == '?' || !command.contains(" ")){
+            //Get command
+            for(String s:GET_COMMANDS){
+                if(command.equals(s)){
+                    switch(s){
+                        case "takeoff":
+                            takeoff();
+                        case "battery?":
+                            getBattery();
+                        case "time?":
+                            getTime();
+                        case "height?":
+                            getHeight();
+                        case "temp?":
+                            getTemperature();
+                    }
+                    return true;
+                }
+            }
+            for(String s:GUIDE_COMMANDS){
+                if(command.equals(s)){
+                    switch(s){
+                        case "speed?":
+                            getSpeed();
+                        case "battery?":
+                            getBattery();
+                        case "time?":
+                            getTime();
+                        case "height?":
+                            getHeight();
+                        case "temp?":
+                            getTemperature();
+                        case "attitude?":
+                            getAttitude();
+                        case "baro?":
+                            getBarometer();
+                        case "acceleration?":
+                            getAcceleration();
+                        case "tof?":
+                            getTof();
+                        case "wifi?":
+                            getWifi();
+                    }
+                    return true;
+                }
+            }
+        }else{
+            //Other command
+            String[] splittedCommand = command.split(" ");
+            if(splittedCommand.length > 1 && splittedCommand.length < 9){
+                for(String s:COMMANDS){
+                    if(splittedCommand[0].equals(s)){
+                        return true;
+                    }
+                }    
+            }
+        }
+        return false;
+    }
+    
+    // ------------------------- GUIDE COMMANDS -------------------------
+    
+    public static void takeoff(){
+        
+    }
+    
+    public static void land(){
+        
+    }
+    
+    public static void streamon(){
+        
+    }
+    
+    public static void streamoff(){
+        
+    }
+    
+    public static void emergency(){
+        
+    }
+    
+    // ------------------------- COMMANDS -------------------------
+    
+    public static void up(int distance){
+        
+    }
+    
+    public static void down(int distance){
+        
+    }
+    
+    public static void left(int distance){
+        
+    }
+    
+    public static void right(int distance){
+        
+    }
+    
+    public static void forward(int distance){
+        
+    }
+    
+    public static void back(int distance){
+        
+    }
+    
+    public static void cw(int distance){
+        
+    }
+    
+    public static void ccw(int distance){
+        
+    }
+    
+    public static void flip(int distance){
+        
+    }
+    
+    public static void go(int x, int y, int z, int speed){
+        
+    }
+    
+    public static void curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed){
+        
+    }
+    
+    // ------------------------- SET COMMANDS -------------------------
+    
+    public static void speed(int speed){
+        
+    }
+    
+    public static void rc(int a, int b, int c, int d){
+        
+    }
+    
+    public static void wifiSsid(String password){
+        
+    }
+    
+    // ------------------------- GET COMMANDS -------------------------
+    
+    public static int getSpeed(){
+        return 0;
+    }
+    
+    public static int getBattery(){
+        return 0;
+    }
+    
+    public static int getTime(){
+        return 0;
+    }
+    
+    public static int getHeight(){
+        return 0;
+    }
+    
+    public static int getTemperature(){
+        return 0;
+    }
+    
+    public static int getAttitude(){
+        
+        //Not sure about the return type.
+        //On the SDK it's 'pitch roll yaw'.
+        //CONSULT TELLO STATE EXPLANATION
+        
+        return 0;
+    }
+    
+    public static int getBarometer(){
+        
+        //Not sure about the return type.
+        //On the SDK it's 'get barometer value (m)', not specified.
+        //CONSULT TELLO STATE EXPLANATION
+        
+        return 0;
+    }
+    
+    public static int getAcceleration(){
+        
+        //Not sure about the return type.
+        //On the SDK it's 'get IMU angular acceleration data (0.001g)'
+        //and it should return 'x y z'.
+        //CONSULT TELLO STATE EXPLANATION
+        
+        return 0;
+    }
+    
+    public static int getTof(){     
+        return 0;
+    }
+    
+    public static int getWifi(){   
+        
+        //Not sure about the return type.
+        //On the SDK it's ' get Wi-Fi SNR' and it should return 'snr'.
+        //CONSULT TELLO STATE EXPLANATION
+        
+        return 0;
+    }
 }
