@@ -72,10 +72,10 @@ public class CommandManager{
             System.out.println("Response read: " + response);
            
             if(response.equals("OK")){
-                System.out.println("OK .-.");
+                System.out.println("--> " + new String(command) + " is ok");
             }
             else{
-                System.err.println("ERROR T_T");
+                System.err.println("--> " + new String(command) + " ERROR");
             }
         }
         catch (UnknownHostException uhe) {

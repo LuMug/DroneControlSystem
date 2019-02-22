@@ -15,24 +15,13 @@ public class LeapMotionReader extends Listener {
     private Controller controller;
     DecimalFormat df = new DecimalFormat("#.###");
 
-    public Frame getFrame() {
-        return frame;
-    }
-
-    public static void main(String[] args) {
-        LeapMotionReader reader = new LeapMotionReader();
-
-    }
-
     public LeapMotionReader() {
         controller = new Controller();
         controller.addListener(this);
 
         df.setRoundingMode(RoundingMode.CEILING);
         try {
-
             System.in.read();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,17 +32,19 @@ public class LeapMotionReader extends Listener {
     }
 
     public void onFrame(Controller controller) {
-        frame = controller.frame();
-
-        System.out.println("leftHandY: " + getHandY(getLeftHand()) + " - rightHandY " + getHandY(getRightHand()));
-        System.out.println("pitch: " + df.format(Math.toDegrees(getPitch())) + " roll: " + df.format(Math.toDegrees(getRoll())) + " yaw: " + df.format(Math.toDegrees(getYaw())));
-
-        System.out.println("leftHandY: " + getHandY(getLeftHand()) + " - rightHandY " + getHandY(getRightHand()));
-
+        setFrame(controller.frame());
+        System.out.println(getFrame().hands().rightmost());
     }
-
+    
+    public synchronized void setFrame(Frame frame){
+        this.frame = frame;
+    }
+    
+    public synchronized Frame getFrame(){
+        return frame;
+    }
+    
     public float getHandX(Hand hand) {
-
         if (hand != null) {
             return hand.palmPosition().getX();
         } else {
@@ -79,7 +70,7 @@ public class LeapMotionReader extends Listener {
     }
 
     public Hand getRightHand() {
-        if (frame.hands().rightmost().isRight()) {
+        if (getFrame().hands().rightmost().isRight()) {
             return frame.hands().rightmost();
         } else {
             return null;
