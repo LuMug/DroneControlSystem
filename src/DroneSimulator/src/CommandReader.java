@@ -74,16 +74,36 @@ public class CommandReader{
             for(String s:GET_COMMANDS){
                 if(command.equals(s)){
                     switch(s){
-                        case "takeoff":
-                            takeoff();
+                        case "speed?":
+                            getSpeed();
+                            break;
                         case "battery?":
                             getBattery();
+                            break;
                         case "time?":
                             getTime();
+                            break;
                         case "height?":
                             getHeight();
+                            break;
                         case "temp?":
                             getTemperature();
+                            break;
+                        case "attitude?":
+                            getAttitude();
+                            break;
+                        case "baro?":
+                            getBarometer();
+                            break;
+                        case "acceleration?":
+                            getAcceleration();
+                            break;
+                        case "tof?":
+                            getTof();
+                            break;
+                        case "wifi?":
+                            getWifi();
+                            break;
                     }
                     return true;
                 }
@@ -91,26 +111,21 @@ public class CommandReader{
             for(String s:GUIDE_COMMANDS){
                 if(command.equals(s)){
                     switch(s){
-                        case "speed?":
-                            getSpeed();
-                        case "battery?":
-                            getBattery();
-                        case "time?":
-                            getTime();
-                        case "height?":
-                            getHeight();
-                        case "temp?":
-                            getTemperature();
-                        case "attitude?":
-                            getAttitude();
-                        case "baro?":
-                            getBarometer();
-                        case "acceleration?":
-                            getAcceleration();
-                        case "tof?":
-                            getTof();
-                        case "wifi?":
-                            getWifi();
+                        case "takeoff":
+                            takeoff();
+                            break;
+                        case "land":
+                            land();
+                            break;
+                        case "streamon":
+                            streamon();
+                            break;
+                        case "streamoff":
+                            streamoff();
+                            break;
+                        case "emergency":
+                            emergency();
+                            break;
                     }
                     return true;
                 }
@@ -121,7 +136,79 @@ public class CommandReader{
             if(splittedCommand.length > 1 && splittedCommand.length < 9){
                 for(String s:COMMANDS){
                     if(splittedCommand[0].equals(s)){
-                        return true;
+                        try{
+                            switch(splittedCommand[0]){
+                                case "up":
+                                    if(splittedCommand.length == 2){
+                                        up(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "down":
+                                    if(splittedCommand.length == 2){
+                                        down(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "left":
+                                    if(splittedCommand.length == 2){
+                                        left(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "right":
+                                    if(splittedCommand.length == 2){
+                                        right(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "forward":
+                                    if(splittedCommand.length == 2){
+                                        forward(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "back":
+                                    if(splittedCommand.length == 2){
+                                        back(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "cw":
+                                    if(splittedCommand.length == 2){
+                                        cw(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "ccw":
+                                    if(splittedCommand.length == 2){
+                                        ccw(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "flip":
+                                    if(splittedCommand.length == 2){
+                                        flip(Integer.parseInt(splittedCommand[1]));
+                                        return true;
+                                    }
+                                    break;
+                                case "go":
+                                    if(splittedCommand.length == 2){
+                                        go(
+                                            Integer.parseInt(splittedCommand[1]),
+                                            Integer.parseInt(splittedCommand[2]),
+                                            Integer.parseInt(splittedCommand[3]),
+                                            Integer.parseInt(splittedCommand[4])
+                                        );
+                                        return true;
+                                    }
+                                    break;
+                                        
+                            }
+                            return false;
+                        }catch(Exception e){
+                            System.err.println("Error while parsing parameters: " + e.getMessage());
+                        }
                     }
                 }    
             }
