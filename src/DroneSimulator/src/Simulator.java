@@ -82,7 +82,9 @@ public class Simulator extends JPanel{
         socket.send(packet);
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SocketException {
+        //commandReader = new CommandReader();
+        //socket = new DatagramSocket(PORT);
         boolean droneIsConnected;
         //Create buffer array with right size
         byte[] buffer = new byte[BUFFER_SIZE];
