@@ -14,3 +14,4 @@ src/DroneController/
 + test/
 + build.xml
 /src/DroneSimulator/build/
+/src/MulticastServerlessChat/nbproject/private/
