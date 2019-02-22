@@ -60,8 +60,19 @@ public class Simulator extends JPanel{
         //PaintFrame
     }
     
-    private static void commandRecieved() throws UnknownHostException, IOException{
+    private static void sendOK() throws UnknownHostException, IOException{
         byte[] response = "OK".getBytes();
+        DatagramPacket packet = new DatagramPacket(
+            response, 
+            response.length, 
+            InetAddress.getByName(ADDRESS_TO_SEND), 
+            PORT
+        );       
+        socket.send(packet);
+    }
+    
+    private static void sendERROR() throws UnknownHostException, IOException{
+        byte[] response = "ERROR".getBytes();
         DatagramPacket packet = new DatagramPacket(
             response, 
             response.length, 
@@ -92,7 +103,7 @@ public class Simulator extends JPanel{
                 String message = new String(recivePacket.getData());
 
                 if((message.trim()).equals("command")){
-                    commandRecieved();
+                    sendOK();
                     droneIsConnected = true;
                     while(droneIsConnected){
                         //Set packet size
@@ -101,6 +112,11 @@ public class Simulator extends JPanel{
                         socket.receive(recivePacket);
                         //Read Packet content
                         String command = new String(recivePacket.getData());
+                        if(commandReader.commandExists(command)){
+                            sendOK();
+                        }else{
+                            sendERROR();
+                        }
                     }
 
                 }
