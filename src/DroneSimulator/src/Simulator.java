@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import javax.swing.JPanel;
 
 /*
@@ -41,69 +42,90 @@ import javax.swing.JPanel;
  * @version 15.02.2019 - xx.xx.xxxx
  */
 public class Simulator extends JPanel{
-    private static final int COMMAND_PORT = 8889;
+    private static final int PORT = 8889;
     private static final String ADDRESS_TO_SEND = "192.168.43.16";
     private static final int BUFFER_SIZE = 64;
+    private static CommandReader commandReader;
+    private static DatagramSocket socket;
+    
+
+    public Simulator() throws SocketException{
+        commandReader = new CommandReader();
+        //Start listening socket
+        socket = new DatagramSocket(PORT);
+    }
     
     @Override
     public void paint(Graphics g){
-        
+        //PaintFrame
     }
     
-    public static void main(String[] args) {
-        try {
-            //Start listening socket
-            DatagramSocket serverSocket = new DatagramSocket(COMMAND_PORT);
+    private static void sendOK() throws UnknownHostException, IOException{
+        byte[] response = "OK".getBytes();
+        DatagramPacket packet = new DatagramPacket(
+            response, 
+            response.length, 
+            InetAddress.getByName(ADDRESS_TO_SEND), 
+            PORT
+        );       
+        socket.send(packet);
+    }
+    
+    private static void sendERROR() throws UnknownHostException, IOException{
+        byte[] response = "ERROR".getBytes();
+        DatagramPacket packet = new DatagramPacket(
+            response, 
+            response.length, 
+            InetAddress.getByName(ADDRESS_TO_SEND), 
+            PORT
+        );       
+        socket.send(packet);
+    }
+    
+    public static void main(String[] args) throws SocketException {
+        //commandReader = new CommandReader();
+        //socket = new DatagramSocket(PORT);
+        boolean droneIsConnected;
+        //Create buffer array with right size
+        byte[] buffer = new byte[BUFFER_SIZE];
 
-            //Create buffer array with right size
-            byte[] buffer = new byte[BUFFER_SIZE];
+        //Prepare packet to store the recived one
+        DatagramPacket recivePacket = new DatagramPacket(buffer, buffer.length);
 
-            //Prepare packet to store the recived one
-            DatagramPacket recivePacket = new DatagramPacket(buffer, buffer.length);
+        System.out.println("Started listener on " + socket.getLocalSocketAddress());
 
-            System.out.println("Started listener on " + serverSocket.getLocalSocketAddress());
-           
-            while (true) {
-                try{
-                    //Set packet size
-                    recivePacket.setData(new byte[buffer.length]);
-                    //Waiting for a Packet and to receive a datagram
-                    serverSocket.receive(recivePacket);
-                    
-                    //Read Packet content
-                    String message = new String(recivePacket.getData());
-                    
-                    if((message.trim()).equals("command")){
-                        System.out.println("COMMAND RECIEVED");
-                        System.err.println("Got command " + message.trim() + " from " + recivePacket.getSocketAddress());
-                        byte[] response = "OK".getBytes();
-                        try{
+        while (true) {
+            try{
+                //Set packet size
+                recivePacket.setData(new byte[buffer.length]);
+                //Waiting for a Packet and to receive a datagram
+                socket.receive(recivePacket);
 
-                            DatagramPacket packet = new DatagramPacket(
-                                    response, 
-                                    response.length, 
-                                    InetAddress.getByName(ADDRESS_TO_SEND), 
-                                    COMMAND_PORT
-                            );
-                 
-                            serverSocket.send(packet);
+                //Read Packet content
+                String message = new String(recivePacket.getData());
 
-                            System.out.println("Message <" + new String(response) + "> sent from " + serverSocket.getLocalSocketAddress() + " to " + packet.getSocketAddress());
-                        }catch(SocketException se){
-                            System.err.println("SocketException: " + se.getMessage());
-                        }catch(IOException ioe){
-                            System.err.println("IOException: " + ioe.getMessage());
+                if((message.trim()).equals("command")){
+                    sendOK();
+                    droneIsConnected = true;
+                    while(droneIsConnected){
+                        //Set packet size
+                        recivePacket.setData(new byte[buffer.length]);
+                        //Waiting for a Packet and to receive a datagram
+                        socket.receive(recivePacket);
+                        //Read Packet content
+                        String command = new String(recivePacket.getData());
+                        if(commandReader.commandExists(command)){
+                            sendOK();
+                        }else{
+                            sendERROR();
                         }
-                     
                     }
-   
+
                 }
-                catch(IOException ioe){
-                    System.out.println("IOException in listener: " + ioe.getMessage());
-                }
+
+            }catch(IOException ioe){
+                System.out.println("IOException in listener: " + ioe.getMessage());
             }
-        } catch (SocketException se) {
-            System.err.println("Can't create listener on socket: " + se.getMessage());
-        }
+        }  
     }
 }

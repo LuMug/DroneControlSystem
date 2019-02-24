@@ -13,5 +13,5 @@ src/DroneController/
   + project.xml
 + test/
 + build.xml
-/src/DroneSimulator/build/
-/src/MulticastChat/nbproject/private/
+
+src/DroneController/nbproject/private/private.properties
