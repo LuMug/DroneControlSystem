@@ -13,6 +13,7 @@ import java.util.logging.Logger;
  */
 public class LeapMotionReader extends Listener {
     DecimalFormat df = new DecimalFormat("#.###");
+    private static Frame frame;
 
     public LeapMotionReader() {
     }
@@ -27,9 +28,9 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getHandY(Hand hand) {
-        if (hand != null) {
-            return hand.palmPosition().getY();
+    public float getHandY() {
+        if (getLeftHand() != null) {
+            return getLeftHand().palmPosition().getY();
         } else {
             return 0;
         }
@@ -44,7 +45,7 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public Hand getRightHand(Frame frame) {
+    public Hand getRightHand() {
         Hand rhand = frame.hands().rightmost();
         if (rhand.isRight()) {
             return rhand;
@@ -53,7 +54,7 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public Hand getLeftHand(Frame frame) {
+    public Hand getLeftHand() {
         Hand lhand = frame.hands().leftmost();
         if (lhand.isLeft()) {
             return lhand;
@@ -62,8 +63,8 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getPitch(Frame frame) {
-        Hand hand = getRightHand(frame);
+    public float getPitch() {
+        Hand hand = getRightHand();
         if (hand != null) {
             return hand.palmPosition().pitch();
         } else {
@@ -71,8 +72,8 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getRoll(Frame frame) {
-        Hand hand = getRightHand(frame);
+    public float getRoll() {
+        Hand hand = getRightHand();
         if (hand != null) {
             return hand.palmPosition().roll();
         } else {
@@ -80,8 +81,8 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getYaw(Frame frame) {
-        Hand hand = getRightHand(frame);
+    public float getYaw() {
+        Hand hand = getRightHand();
         if (hand != null) {
             return hand.palmPosition().yaw();
         } else {
@@ -89,12 +90,20 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getDroneLiftAmount(Frame frame) {
+    public float getDroneLiftAmount() {
         Hand hand;
-        if ((hand = getLeftHand(frame)) != null) {
+        if ((hand = getLeftHand()) != null) {
             return getHandZ(hand);
         } else {
             return 0;
         }
+    }
+    
+    public synchronized void setFrame(Frame frame) {
+        this.frame = frame;
+    }
+
+    public synchronized Frame getFrame() {
+        return frame;
     }
 }
