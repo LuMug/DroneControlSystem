@@ -6,7 +6,9 @@ import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Listener;
 import comunication.Commands;
 import comunication.CommandManager;
-import reader.LeapMotionReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import reader.LeapMotionReaderListener;
 
 /**
@@ -16,7 +18,7 @@ import reader.LeapMotionReaderListener;
 public class DroneController extends Listener {
 
     private static CommandManager commandManager = new CommandManager();
-    private LeapMotionReader leapReader;
+//    private LeapMotionReader leapReader;
     private Frame frame;
     private Controller controller;
 
@@ -25,27 +27,28 @@ public class DroneController extends Listener {
 //    public static void sendUpCommand(float distance) {
 //        commandManager.sendCommand(up(distance));
 //    }
-
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
         Controller controller = new Controller();
-        //Reads leapmotion data and sends it to the drone
-        while(true){
-            Frame frame = controller.frame();
-            System.out.println("frame: " + frame);
+        DroneController mineController = new DroneController();
+        controller.addListener(mineController);
+        try {
+            System.in.read();
+        } catch (IOException ex) {
+            System.out.println("err");
         }
     }
-    
-    
+
     public void onConnect(Controller controller) {
         System.out.println("Connected");
     }
 
     public void onFrame(Controller controller) {
-        
+
         setFrame(controller.frame());
         System.out.println("frame received: " + getFrame());
     }
+
     public synchronized void setFrame(Frame frame) {
         this.frame = frame;
     }
@@ -61,9 +64,8 @@ public class DroneController extends Listener {
         return translated;
     }
 
-
     public DroneController() {
 //        leapReader = new LeapMotionReader();
     }
-    
+
 }
