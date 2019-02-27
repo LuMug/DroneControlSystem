@@ -16,7 +16,9 @@ public class ComunicationTesting {
         //Metodi bloccanti, vanno startati in un thread
         while(true){
             try{
-                String[] commands = new String[]{CommandBuilder.ENABLE_COMMANDS,CommandBuilder.TAKEOFF,CommandBuilder.up(130)};
+                String[] commands = new String[]{Commands.ENABLE_COMMANDS,Commands.TAKEOFF,Commands.up(130)};
+                
+                System.out.println(commands[2]);
                 manager.sendCommands(commands);
 
                 Thread.sleep(2000);

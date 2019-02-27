@@ -1,6 +1,7 @@
 .DS_Store
 diari/.DS_Store
 src/.DS_Store
+<<<<<<< HEAD
 
 # exclude NetBeans files #
 src/DroneController/
@@ -18,3 +19,6 @@ src/DroneController/nbproject/private/private.properties
 src/DroneSimulator/build/built-jar.properties
 *.class
 *.properties
+=======
+src/DroneController/nbproject/private/private.properties
+>>>>>>> e343dd8528c880e4ce07c50cb5cfd57ad75098c4
