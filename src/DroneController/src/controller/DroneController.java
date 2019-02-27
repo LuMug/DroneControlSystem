@@ -15,9 +15,8 @@ import reader.LeapMotionReader;
 public class DroneController extends Commands{
     private static CommandManager commandManager = new CommandManager();
     private static LeapMotionReader leapReader = new LeapMotionReader();
-
     private static final float STEP = 10f;
-    
+    private static final int AVERAGE_POINTS = 10;
     
     public static void sendUpCommand(float distance){
         commandManager.sendCommand(up(distance));
@@ -28,24 +27,34 @@ public class DroneController extends Commands{
         
         //Reads leapmotion data and sends it to the drone
         while(true){
-            Frame frame = leapReader.getFrame();
-            System.out.println(frame);
-            
-            /*
-            if(righthand != null){
-                float up = translateInput(leapReader.getHandY(righthand), STEP);
-                
-                //sendUpCommand(translateInput(leapReader.getHandY(righthand), STEP));
-                System.out.println("Up: " + up);
-            }   
-            */
+            float up = translateAltitude(getAverageAltitude(AVERAGE_POINTS), STEP);
+            System.out.println("Up: " + up);
         }
     }
     
-    public static float translateInput(float altitude, float step){
+    //Right hand feature
+    public static float translateAltitude(float altitude, float step){
         //MAX 60 CM
         //Punto 0 -> 30 CM
-        float translated = (altitude - 30) % step;
+        float translated = ((altitude / 10) - 30) / step;
         return translated;
+    }
+    
+    //right hand altitude
+    public static float getAverageAltitude(int points){
+        int total = 0;
+        
+        for(int i = 0; i < points; i++){
+            Hand rHand = leapReader.getRightHand();
+            
+            if(rHand != null){
+                total += leapReader.getHandY(rHand);
+            }
+            else{
+                i--;
+            }
+        }
+        
+        return total/points;
     }
 }
