@@ -27,8 +27,14 @@ public class DroneController extends Commands{
         
         //Reads leapmotion data and sends it to the drone
         while(true){
-            float up = translateAltitude(getAverageAltitude(AVERAGE_POINTS), STEP);
-            System.out.println("Up: " + up);
+            float altitudeCm = translateAltitude(getAverageAltitude(AVERAGE_POINTS), STEP);
+           
+            if(altitudeCm > 0){
+                System.out.println("Up: " + altitudeCm);
+            }
+            else{
+                System.out.println("Down: " + altitudeCm);
+            }
         }
     }
     
@@ -51,6 +57,7 @@ public class DroneController extends Commands{
                 total += leapReader.getHandY(rHand);
             }
             else{
+                //Reset
                 i--;
             }
         }
