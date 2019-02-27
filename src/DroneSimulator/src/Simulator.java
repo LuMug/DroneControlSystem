@@ -47,17 +47,20 @@ public class Simulator extends JPanel{
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
+    private static SimulatorPainter painter;
     
 
     public Simulator() throws SocketException{
         commandReader = new CommandReader();
-        //Start listening socket
+        painter = new SimulatorPainter();
+        //Start listening on socket
         socket = new DatagramSocket(PORT);
+        this.startListening();
     }
     
     @Override
     public void paint(Graphics g){
-        //PaintFrame
+        painter.paint(g);
     }
     
     private static void sendOK() throws UnknownHostException, IOException{
@@ -81,10 +84,8 @@ public class Simulator extends JPanel{
         );       
         socket.send(packet);
     }
-    
-    public static void main(String[] args) throws SocketException {
-        //commandReader = new CommandReader();
-        //socket = new DatagramSocket(PORT);
+
+    public void startListening(){
         boolean droneIsConnected;
         //Create buffer array with right size
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -126,6 +127,6 @@ public class Simulator extends JPanel{
             }catch(IOException ioe){
                 System.out.println("IOException in listener: " + ioe.getMessage());
             }
-        }  
+        } 
     }
 }
