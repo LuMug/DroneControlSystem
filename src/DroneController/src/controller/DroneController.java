@@ -26,45 +26,23 @@ public class DroneController extends Listener {
     private static final float STEP = 10f;
     private static final int AVERAGE_POINTS = 10;
 
-    public DroneController() {
+    public DroneController(){
         controller = new Controller();
         controller.addListener(this);
+        
+        try {
+            System.in.read();
+        } catch (IOException ex) {
+            System.err.println("IOException io.read:" + ex.getMessage());
+        }
     }        
 
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
-        
-        //Reads leapmotion data and sends it to the drone
-        while(true){
-            float altitudeCm = translateAltitude(getAverageAltitude(AVERAGE_POINTS), STEP);
-
-            if(altitudeCm > 0){
-                System.out.println("Up: " + altitudeCm);
-            }
-            else{
-                System.out.println("Down: " + altitudeCm);
-            }
-        }
+        DroneController dc = new DroneController();
     }
 
-    public void onConnect(Controller controller) {
-        System.out.println("Connected");
-    }
-
-    public void onFrame(Controller controller) {
-
-        setFrame(controller.frame());
-        System.out.println("frame received: " + getFrame());
-    }
-
-    public synchronized void setFrame(Frame frame) {
-        this.frame = frame;
-    }
-
-    public static synchronized Frame getFrame() {
-        return frame;
-    }
-
+    
     public static float translateAltitude(float altitude, float step) {
         //MAX 60 CM
         //Punto 0 -> 30 CM
@@ -88,5 +66,27 @@ public class DroneController extends Listener {
         }
 
         return total/points;
+    }
+    
+    
+    public void onConnect(Controller controller) {
+        System.out.println("Connected");
+    }
+
+    public void onFrame(Controller controller) {
+        setFrame(controller.frame());
+        //System.out.println("Controller: " +controller.frame().currentFramesPerSecond());
+        //System.out.println("Frame: " + getFrame().currentFramesPerSecond());
+        
+        System.out.println(getFrame().hands().rightmost().palmPosition().getY());
+        //System.out.println(leapReader.getHandY(getFrame().hands().rightmost()));
+    } 
+    
+    public synchronized void setFrame(Frame frame) {
+        this.frame = frame;
+    }
+
+    public static synchronized Frame getFrame() {
+        return frame;
     }
 }

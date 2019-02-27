@@ -8,10 +8,7 @@ import java.text.DecimalFormat;
  * @author Fadil Smajilbasic
  */
 public class LeapMotionReader extends Listener {
-
-    
     DecimalFormat df = new DecimalFormat("#.###");
-    LeapMotionReaderListener listener;
 
     public float getHandX(Hand hand) {
         if (hand != null) {
