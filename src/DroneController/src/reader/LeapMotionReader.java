@@ -23,7 +23,7 @@ public class LeapMotionReader extends Listener {
         try {
             System.in.read();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error while reading input from leapmotion: " + e.getMessage());
         }
     }
 
@@ -33,14 +33,13 @@ public class LeapMotionReader extends Listener {
 
     public void onFrame(Controller controller) {
         setFrame(controller.frame());
-        System.out.println(getFrame().hands().rightmost());
     }
     
-    public synchronized void setFrame(Frame frame){
+    public void setFrame(Frame frame){
         this.frame = frame;
     }
     
-    public synchronized Frame getFrame(){
+    public Frame getFrame(){
         return frame;
     }
     
@@ -71,14 +70,14 @@ public class LeapMotionReader extends Listener {
 
     public Hand getRightHand() {
         if (getFrame().hands().rightmost().isRight()) {
-            return frame.hands().rightmost();
+            return getFrame().hands().rightmost();
         } else {
             return null;
         }
     }
 
     public Hand getLeftHand() {
-        if (frame.hands().leftmost().isLeft()) {
+        if (getFrame().hands().leftmost().isLeft()) {
             return frame.hands().leftmost();
         } else {
             return null;
