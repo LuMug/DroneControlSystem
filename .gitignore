@@ -15,3 +15,6 @@ src/DroneController/
 + build.xml
 
 src/DroneController/nbproject/private/private.properties
+src/DroneSimulator/build/built-jar.properties
+*.class
+*.properties
