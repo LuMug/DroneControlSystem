@@ -77,234 +77,277 @@ public class CommandReader{
         "wifi?"
     };
     
-    public boolean commandExists(String command){
-        if(command.charAt(command.length() - 1) == '?' || !command.contains(" ")){
-            //Get command
-            for(String s:GET_COMMANDS){
-                if(command.equals(s)){
-                    switch(s){
-                        case "speed?":
-                            getSpeed();
-                            break;
-                        case "battery?":
-                            getBattery();
-                            break;
-                        case "time?":
-                            getTime();
-                            break;
-                        case "height?":
-                            getHeight();
-                            break;
-                        case "temp?":
-                            getTemperature();
-                            break;
-                        case "attitude?":
-                            getAttitude();
-                            break;
-                        case "baro?":
-                            getBarometer();
-                            break;
-                        case "acceleration?":
-                            getAcceleration();
-                            break;
-                        case "tof?":
-                            getTof();
-                            break;
-                        case "wifi?":
-                            getWifi();
-                            break;
-                    }
-                    return true;
+    public int getterCommandExists(String command){
+        for(String s:GET_COMMANDS){
+            if(command.equals(s)){
+                switch(s){
+                    case "speed?":
+                        return getSpeed();
+                    case "battery?":
+                        return getBattery();
+                    case "time?":
+                        return getTime();
+                    case "height?":
+                        return getHeight();
+                    case "temp?":
+                        return getTemperature();
+                    case "attitude?":
+                        return getAttitude();
+                    case "baro?":
+                        return getBarometer();
+                    case "acceleration?":
+                        return getAcceleration();
+                    case "tof?":
+                        return getTof();
+                    case "wifi?":
+                        return getWifi();
                 }
             }
-            for(String s:GUIDE_COMMANDS){
-                if(command.equals(s)){
-                    switch(s){
-                        case "takeoff":
-                            takeoff();
-                            break;
-                        case "land":
-                            land();
-                            break;
-                        case "streamon":
-                            streamon();
-                            break;
-                        case "streamoff":
-                            streamoff();
-                            break;
-                        case "emergency":
-                            emergency();
-                            break;
-                    }
-                    return true;
+        }
+        return Integer.MIN_VALUE;
+    }
+    
+    public boolean instructionCommandExists(String command){
+        for(String s:GUIDE_COMMANDS){
+            if(command.equals(s)){
+                switch(s){
+                    case "takeoff":
+                        return takeoff();
+                    case "land":
+                        return land();
+                    case "streamon":
+                        return streamon();
+                    case "streamoff":
+                        return streamoff();
+                    case "emergency":
+                        return emergency();
                 }
             }
-        }else{
-            //Other command
-            String[] splittedCommand = command.split(" ");
-            if(splittedCommand.length > 1 && splittedCommand.length < 9){
-                for(String s:COMMANDS){
-                    if(splittedCommand[0].equals(s)){
-                        try{
-                            switch(splittedCommand[0]){
-                                case "up":
-                                    if(splittedCommand.length == 2){
-                                        up(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "down":
-                                    if(splittedCommand.length == 2){
-                                        down(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "left":
-                                    if(splittedCommand.length == 2){
-                                        left(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "right":
-                                    if(splittedCommand.length == 2){
-                                        right(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "forward":
-                                    if(splittedCommand.length == 2){
-                                        forward(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "back":
-                                    if(splittedCommand.length == 2){
-                                        back(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "cw":
-                                    if(splittedCommand.length == 2){
-                                        cw(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "ccw":
-                                    if(splittedCommand.length == 2){
-                                        ccw(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "flip":
-                                    if(splittedCommand.length == 2){
-                                        flip(Integer.parseInt(splittedCommand[1]));
-                                        return true;
-                                    }
-                                    break;
-                                case "go":
-                                    if(splittedCommand.length == 2){
-                                        go(
-                                            Integer.parseInt(splittedCommand[1]),
-                                            Integer.parseInt(splittedCommand[2]),
-                                            Integer.parseInt(splittedCommand[3]),
-                                            Integer.parseInt(splittedCommand[4])
-                                        );
-                                        return true;
-                                    }
-                                    break;
-                                    
-                            }
-                            return false;
-                        }catch(NumberFormatException nfe){
-                            System.err.println("Error while parsing parameters: " + nfe.getMessage());
-                        }
+        }
+        return false;
+    }
+    
+    public boolean commandExists(String command) throws InterruptedException{
+        String[] splittedCommand = command.split(" ");
+        if(splittedCommand.length > 1 && splittedCommand.length < 9){
+            for(String s:COMMANDS){
+                if(splittedCommand[0].equals(s)){
+                    try{
+                        switch(splittedCommand[0]){
+                            case "up":
+                                if(splittedCommand.length == 2){
+                                    return up(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "down":
+                                if(splittedCommand.length == 2){
+                                    return down(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "left":
+                                if(splittedCommand.length == 2){
+                                    return left(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "right":
+                                if(splittedCommand.length == 2){
+                                    return right(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "forward":
+                                if(splittedCommand.length == 2){
+                                    return forward(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "back":
+                                if(splittedCommand.length == 2){
+                                    return back(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "cw":
+                                if(splittedCommand.length == 2){
+                                    return cw(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "ccw":
+                                if(splittedCommand.length == 2){
+                                    return ccw(Integer.parseInt(splittedCommand[1]));
+                                }
+                                break;
+                            case "flip":
+                                if(splittedCommand.length == 2){
+                                    return flip(splittedCommand[1].charAt(0));
+                                }
+                                break;
+                            case "go":
+                                if(splittedCommand.length == 2){
+                                    return go(
+                                        Integer.parseInt(splittedCommand[1]),
+                                        Integer.parseInt(splittedCommand[2]),
+                                        Integer.parseInt(splittedCommand[3]),
+                                        Integer.parseInt(splittedCommand[4])
+                                    );
+                                }
+                                break;
+                        } 
+                    }catch(NumberFormatException nfe){
+                        System.err.println("Error while parsing parameters: " + nfe.getMessage());
                     }
-                }    
-            }
+                }
+            }    
         }
         return false;
     }
     
     // ------------------------- GUIDE COMMANDS -------------------------
     
-    public static void takeoff(){
-        
+    public static boolean takeoff(){
+        //From 0,0,0
+        return true;
     }
     
-    public static void land(){
-        
+    public static boolean land(){
+        //Go back to 0,0,0
+        return true;
     }
     
-    public static void streamon(){
-        
+    public static boolean streamon(){
+        return true;
     }
     
-    public static void streamoff(){
-        
+    public static boolean streamoff(){
+        return true;
     }
     
-    public static void emergency(){
-        
+    public static boolean emergency(){
+        return true;
     }
     
     // ------------------------- COMMANDS -------------------------
     
-    public static void up(int distance){
-        
+    public static boolean up(int distance){
+        if(distance >= 20 && distance <= 500){
+            simulator.setY(simulator.getY() + distance);
+            return true;
+        }
+        return false;
     }
     
-    public static void down(int distance){
-        
+    public static boolean down(int distance){
+        if(distance >= 20 && distance <= 500){
+            simulator.setY(simulator.getY() - distance);
+            return true;
+        }
+        return false;
     }
     
-    public static void left(int distance){
-        
+    public static boolean left(int distance){
+        if(distance >= 20 && distance <= 500){
+            simulator.setX(simulator.getX() - distance);
+            return true;
+        }
+        return false;
     }
     
-    public static void right(int distance){
-        
+    public static boolean right(int distance){
+        if(distance >= 20 && distance <= 500){
+            simulator.setX(simulator.getX() + distance);
+            return true;
+        }
+        return false;
     }
     
-    public static void forward(int distance){
-        
+    public static boolean forward(int distance){
+        if(distance >= 20 && distance <= 500){
+            simulator.setZ(simulator.getZ() - distance);
+            return true;
+        }
+        return false;
     }
     
-    public static void back(int distance){
-        
+    public static boolean back(int distance){
+        if(distance >= 20 && distance <= 500){
+            simulator.setZ(simulator.getZ() + distance);
+            return true;
+        }
+        return false;
     }
     
-    public static void cw(int distance){
-        
+    public static boolean cw(int rotation){
+        if(rotation >= 1 && rotation < 3600){
+            rotation /= 10;
+            simulator.setRotationX(simulator.getRotationX() + rotation);
+            return true;
+        }
+        return false;
     }
     
-    public static void ccw(int distance){
-        
+    public static boolean ccw(int rotation){
+        if(rotation >= 1 && rotation < 3600){
+            rotation /= 10;
+            simulator.setRotationX(simulator.getRotationX() - rotation);
+            return true;
+        }
+        return false;
     }
     
-    public static void flip(int distance){
-        
+    public static boolean flip(char where) throws InterruptedException{
+        if(where == 'l' || where == 'r' || where == 'f' || where == 'b'){
+            switch(where){
+                case 'l':
+                    //Left flip on X axis
+                    for(int i = simulator.getRotationX(); i < simulator.getRotationX() + 360; i += 36){
+                        simulator.setRotationX(simulator.getRotationX() + i);
+                        Thread.sleep(100);
+                    }
+                    return true;
+                case 'r':
+                    //Right flip on X axis
+                    for(int i = simulator.getRotationX(); i < simulator.getRotationX() + 360; i += 36){
+                        simulator.setRotationX(simulator.getRotationX() - i);
+                        Thread.sleep(100);
+                    }
+                    return true;
+                case 'f':
+                    //Left flip on Z axis
+                    for(int i = simulator.getRotationZ(); i < simulator.getRotationZ() + 360; i += 36){
+                        simulator.setRotationZ(simulator.getRotationZ() + i);
+                        Thread.sleep(100);
+                    }
+                    return true;
+                case 'b':
+                    //Left flip on Z axis
+                    for(int i = simulator.getRotationZ(); i < simulator.getRotationZ() + 360; i += 36){
+                        simulator.setRotationZ(simulator.getRotationZ() - i);
+                        Thread.sleep(100);
+                    }
+                    return true;
+            }
+        }
+        return false;
     }
     
-    public static void go(int x, int y, int z, int speed){
+    public static boolean go(int x, int y, int z, int speed){
         
+        return true;
     }
     
-    public static void curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed){
-        
+    public static boolean curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed){
+        return true;
     }
     
     // ------------------------- SET COMMANDS -------------------------
     
-    public static void speed(int speed){
-        
+    public static boolean speed(int speed){
+        return true;
     }
     
-    public static void rc(int a, int b, int c, int d){
-        
+    public static boolean rc(int a, int b, int c, int d){
+        return true;
     }
     
-    public static void wifiSsid(String password){
-        
+    public static boolean wifiSsid(String password){
+        return true;
     }
     
     // ------------------------- GET COMMANDS -------------------------
