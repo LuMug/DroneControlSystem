@@ -26,9 +26,14 @@ public class DroneController extends Listener {
     private static final float STEP = 10f;
     private static final int AVERAGE_POINTS = 10;
 
+    public DroneController() {
+        controller = new Controller();
+        controller.addListener(this);
+    }        
+
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
-        Controller controller = new Controller();
+        
         //Reads leapmotion data and sends it to the drone
         while(true){
             float altitudeCm = translateAltitude(getAverageAltitude(AVERAGE_POINTS), STEP);
