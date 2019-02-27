@@ -23,10 +23,20 @@ public class DroneController extends Listener {
     private Controller controller;
 
     private static final float STEP = 10f;
+    
+    
+    
+    public synchronized void setFrame(Frame frame) {
+        this.frame = frame;
+    }
 
-//    public static void sendUpCommand(float distance) {
-//        commandManager.sendCommand(up(distance));
-//    }
+    public synchronized Frame getFrame() {
+        return frame;
+    }
+
+    public static void sendUpCommand(float distance) {
+        commandManager.sendCommand(up(distance));
+    }
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
         Controller controller = new Controller();
@@ -47,15 +57,10 @@ public class DroneController extends Listener {
 
         setFrame(controller.frame());
         System.out.println("frame received: " + getFrame());
+        
     }
 
-    public synchronized void setFrame(Frame frame) {
-        this.frame = frame;
-    }
-
-    public synchronized Frame getFrame() {
-        return frame;
-    }
+    
 
     public static float translateInput(float altitude, float step) {
         //MAX 60 CM
