@@ -25,10 +25,20 @@
  */
 
 /**
- *
- * @author jarinaser
+ * La classe CommandReader ha lo scopo di ricevere i metodi mandati via pacchetto
+ * attraverso i quali muoverà il drone nel modo corretto.
+ * 
+ * @author Jari Näser
+ * @version 22.02.2019 - xx.xx.xxxx
  */
 public class CommandReader{
+    
+    private static Simulator simulator;
+
+    public CommandReader(Simulator simulator){
+        this.simulator = simulator;
+    }
+    
     private static final String[] COMMANDS = {
         "up",
         "down",

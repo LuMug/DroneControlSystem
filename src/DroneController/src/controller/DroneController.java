@@ -57,7 +57,7 @@ public class DroneController extends Listener {
     public static float translateInput(float altitude, float step) {
         //MAX 60 CM
         //Punto 0 -> 30 CM
-        float translated = (altitude - 30) % step;
+        float translated = ((altitude / 10) - 30) / step;
         return translated;
     }
 
