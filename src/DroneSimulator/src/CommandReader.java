@@ -202,11 +202,11 @@ public class CommandReader{
                                         return true;
                                     }
                                     break;
-                                        
+                                    
                             }
                             return false;
-                        }catch(Exception e){
-                            System.err.println("Error while parsing parameters: " + e.getMessage());
+                        }catch(NumberFormatException nfe){
+                            System.err.println("Error while parsing parameters: " + nfe.getMessage());
                         }
                     }
                 }    
