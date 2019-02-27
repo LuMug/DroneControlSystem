@@ -1,7 +1,11 @@
 package reader;
 
 import com.leapmotion.leap.*;
+import java.io.IOException;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -9,6 +13,11 @@ import java.text.DecimalFormat;
  */
 public class LeapMotionReader extends Listener {
     DecimalFormat df = new DecimalFormat("#.###");
+
+    public LeapMotionReader() {
+    }
+
+    
 
     public float getHandX(Hand hand) {
         if (hand != null) {
