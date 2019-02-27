@@ -4,5 +4,7 @@ src/.DS_Store
 
 src/DroneController/nbproject/private/private.properties
 src/DroneSimulator/build/built-jar.properties
-*.class
-*.properties
+
+src/DroneController/build/classes/reader/LeapMotionReader.class
+src/DroneController/build/classes/controller/DroneController.class
+src/DroneController/dist/DroneController.jar

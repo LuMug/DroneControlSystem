@@ -9,6 +9,7 @@ import comunication.CommandManager;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import reader.LeapMotionReader;
 import reader.LeapMotionReaderListener;
 
 /**
@@ -18,14 +19,19 @@ import reader.LeapMotionReaderListener;
 public class DroneController extends Listener {
 
     private static CommandManager commandManager = new CommandManager();
-//    private LeapMotionReader leapReader;
-    private Frame frame;
+    private static LeapMotionReader leapReader;
+    private static Frame frame;
     private Controller controller;
 
     private static final float STEP = 10f;
-    
-    
-    
+
+    private static final int AVERAGE_POINTS = 10;
+
+    public DroneController() {
+        controller = new Controller();
+        controller.addListener(this);
+    }
+
     public synchronized void setFrame(Frame frame) {
         this.frame = frame;
     }
@@ -34,18 +40,21 @@ public class DroneController extends Listener {
         return frame;
     }
 
-    public static void sendUpCommand(float distance) {
-        commandManager.sendCommand(up(distance));
-    }
+//    public static void sendUpCommand(float distance) {
+//        commandManager.sendCommand(up(distance));
+//    }
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
-        Controller controller = new Controller();
-        DroneController mineController = new DroneController();
-        controller.addListener(mineController);
-        try {
-            System.in.read();
-        } catch (IOException ex) {
-            System.out.println("err");
+        DroneController controller = new DroneController();
+        //Reads leapmotion data and sends it to the drone
+        while (true) {
+            float altitudeCm = controller.translateAltitude(controller.getAverageAltitude(AVERAGE_POINTS), STEP);
+
+            if (altitudeCm > 0) {
+                System.out.println("Up: " + altitudeCm);
+            } else {
+                System.out.println("Down: " + altitudeCm);
+            }
         }
     }
 
@@ -57,20 +66,31 @@ public class DroneController extends Listener {
 
         setFrame(controller.frame());
         System.out.println("frame received: " + getFrame());
-        
+
     }
 
-    
-
-    public static float translateInput(float altitude, float step) {
+    public float translateAltitude(float altitude, float step) {
         //MAX 60 CM
         //Punto 0 -> 30 CM
         float translated = ((altitude / 10) - 30) / step;
         return translated;
     }
 
-    public DroneController() {
-//        leapReader = new LeapMotionReader();
-    }
+    //right hand altitude
+    public float getAverageAltitude(int points) {
+        int total = 0;
 
+        for (int i = 0; i < points; i++) {
+            Hand rHand = leapReader.getRightHand(getFrame());
+
+            if (rHand != null) {
+                total += leapReader.getHandY(rHand);
+            } else {
+                //Reset
+                i--;
+            }
+        }
+
+        return total / points;
+    }
 }
