@@ -38,30 +38,94 @@ import javax.swing.JPanel;
  * drone DJI Tello.
  * 
  * @author Jari Näser
- * @author Andrea Rauso
  * @version 15.02.2019 - xx.xx.xxxx
  */
 public class Simulator extends JPanel{
+    
+    // ------------------- General Variables -------------------
+    
     private static final int PORT = 8889;
     private static final String ADDRESS_TO_SEND = "192.168.43.16";
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
     private static SimulatorPainter painter;
+    //Positioning points
+    private int x = 0;
+    private int y = 0;
+    private int z = 0;
+    private int rotationX = 0;
+    private int rotationY = 0;
+    private int rotationZ = 0;
     
-
+    // ------------------- Constructor -------------------
+    
     public Simulator() throws SocketException{
-        commandReader = new CommandReader();
+        commandReader = new CommandReader(this);
         painter = new SimulatorPainter();
         //Start listening on socket
         socket = new DatagramSocket(PORT);
         this.startListening();
     }
     
+    // ------------------- Setters and Getters -------------------
+    
+    @Override
+    public int getX(){
+        return this.x;
+    }
+    
+    public void setX(int x){
+        this.x = x;
+    }
+    
+    @Override
+    public int getY(){
+        return this.y;
+    }
+    
+    public void setY(int y){
+        this.y = y;
+    }
+    
+    public int getZ(){
+        return this.z ;
+    }
+    
+    public void setZ(int z){
+        this.z = z;
+    }
+    
+    public int getRotationX(){
+        return this.rotationX;
+    }
+    
+    public void setRotationX(int rotationX){
+        this.rotationX = rotationX;
+    }
+    
+    public int getRotationY(){
+        return this.rotationY;
+    }
+    
+    public void setRotationY(int rotationY){
+        this.rotationY = rotationY;
+    }
+    
+    public int getRotationZ(){
+        return this.rotationZ;
+    }
+    
+    public void setRotationZ(int rotationZ){
+        this.rotationZ = rotationZ;
+    }
+    
     @Override
     public void paint(Graphics g){
         painter.paint(g);
     }
+    
+    // ------------------- Helper Methods -------------------
     
     private static void sendOK() throws UnknownHostException, IOException{
         byte[] response = "OK".getBytes();
@@ -84,8 +148,10 @@ public class Simulator extends JPanel{
         );       
         socket.send(packet);
     }
+    
+    // ------------------- Network Methods -------------------
 
-    public void startListening(){
+    private void startListening(){
         boolean droneIsConnected;
         //Create buffer array with right size
         byte[] buffer = new byte[BUFFER_SIZE];
