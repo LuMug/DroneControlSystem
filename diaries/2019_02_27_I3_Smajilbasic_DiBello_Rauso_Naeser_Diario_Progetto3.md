@@ -5,6 +5,7 @@
 ## Lavori svolti
 
 Andrea ha messo i file della libreria JFreeChart all'interno del progetto e ha creato una classe per mostrare i valori della rotazione del drone. 
+Fadil è riuscito a far leggere al DroneController i dati dal LeapMotion, inoltre abbiamo migliorato l'integrazione tra la classe Dronecontroller e LeapMotionReader
 
 ##  Problemi riscontrati e soluzioni adottate
 
