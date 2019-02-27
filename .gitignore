@@ -8,4 +8,8 @@ src/DroneSimulator/build/built-jar.properties
 src/DroneController/build/classes/reader/LeapMotionReader.class
 src/DroneController/build/classes/controller/DroneController.class
 src/DroneController/dist/DroneController.jar
+<<<<<<< HEAD
 src/DroneController/nbproject/private/private.xml
+=======
+*.class
+>>>>>>> 1bd840cdd00a04f6589531da8aa3bff412c438de
