@@ -4,6 +4,8 @@ import com.leapmotion.leap.*;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -11,38 +13,15 @@ import java.text.DecimalFormat;
  */
 public class LeapMotionReader extends Listener {
 
-    private Frame frame;
-    private Controller controller;
+    
     DecimalFormat df = new DecimalFormat("#.###");
+    LeapMotionReaderListener listener;
 
     public LeapMotionReader() {
-        controller = new Controller();
-        controller.addListener(this);
-
-        df.setRoundingMode(RoundingMode.CEILING);
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            System.out.println("Error while reading input from leapmotion: " + e.getMessage());
-        }
     }
 
-    public void onConnect(Controller controller) {
-        System.out.println("Connected");
-    }
+    
 
-    public void onFrame(Controller controller) {
-        setFrame(controller.frame());
-    }
-    
-    public void setFrame(Frame frame){
-        this.frame = frame;
-    }
-    
-    public Frame getFrame(){
-        return frame;
-    }
-    
     public float getHandX(Hand hand) {
         if (hand != null) {
             return hand.palmPosition().getX();
