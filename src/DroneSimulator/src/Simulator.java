@@ -100,24 +100,39 @@ public class Simulator extends JPanel{
         return this.rotationX;
     }
     
-    public void setRotationX(int rotationX){
-        this.rotationX = rotationX;
+    public void setRotationX(int rotation){
+        if(rotation >= -360 && rotation <= 360){
+            this.rotationX = rotation;
+        }else{
+            int div = rotation%360;
+            this.rotationX = rotation/div;
+        }
     }
     
     public int getRotationY(){
         return this.rotationY;
     }
     
-    public void setRotationY(int rotationY){
-        this.rotationY = rotationY;
+    public void setRotationY(int rotation){
+        if(rotation >= -360 && rotation <= 360){
+            this.rotationY = rotation;
+        }else{
+            int div = rotation%360;
+            this.rotationY = rotation/div;
+        }
     }
     
     public int getRotationZ(){
         return this.rotationZ;
     }
     
-    public void setRotationZ(int rotationZ){
-        this.rotationZ = rotationZ;
+    public void setRotationZ(int rotation){
+        if(rotation >= -360 && rotation <= 360){
+            this.rotationZ = rotation;
+        }else{
+            int div = rotation%360;
+            this.rotationZ = rotation/div;
+        }
     }
     
     @Override
@@ -151,7 +166,7 @@ public class Simulator extends JPanel{
     
     // ------------------- Network Methods -------------------
 
-    private void startListening(){
+    private void startListening() throws InterruptedException{
         boolean droneIsConnected;
         //Create buffer array with right size
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -181,11 +196,34 @@ public class Simulator extends JPanel{
                         socket.receive(recivePacket);
                         //Read Packet content
                         String command = new String(recivePacket.getData());
-                        if(commandReader.commandExists(command)){
-                            sendOK();
+                        command = command.trim();
+                        if(command != null){
+                            if(command.charAt(command.length() - 1) == '?'){
+                                //Getter commands 
+                                if(commandReader.getterCommandExists(command) == Integer.MIN_VALUE){
+                                    sendERROR();
+                                }else{
+                                    sendOK();
+                                }
+                            }else if(!command.contains(" ")){
+                                //Void commands
+                                if(commandReader.instructionCommandExists(command)){
+                                    sendOK();
+                                }else{
+                                    sendERROR();
+                                }
+                            }else{
+                                //Normal commands
+                                if(commandReader.commandExists(command)){
+                                    sendOK();
+                                }else{
+                                    sendERROR();
+                                }
+                            }
                         }else{
                             sendERROR();
                         }
+                        
                     }
 
                 }
