@@ -11,8 +11,7 @@ import java.util.logging.Logger;
  *
  * @author Fadil Smajilbasic
  */
-public class LeapMotionReader extends Listener {
-    DecimalFormat df = new DecimalFormat("#.###");
+public class LeapMotionReader {
     private static Frame frame;
 
     public LeapMotionReader() {
@@ -28,9 +27,9 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getHandY() {
-        if (getLeftHand() != null) {
-            return getLeftHand().palmPosition().getY();
+    public float getHandY(Hand hand) {
+        if (hand != null) {
+            return hand.palmPosition().getY();
         } else {
             return 0;
         }
@@ -63,8 +62,7 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getPitch() {
-        Hand hand = getRightHand();
+    public float getPitch(Hand hand) {
         if (hand != null) {
             return hand.palmPosition().pitch();
         } else {
@@ -72,8 +70,7 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getRoll() {
-        Hand hand = getRightHand();
+    public float getRoll(Hand hand) {
         if (hand != null) {
             return hand.palmPosition().roll();
         } else {
@@ -81,8 +78,7 @@ public class LeapMotionReader extends Listener {
         }
     }
 
-    public float getYaw() {
-        Hand hand = getRightHand();
+    public float getYaw(Hand hand) {
         if (hand != null) {
             return hand.palmPosition().yaw();
         } else {

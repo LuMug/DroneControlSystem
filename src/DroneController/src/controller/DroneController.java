@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import reader.LeapMotionReader;
-import reader.LeapMotionReaderListener;
 
 /**
  *
@@ -48,8 +47,9 @@ public class DroneController extends Listener implements Runnable {
 
     public void onFrame(Controller controller) {
         leapReader.setFrame(controller.frame());
-        System.out.println(leapReader.getHandY());
-        sendUpCommand(translateAltitude(leapReader.getHandY(),STEP));
+        float altitude = leapReader.getHandZ(leapReader.getLeftHand());
+        System.out.println(altitude);
+        sendUpCommand(translateAltitude(altitude,STEP));
     }
 
     public float translateAltitude(float altitude, float step) {
@@ -67,7 +67,7 @@ public class DroneController extends Listener implements Runnable {
             Hand rHand = leapReader.getRightHand();
 
             if (rHand != null) {
-                total += leapReader.getHandY();
+                total += leapReader.getHandY(rHand);
             } else {
                 //Reset
                 i--;

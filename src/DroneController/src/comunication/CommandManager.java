@@ -14,7 +14,7 @@ import settings.TelloComunicationData;
  */
 public class CommandManager{
 
-    DatagramSocket commandSocket;
+    private DatagramSocket commandSocket;
     
     
     public CommandManager() {

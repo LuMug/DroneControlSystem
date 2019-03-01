@@ -9,3 +9,4 @@ src/DroneController/build/classes/reader/LeapMotionReader.class
 src/DroneController/build/classes/controller/DroneController.class
 src/DroneController/dist/DroneController.jar
 src/DroneController/nbproject/private/private.xml
+.vscode/settings.json
