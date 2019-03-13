@@ -31,9 +31,6 @@ public class DroneController extends Listener implements Runnable {
         leapReader = new LeapMotionReader();
     }
 
-    public static void sendUpCommand(float distance) {
-        commandManager.sendCommand(Commands.up(distance));
-    }
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
         DroneController controller = new DroneController();
@@ -48,7 +45,7 @@ public class DroneController extends Listener implements Runnable {
         leapReader.setFrame(controller.frame());
         float altitude = leapReader.getHandZ(leapReader.getLeftHand());
         System.out.println(altitude);
-        sendUpCommand(translateAltitude(altitude,STEP));
+        commandManager.sendCommand(Commands.TAKEOFF);
     }
 
     public float translateAltitude(float altitude, float step) {

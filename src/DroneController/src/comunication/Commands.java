@@ -8,16 +8,16 @@ import settings.FlipCommand;
  */
 public abstract class Commands {
     
-    //Complete commands
+    // <editor-fold desc="Complete commands">
     public static final String ENABLE_COMMANDS = "command";
     public static final String TAKEOFF = "takeoff";
     public static final String LAND = "land";
     public static final String STREAM_VIDEO_ON = "streamon";
     public static final String STREAM_VIDEO_OFF = "streamoff";
     public static final String EMERGENCY = "emergency";
-    
-    //Semi commands -> Keywords used in complex commands
-    
+    // </editor-fold>
+
+    // <editor-fold desc="Semi Commands">
     //Movements
     private static final String UP = "up";
     private static final String DOWN = "down";
@@ -47,9 +47,9 @@ public abstract class Commands {
     private static final String GET_ACCELERATION = "acceleration?";
     private static final String GET_TOF = "tof?";
     private static final String GET_WIFI_SNR = "wifi?";
+    // </editor-fold>
     
     // <editor-fold desc="Movements">
-    
     //Movimenti base
     public static String up(int cmDistance){
         return String.format("%s %d",UP,cmDistance);
@@ -178,4 +178,4 @@ public abstract class Commands {
         return String.format("%s",GET_WIFI_SNR);
     }
     // </editor-fold>
-}    
+}
