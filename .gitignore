@@ -20,4 +20,12 @@ src/DroneController/build/nbproject/private/config.properties
 src/DroneController/build/nbproject/private/private.properties
 src/DroneController/build/classes/.netbeans_update_resources
 src/DroneController/build/classes/.netbeans_automatic_build
-/src/DroneController/build/
+src/DroneController/nbproject/genfiles.properties
+src/DroneController/nbproject/private/private.xml
+src/DroneController/nbproject/project.properties
+src/DroneController/nbproject/configs/LeapMotion.properties
+src/DroneController/nbproject/private/config.properties
+src/DroneController/nbproject/private/private.properties
+src/DroneSimulator/nbproject/private/private.properties
+src/DroneController/nbproject/project.xml
+src/DroneController/nbproject/build-impl.xml
