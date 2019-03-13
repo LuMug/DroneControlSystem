@@ -31,7 +31,6 @@ public class DroneController extends Listener implements Runnable {
         leapReader = new LeapMotionReader();
     }
 
-
     public static void sendUpCommand(float distance) {
         commandManager.sendCommand(Commands.up(distance));
     }
