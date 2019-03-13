@@ -60,7 +60,7 @@ public class Simulator extends JPanel{
     
     // ------------------- Constructor -------------------
     
-    public Simulator() throws SocketException{
+    public Simulator() throws SocketException, InterruptedException{
         commandReader = new CommandReader(this);
         painter = new SimulatorPainter();
         //Start listening on socket
