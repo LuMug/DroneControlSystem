@@ -4,28 +4,9 @@ src/.DS_Store
 
 
 .vscode/settings.json
-src/DroneController/build/nbproject/project.xml
-src/DroneController/build/nbproject/private/private.xml
-src/DroneController/build/nbproject/build-impl.xml
-src/DroneController/build/classes/comunication/CommandManager.class
-src/DroneController/build/classes/comunication/Commands.class
-src/DroneController/build/classes/comunication/ComunicationTesting.class
-src/DroneController/build/classes/controller/DroneController.class
-src/DroneController/build/classes/reader/LeapMotionReader.class
-src/DroneController/build/classes/settings/TelloComunicationData.class
-src/DroneController/build/nbproject/genfiles.properties
-src/DroneController/build/nbproject/project.properties
-src/DroneController/build/nbproject/configs/LeapMotion.properties
-src/DroneController/build/nbproject/private/config.properties
-src/DroneController/build/nbproject/private/private.properties
-src/DroneController/build/classes/.netbeans_update_resources
-src/DroneController/build/classes/.netbeans_automatic_build
-src/DroneController/nbproject/genfiles.properties
-src/DroneController/nbproject/private/private.xml
-src/DroneController/nbproject/project.properties
-src/DroneController/nbproject/configs/LeapMotion.properties
-src/DroneController/nbproject/private/config.properties
-src/DroneController/nbproject/private/private.properties
+src/DroneController/build/classes/**
+src/DroneController/build/nbproject/**
+src/DroneController/nbproject/**
 src/DroneSimulator/nbproject/private/private.properties
-src/DroneController/nbproject/project.xml
-src/DroneController/nbproject/build-impl.xml
+src/DroneController/build/classes/controller/FrameHelper.class
+src/DroneController/dist/DroneController.jar

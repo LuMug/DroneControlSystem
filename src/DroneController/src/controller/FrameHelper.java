@@ -1,4 +1,4 @@
-package reader;
+package controller;
 
 import com.leapmotion.leap.*;
 import java.io.IOException;
@@ -11,10 +11,11 @@ import java.util.logging.Logger;
  *
  * @author Fadil Smajilbasic
  */
-public class LeapMotionReader {
-    private static Frame frame;
+public class FrameHelper {
+    private Frame currentFrame = new Frame();
+    private Frame lastFrame;
 
-    public LeapMotionReader() {
+    public FrameHelper() {
     }
 
     
@@ -44,7 +45,7 @@ public class LeapMotionReader {
         }
     }
 
-    public Hand getRightHand() {
+    public Hand getRightHand(Frame frame) {
         Hand rhand = frame.hands().rightmost();
         if (rhand.isRight()) {
             return rhand;
@@ -53,7 +54,7 @@ public class LeapMotionReader {
         }
     }
 
-    public Hand getLeftHand() {
+    public Hand getLeftHand(Frame frame) {
         Hand lhand = frame.hands().leftmost();
         if (lhand.isLeft()) {
             return lhand;
@@ -88,18 +89,30 @@ public class LeapMotionReader {
 
     public float getDroneLiftAmount() {
         Hand hand;
-        if ((hand = getLeftHand()) != null) {
+        if ((hand = getLeftHand(currentFrame)) != null) {
             return getHandZ(hand);
         } else {
             return 0;
         }
     }
     
+    public float getDeltaZ(){
+        return getHandZ(getLeftHand(currentFrame)) - getHandZ(getLeftHand(lastFrame));        
+    }
+    
     public synchronized void setFrame(Frame frame) {
-        this.frame = frame;
+        this.lastFrame = this.currentFrame;
+        this.currentFrame = frame;
+        
     }
 
+    public Frame getLastFrame() {
+        return this.lastFrame;
+    }
+    
+    
+
     public synchronized Frame getFrame() {
-        return frame;
+        return currentFrame;
     }
 }

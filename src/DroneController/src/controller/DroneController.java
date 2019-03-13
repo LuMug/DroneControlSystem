@@ -7,9 +7,10 @@ import com.leapmotion.leap.Listener;
 import comunication.Commands;
 import comunication.CommandManager;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import reader.LeapMotionReader;
 
 /**
  *
@@ -18,8 +19,9 @@ import reader.LeapMotionReader;
 public class DroneController extends Listener implements Runnable {
 
     private static CommandManager commandManager = new CommandManager();
-    private static LeapMotionReader leapReader;
+    private FrameHelper helper;
     private Controller controller;
+    private List<Float> deltas = new ArrayList<Float>();
 
     private static final float STEP = 10f;
 
@@ -28,13 +30,13 @@ public class DroneController extends Listener implements Runnable {
     public DroneController() {
         controller = new Controller();
         controller.addListener(this);
-        leapReader = new LeapMotionReader();
+        helper = new FrameHelper();
     }
-
 
     public static void sendUpCommand(float distance) {
         commandManager.sendCommand(Commands.up(distance));
     }
+
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
         DroneController controller = new DroneController();
@@ -46,10 +48,26 @@ public class DroneController extends Listener implements Runnable {
     }
 
     public void onFrame(Controller controller) {
-        leapReader.setFrame(controller.frame());
-        float altitude = leapReader.getHandZ(leapReader.getLeftHand());
-        System.out.println(altitude);
-        sendUpCommand(translateAltitude(altitude,STEP));
+        helper.setFrame(controller.frame());
+
+        float altitude = helper.getHandZ(helper.getLeftHand(helper.getFrame()));
+        deltas.add(helper.getDeltaZ());
+
+        if (deltas.get(deltas.size() - 1) > getAverageDeltas() || deltas.get(deltas.size() - 1) < -getAverageDeltas()) {
+//            System.out.println("movement detected: " + altitude);
+//            System.out.println("average: " + getAverageDeltas());
+            sendUpCommand((float)0.5);
+
+        }
+
+    }
+
+    public float getAverageDeltas() {
+        float tot = 0;
+        for (Float delta : deltas) {
+            tot += Math.abs(delta);
+        }
+        return tot / deltas.size();
     }
 
     public float translateAltitude(float altitude, float step) {
@@ -59,29 +77,12 @@ public class DroneController extends Listener implements Runnable {
         return translated;
     }
 
-    //right hand altitude
-    public float getAverageAltitude(int points) {
-        int total = 0;
-
-        for (int i = 0; i < points; i++) {
-            Hand rHand = leapReader.getRightHand();
-
-            if (rHand != null) {
-                total += leapReader.getHandY(rHand);
-            } else {
-                //Reset
-                i--;
-            }
-        }
-
-        return total / points;
-    }
-
     @Override
     public void run() {
         System.out.println("reading");
         try {
             System.in.read();
+
         } catch (IOException ex) {
             System.err.println("IOException io.read:" + ex.getMessage());
         }

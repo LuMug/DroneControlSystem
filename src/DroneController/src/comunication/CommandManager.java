@@ -12,7 +12,7 @@ import settings.TelloComunicationData;
  * TODO: <INSERT DESCRIPTION>
  * @author Luca Di Bello
  */
-public class CommandManager{
+public class CommandManager  {
 
     private DatagramSocket commandSocket;
     
@@ -34,6 +34,7 @@ public class CommandManager{
      * @param command Command to send to the drone.
      */
     public void sendCommand(String command){
+        System.out.println("sending command" + command);
         //Create a socket for sending the data
         try {
             //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
