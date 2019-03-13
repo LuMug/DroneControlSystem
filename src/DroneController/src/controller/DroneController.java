@@ -33,10 +33,6 @@ public class DroneController extends Listener implements Runnable {
         helper = new FrameHelper();
     }
 
-    public static void sendUpCommand(float distance) {
-        commandManager.sendCommand(Commands.up(distance));
-    }
-
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
         DroneController controller = new DroneController();

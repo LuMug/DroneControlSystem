@@ -16,7 +16,6 @@ public class CommandManager  {
 
     private DatagramSocket commandSocket;
     
-    
     public CommandManager() {
         try{
             commandSocket = new DatagramSocket(TelloComunicationData.TELLO_COMMAND_LISTEN_PORT);
@@ -27,8 +26,6 @@ public class CommandManager  {
         }
     }
     
-    
-
     /**
      * This method sends a command to DJI Tello.
      * @param command Command to send to the drone.
