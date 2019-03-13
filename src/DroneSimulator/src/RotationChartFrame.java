@@ -14,15 +14,29 @@ import org.jfree.data.category.DefaultCategoryDataset;
  */
 
 /**
- *
+ * La classe RotationChartFrame é un frame che permette di visualizzare i dati
+ * relativi alla rotazione del drone sui tre assi
+ * 
  * @author Andrea Rauso
  */
 public class RotationChartFrame extends javax.swing.JFrame {
 
-    private float rotationY; //yaw
-    private float rotationX; //pitch
-    private float rotationZ; //roll
-
+    /**
+     * Rotazione sull'asse X (Pitch)
+     */
+    private float rotationY; 
+    
+    /**
+     * Rotazione sull'asse Y (Yaw)
+     */
+    private float rotationX; 
+    
+    /**
+     * Rotazione sull'asse Z (Roll)
+     */
+    private float rotationZ; 
+    
+    
     /**
      * Creates new form AxesChartFrame
      */
