@@ -454,7 +454,7 @@ public class CommandReader{
     // ------------------------- HELPER METHODS -------------------------
     
     public static int unsign(int value){
-        return (int)Math.sqrt(Math.pow(value, 2));
+        return (value < 0)?value*-1:value;
     }
     
     public static boolean isInsideRange(int value, int min, int max){
