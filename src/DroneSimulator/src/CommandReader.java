@@ -226,7 +226,7 @@ public class CommandReader{
     // ------------------------- COMMANDS -------------------------
     
     public static boolean up(int distance){
-        if(distance >= 20 && distance <= 500){
+        if(isInsideRange(distance, 20, 500)){
             simulator.setY(simulator.getY() + distance);
             return true;
         }
@@ -234,7 +234,7 @@ public class CommandReader{
     }
     
     public static boolean down(int distance){
-        if(distance >= 20 && distance <= 500){
+        if(isInsideRange(distance, 20, 500)){
             simulator.setY(simulator.getY() - distance);
             return true;
         }
@@ -242,7 +242,7 @@ public class CommandReader{
     }
     
     public static boolean left(int distance){
-        if(distance >= 20 && distance <= 500){
+        if(isInsideRange(distance, 20, 500)){
             simulator.setX(simulator.getX() - distance);
             return true;
         }
@@ -250,7 +250,7 @@ public class CommandReader{
     }
     
     public static boolean right(int distance){
-        if(distance >= 20 && distance <= 500){
+        if(isInsideRange(distance, 20, 500)){
             simulator.setX(simulator.getX() + distance);
             return true;
         }
@@ -258,7 +258,7 @@ public class CommandReader{
     }
     
     public static boolean forward(int distance){
-        if(distance >= 20 && distance <= 500){
+        if(isInsideRange(distance, 20, 500)){
             simulator.setZ(simulator.getZ() - distance);
             return true;
         }
@@ -266,7 +266,7 @@ public class CommandReader{
     }
     
     public static boolean back(int distance){
-        if(distance >= 20 && distance <= 500){
+        if(isInsideRange(distance, 20, 500)){
             simulator.setZ(simulator.getZ() + distance);
             return true;
         }
@@ -274,7 +274,7 @@ public class CommandReader{
     }
     
     public static boolean cw(int rotation){
-        if(rotation >= 1 && rotation < 3600){
+        if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
             simulator.setRotationX(simulator.getRotationX() + rotation);
             return true;
@@ -283,7 +283,7 @@ public class CommandReader{
     }
     
     public static boolean ccw(int rotation){
-        if(rotation >= 1 && rotation < 3600){
+        if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
             simulator.setRotationX(simulator.getRotationX() - rotation);
             return true;
@@ -327,13 +327,51 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean go(int x, int y, int z, int speed){
-        
-        return true;
+    public static boolean go(int x, int y, int z, int speed) throws InterruptedException{
+        if(isInsideRange(x, 20, 500) || isInsideRange(x, -500, -20) &&
+                isInsideRange(y, 20, 500) || isInsideRange(y, -500, -20) &&
+                isInsideRange(z, 20, 500) || isInsideRange(z, -500, -20)){
+            if(speed >= 10 && speed <= 100){
+                
+                int biggest;
+                if(unsign(x) > unsign(y)){
+                    biggest = x;
+                }else if(unsign(y) > unsign(z)){
+                    biggest = y;
+                }else{
+                    biggest = z;
+                }
+                
+                int delay = biggest / speed;
+                
+                for(int i = 0; i < delay; i++){
+                    simulator.setX(simulator.getX() + x/delay);
+                    simulator.setY(simulator.getY() + y/delay);
+                    simulator.setZ(simulator.getZ() + z/delay);
+                    Thread.sleep(delay);
+                }
+                return true;
+            }
+        }
+        return false;
     }
     
-    public static boolean curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed){
-        return true;
+    public static boolean curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed) throws InterruptedException{
+        if(isInsideRange(x1, 20, 500) || isInsideRange(x1, -500, -20) &&
+                isInsideRange(y1, 20, 500) || isInsideRange(y1, -500, -20) &&
+                isInsideRange(z1, 20, 500) || isInsideRange(z1, -500, -20) &&
+                isInsideRange(x2, 20, 500) || isInsideRange(x2, -500, -20) &&
+                isInsideRange(y2, 20, 500) || isInsideRange(y2, -500, -20) &&
+                isInsideRange(z2, 20, 500) || isInsideRange(z2, -500, -20)){
+            
+            if(isInsideRange(speed, 10, 60)){
+                go(x1, y1, z1, speed);
+                go(x2, y2, z2, speed);
+                return true;
+            }
+            
+        }
+        return false;
     }
     
     // ------------------------- SET COMMANDS -------------------------
@@ -411,5 +449,15 @@ public class CommandReader{
         //CONSULT TELLO STATE EXPLANATION
         
         return 0;
+    }
+    
+    // ------------------------- HELPER METHODS -------------------------
+    
+    public static int unsign(int value){
+        return (int)Math.sqrt(Math.pow(value, 2));
+    }
+    
+    public static boolean isInsideRange(int value, int min, int max){
+        return (value <= min && value >= max);
     }
 }
