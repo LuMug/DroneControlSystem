@@ -151,6 +151,7 @@ public class Simulator extends JPanel{
             PORT
         );       
         socket.send(packet);
+        System.out.println("Sent OK response.");
     }
     
     private static void sendERROR() throws UnknownHostException, IOException{
@@ -162,6 +163,7 @@ public class Simulator extends JPanel{
             PORT
         );       
         socket.send(packet);
+        System.out.println("Sent ERROR response.");
     }
     
     // ------------------- Network Methods -------------------
@@ -183,9 +185,11 @@ public class Simulator extends JPanel{
                 //Waiting for a Packet and to receive a datagram
                 socket.receive(recivePacket);
                 //Read Packet content
-                String message = new String(recivePacket.getData());
+                String message = new String(recivePacket.getData()).trim();
+                
+                System.out.println("Recieved packet, content: " + message);
 
-                if((message.trim()).equals("command")){
+                if((message).equals("command")){
                     sendOK();
                     droneIsConnected = true;
                     while(droneIsConnected){
