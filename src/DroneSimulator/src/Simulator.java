@@ -45,7 +45,7 @@ public class Simulator extends JPanel{
     // ------------------- General Variables -------------------
     
     private static final int PORT = 8889;
-    private static final String ADDRESS_TO_SEND = "192.168.43.16";
+    private static final String ADDRESS_TO_SEND = "192.168.43.246";
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
@@ -166,7 +166,7 @@ public class Simulator extends JPanel{
     
     // ------------------- Network Methods -------------------
 
-    private void startListening() throws InterruptedException{
+    public void startListening() throws InterruptedException{
         boolean droneIsConnected;
         //Create buffer array with right size
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -182,7 +182,6 @@ public class Simulator extends JPanel{
                 recivePacket.setData(new byte[buffer.length]);
                 //Waiting for a Packet and to receive a datagram
                 socket.receive(recivePacket);
-
                 //Read Packet content
                 String message = new String(recivePacket.getData());
 
@@ -232,5 +231,11 @@ public class Simulator extends JPanel{
                 System.out.println("IOException in listener: " + ioe.getMessage());
             }
         } 
+    }
+    
+    // ------------------- Other Methods -------------------
+    
+    public void stopMotors(){
+        //Stop all four motors immediatly.
     }
 }

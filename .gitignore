@@ -10,3 +10,6 @@ src/DroneController/nbproject/**
 src/DroneSimulator/nbproject/private/private.properties
 src/DroneController/build/classes/controller/FrameHelper.class
 src/DroneController/dist/DroneController.jar
+*.properties
+*.class
+*.class
