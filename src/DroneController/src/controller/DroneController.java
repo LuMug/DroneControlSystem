@@ -4,8 +4,7 @@ import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Listener;
-import comunication.Commands;
-import comunication.CommandManager;
+import communication.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class DroneController extends Listener implements Runnable {
 
-    private static CommandManager commandManager = new CommandManager();
+    private static CommandManager commandManager;
     private FrameHelper helper;
     private Controller controller;
     private List<Float> deltas = new ArrayList<Float>();
@@ -31,6 +30,7 @@ public class DroneController extends Listener implements Runnable {
         controller = new Controller();
         controller.addListener(this);
         helper = new FrameHelper();
+        commandManager = new CommandManager();
     }
 
     public static void main(String[] args) {
@@ -44,17 +44,25 @@ public class DroneController extends Listener implements Runnable {
     }
 
     public void onFrame(Controller controller) {
-        helper.setFrame(controller.frame());
-
-        float altitude = helper.getHandZ(helper.getLeftHand(helper.getFrame()));
-        deltas.add(helper.getDeltaZ());
-
-        if (deltas.get(deltas.size() - 1) > getAverageDeltas() || deltas.get(deltas.size() - 1) < -getAverageDeltas()) {
+//        helper.setFrame(controller.frame());
+//
+//        float altitude = helper.getHandZ(helper.getLeftHand(helper.getFrame()));
+//        float lastZ = helper.getDeltaZ();
+//        deltas.add(lastZ);
+//        float average = getAverageDeltas();
+////        System.out.println("average: " + getAverageDeltas());
+//
+//        if (lastZ > average || lastZ < -average) {
 //            System.out.println("movement detected: " + altitude);
-//            System.out.println("average: " + getAverageDeltas());
-            sendUpCommand((float)0.5);
-
-        }
+////            System.out.println("average: " + average);
+//
+//            String message = altitude > 0 ? Commands.up(altitude) : Commands.down(altitude);
+//
+//            System.out.println("sending message: " + message);
+//
+//            commandManager.sendCommand(message);
+//
+//        }
 
     }
 
@@ -76,11 +84,33 @@ public class DroneController extends Listener implements Runnable {
     @Override
     public void run() {
         System.out.println("reading");
-        try {
-            System.in.read();
+//        try {
+//            System.in.read();
+//
+//        } catch (IOException ex) {
+//            System.err.println("IOException io.read:" + ex.getMessage());
+//        }
 
-        } catch (IOException ex) {
-            System.err.println("IOException io.read:" + ex.getMessage());
+        while (controller.isConnected()) {
+            helper.setFrame(controller.frame());
+
+            float altitude = helper.getHandZ(helper.getLeftHand(helper.getFrame()));
+            float lastZ = helper.getDeltaZ();
+            deltas.add(lastZ);
+            float average = getAverageDeltas();
+//        System.out.println("average: " + getAverageDeltas());
+
+            if (lastZ > average || lastZ < -average) {
+                System.out.println("movement detected: " + altitude);
+//            System.out.println("average: " + average);
+
+                String message = altitude > 0 ? Commands.up(altitude) : Commands.down(altitude);
+
+                System.out.println("sending message: " + message);
+
+                commandManager.sendCommand(message);
+
+            }
         }
         System.out.println("finished reading");
     }

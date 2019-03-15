@@ -1,4 +1,4 @@
-package comunication;
+package communication;
 
 import settings.FlipCommand;
 
@@ -51,28 +51,28 @@ public abstract class Commands {
     
     // <editor-fold desc="Movements">
     //Movimenti base
-    public static String up(int cmDistance){
-        return String.format("%s %d",UP,cmDistance);
+    public static String up(float cmDistance){
+        return String.format("%s %f",UP,cmDistance);
     }
     
-    public static String down(int cmDistance){
-        return String.format("%s %d",DOWN,cmDistance);
+    public static String down(float cmDistance){
+        return String.format("%s %f",DOWN,cmDistance);
     }
     
-    public static String left(int cmDistance){
-        return String.format("%s %d",LEFT,cmDistance);
+    public static String left(float cmDistance){
+        return String.format("%s %f",LEFT,cmDistance);
     }
     
-    public static String right(int cmDistance){
-        return String.format("%s %d",RIGHT,cmDistance);
+    public static String right(float cmDistance){
+        return String.format("%s %f",RIGHT,cmDistance);
     }
     
-    public static String forward(int cmDistance){
-        return String.format("%s %d",FORWARD,cmDistance);
+    public static String forward(float cmDistance){
+        return String.format("%s %f",FORWARD,cmDistance);
     }
     
-    public static String back(int cmDistance){
-        return String.format("%s %d",BACK,cmDistance);
+    public static String back(float cmDistance){
+        return String.format("%s %f",BACK,cmDistance);
     }
     
     //Rotazioni

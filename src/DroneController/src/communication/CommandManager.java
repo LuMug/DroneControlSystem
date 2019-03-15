@@ -1,4 +1,4 @@
-package comunication;
+package communication;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import settings.TelloComunicationData;
 
 /**
- * TODO: <INSERT DESCRIPTION>
+ * 
  * @author Luca Di Bello
  */
 public class CommandManager  {
@@ -55,7 +55,7 @@ public class CommandManager  {
                     5555
             );
             */
-            
+//            System.out.println("packet: " + packet.getPort());
             commandSocket.send(packet);
             
             System.out.println("Message sent to " + packet.getSocketAddress());

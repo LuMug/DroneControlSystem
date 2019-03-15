@@ -1,4 +1,4 @@
-package comunication;
+package communication;
 
 import settings.TelloComunicationData;
 
@@ -7,7 +7,7 @@ import settings.TelloComunicationData;
  * the drone simulator.
  * @author Luca Di Bello
  */
-public class ComunicationTesting {
+public class CommunicationTesting {
     public static CommandManager manager;
 
     public static void main(String[] args) {
