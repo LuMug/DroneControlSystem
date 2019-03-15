@@ -7,6 +7,9 @@
 Jari:
 Ho continuato con lo sviluppo della classe CommandReader nella quale sto finendo di simulare il movimento del drone al ricevimento dei vari comandi della SDK di Tello.
 
+Fadil:
+Ho modificato la classe LeapMotionReader rinominandola FrameHelper, poichè conteneva solo metodi utili a ricavare delle informazioni da un frame, in più ho aggiunte altre funzionalità a quella classe. Ho integrato le funzionalità della classe FrameHelper nella classe DroneController. Devo ancora correggere la classe CommandManager di Luca per farla funzionare con la struttura che abbiamo adesso.
+
 ##  Problemi riscontrati e soluzioni adottate
 
 
