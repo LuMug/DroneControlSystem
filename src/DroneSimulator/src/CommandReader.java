@@ -1,5 +1,3 @@
-
-
 /*
  * The MIT License
  *
@@ -60,7 +58,7 @@ public class CommandReader{
         "curve",
         "speed",
         "rc",
-        "wifi ssid"
+        "wifi"
     };
     
     private static final String[] GUIDE_COMMANDS = {
