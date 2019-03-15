@@ -33,13 +33,13 @@
  */
 public class CommandReader{
     
+    private static final int BATTERY_PERCENTAGE = 100;
+    private static final int ACTUAL_TEMPERATURE = 24;
+    private static final int BAROMETER_PRESSURE = 1;
     private static Simulator simulator;
     private static int speed;
     private static String ssid;
     private static String password;
-    private static final int BATTERY_PERCENTAGE = 100;
-    private static final int ACTUAL_TEMPERATURE = 24;
-    private static final int BAROMETER_PRESSURE = 1;
     private static long takeoffTime;
 
     public CommandReader(Simulator simulator){
@@ -114,7 +114,7 @@ public class CommandReader{
         return Integer.MIN_VALUE;
     }
     
-    public boolean instructionCommandExists(String command){
+    public boolean instructionCommandExists(String command) throws InterruptedException{
         for(String s:GUIDE_COMMANDS){
             if(command.equals(s)){
                 switch(s){
@@ -208,26 +208,31 @@ public class CommandReader{
     
     // ------------------------- GUIDE COMMANDS -------------------------
     
-    public static boolean takeoff(){
+    public static boolean takeoff() throws InterruptedException{
         //From 0,0,0
         takeoffTime = System.currentTimeMillis();
+        go(0, 100, 0, 50);
         return true;
     }
     
-    public static boolean land(){
-        //Go back to 0,0,0
+    public static boolean land() throws InterruptedException{
+        go(simulator.getX(), 0, simulator.getZ(), 50);
+        takeoffTime = 0;
         return true;
     }
     
     public static boolean streamon(){
+        //VideoStream on
         return true;
     }
     
     public static boolean streamoff(){
+        //VideoStream off
         return true;
     }
     
     public static boolean emergency(){
+        simulator.stopMotors();
         return true;
     }
     
@@ -356,7 +361,7 @@ public class CommandReader{
                     simulator.setX(simulator.getX() + x/delay);
                     simulator.setY(simulator.getY() + y/delay);
                     simulator.setZ(simulator.getZ() + z/delay);
-                    Thread.sleep(delay);
+                    Thread.sleep(delay*1000);
                 }
                 return true;
             }
