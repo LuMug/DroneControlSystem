@@ -396,6 +396,9 @@ public class CommandReader{
     }
     
     public static boolean rc(int a, int b, int c, int d){
+        
+        //Still to do
+        
         return true;
     }
     
@@ -441,6 +444,8 @@ public class CommandReader{
         //On the SDK it's 'pitch roll yaw'.
         //CONSULT TELLO STATE EXPLANATION
         
+        //Still to do
+        
         return 0;
     }
     
@@ -456,10 +461,15 @@ public class CommandReader{
         //and it should return 'x y z'.
         //CONSULT TELLO STATE EXPLANATION
         
+        //Still to do
+        
         return 0;
     }
     
-    public static int getTof(){     
+    public static int getTof(){   
+        
+        //Still to do
+        
         return 0;
     }
     
@@ -468,6 +478,8 @@ public class CommandReader{
         //Not sure about the return type.
         //On the SDK it's ' get Wi-Fi SNR' and it should return 'snr'.
         //CONSULT TELLO STATE EXPLANATION
+        
+        //Still to do
         
         return 0;
     }
