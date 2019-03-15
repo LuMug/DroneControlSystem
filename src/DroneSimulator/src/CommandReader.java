@@ -34,6 +34,13 @@
 public class CommandReader{
     
     private static Simulator simulator;
+    private static int speed;
+    private static String ssid;
+    private static String password;
+    private static final int BATTERY_PERCENTAGE = 100;
+    private static final int ACTUAL_TEMPERATURE = 24;
+    private static final int BAROMETER_PRESSURE = 1;
+    private static long takeoffTime;
 
     public CommandReader(Simulator simulator){
         this.simulator = simulator;
@@ -203,6 +210,7 @@ public class CommandReader{
     
     public static boolean takeoff(){
         //From 0,0,0
+        takeoffTime = System.currentTimeMillis();
         return true;
     }
     
@@ -376,38 +384,52 @@ public class CommandReader{
     
     // ------------------------- SET COMMANDS -------------------------
     
-    public static boolean speed(int speed){
-        return true;
+    public static boolean speed(int value){
+        if(isInsideRange(value, 10, 100)){
+            speed = value;
+            return true;
+        }
+        return false;
     }
     
     public static boolean rc(int a, int b, int c, int d){
         return true;
     }
     
-    public static boolean wifiSsid(String password){
-        return true;
+    public static boolean wifi(String ssidValue, String passwordValue){
+        if(passwordValue.length() > 0 && ssidValue.length() > 0){
+            password = passwordValue;
+            ssid = ssidValue;
+            
+            //Join network or do what needed.
+            //Still to discuss and modify.
+            
+            return true;
+        }
+        return false;
     }
     
     // ------------------------- GET COMMANDS -------------------------
     
     public static int getSpeed(){
-        return 0;
+        return speed;
     }
     
     public static int getBattery(){
-        return 0;
+        return BATTERY_PERCENTAGE;
     }
     
     public static int getTime(){
-        return 0;
+        //In seconds
+        return (int)((System.currentTimeMillis() - takeoffTime)/1000);
     }
     
     public static int getHeight(){
-        return 0;
+        return simulator.getX();
     }
     
     public static int getTemperature(){
-        return 0;
+        return ACTUAL_TEMPERATURE;
     }
     
     public static int getAttitude(){
@@ -420,12 +442,8 @@ public class CommandReader{
     }
     
     public static int getBarometer(){
-        
-        //Not sure about the return type.
-        //On the SDK it's 'get barometer value (m)', not specified.
-        //CONSULT TELLO STATE EXPLANATION
-        
-        return 0;
+        //Return number is in Atmospheres (1 Atmosphere = 101325 Pascal)
+        return BAROMETER_PRESSURE;
     }
     
     public static int getAcceleration(){
