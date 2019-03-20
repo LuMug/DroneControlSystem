@@ -31,7 +31,7 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     private double positionZ;
 
     /**
-     * Creates new form AxesChartFrame
+     * Creates new form PositionXZPlotFrame
      */
     public PositionXZPlotFrame(double PositionX, double PositionZ) {
         initComponents();
