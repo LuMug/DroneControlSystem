@@ -31,7 +31,7 @@ public class CommandManager  {
      * @param command Command to send to the drone.
      */
     public void sendCommand(String command){
-        System.out.println("sending command" + command);
+        System.out.println("sending command: " + command);
         //Create a socket for sending the data
         try {
             //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente

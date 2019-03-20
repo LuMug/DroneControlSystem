@@ -40,7 +40,7 @@ public class DroneController extends Listener implements Runnable {
     }
 
     public void onConnect(Controller controller) {
-        System.out.println("Connected");
+        System.out.println("Connected leap");
     }
 
     public void onFrame(Controller controller) {
@@ -70,6 +70,7 @@ public class DroneController extends Listener implements Runnable {
 
     @Override
     public void run() {
+
         System.out.println("reading");
 //        try {
 //            System.in.read();
@@ -78,6 +79,7 @@ public class DroneController extends Listener implements Runnable {
 //            System.err.println("IOException io.read:" + ex.getMessage());
 //        }
 
+        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
@@ -95,16 +97,18 @@ public class DroneController extends Listener implements Runnable {
                 float average = getAverageDeltas();
 
                 if ((lastY > average || lastY < -average) && average > 0.1) {
-                    System.out.println("movement detected: " + average);
+//                    System.out.println("movement detected: " + average);
+                    String message = lastY > 0 ? Commands.up((int) lastY) : Commands.down((int) lastY);
+                    if ((int) lastY != 0) {
 
-                    String message = lastY > 0 ? Commands.up((int)lastY) : Commands.down((int)lastY);
-                    System.out.println("sending message: " + message);
-//                commandManager.sendCommand(message);
+                        System.out.println("sending message: " + message);
+                        commandManager.sendCommand(message);
+                    }
 
                 }
             }
         }
-        System.out.println("finished reading");
+        System.out.println("drone not connected");
     }
 
 }
