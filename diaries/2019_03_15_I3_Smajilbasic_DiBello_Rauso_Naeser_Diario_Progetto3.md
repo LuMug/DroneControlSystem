@@ -5,12 +5,12 @@
 ## Lavori svolti
 
 Jari:
-
+Ho concluso lo sviluppo ed implementazione della maggior parte dei metodi di movimento del drone.
 
 Fadil:
 Io integrato la mia classe DroneController con le classi CommandManager e FrameHelper. Adesso possiamo leggere la posizione della mano tradurla in comandi del drone e mandare il comando al drone.
 
-Luca: 
+Luca:
 Non era presente alla lezione.
 
 Andrea:
@@ -23,4 +23,4 @@ Non abbiamo riscontrato nessun problema.
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
-Jari: Se possibile finire la classe CommandReader e fare dei primi test unendola a Simulator.
+Jari: Testare il funzionamento dei vari metodi già fatti collegandola alla classe CommandManager e continuare a sviluppare i metodi non ancora conclusi.
