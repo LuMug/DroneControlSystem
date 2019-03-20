@@ -45,7 +45,7 @@ public class Simulator extends JPanel{
     // ------------------- General Variables -------------------
     
     private static final int PORT = 8889;
-    private static final String ADDRESS_TO_SEND = "192.168.43.246";
+    private static final String ADDRESS_TO_SEND = "192.168.43.16";
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
@@ -163,7 +163,7 @@ public class Simulator extends JPanel{
             PORT
         );       
         socket.send(packet);
-        System.out.println("Sent ERROR response.");
+        System.err.println("Sent ERROR response.");
     }
     
     // ------------------- Network Methods -------------------
@@ -188,7 +188,7 @@ public class Simulator extends JPanel{
                 String message = new String(recivePacket.getData()).trim();
                 
                 System.out.println("Recieved packet, content: " + message);
-
+                
                 if((message).equals("command")){
                     sendOK();
                     droneIsConnected = true;
@@ -199,6 +199,9 @@ public class Simulator extends JPanel{
                         socket.receive(recivePacket);
                         //Read Packet content
                         String command = new String(recivePacket.getData()).trim();
+                        
+                        System.out.println("Recieved packet, content: " + command);
+                        
                         if(command != null){
                             if(command.charAt(command.length() - 1) == '?'){
                                 //Getter commands 
@@ -228,6 +231,8 @@ public class Simulator extends JPanel{
                         
                     }
 
+                }else{
+                    sendERROR();
                 }
 
             }catch(IOException ioe){
