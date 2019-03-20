@@ -65,7 +65,7 @@ public class Simulator extends JPanel{
         painter = new SimulatorPainter();
         //Start listening on socket
         socket = new DatagramSocket(PORT);
-        this.startListening();
+        startListening();
     }
     
     // ------------------- Setters and Getters -------------------
@@ -151,6 +151,7 @@ public class Simulator extends JPanel{
             PORT
         );       
         socket.send(packet);
+        System.out.println("Sent OK response.");
     }
     
     private static void sendERROR() throws UnknownHostException, IOException{
@@ -162,11 +163,12 @@ public class Simulator extends JPanel{
             PORT
         );       
         socket.send(packet);
+        System.out.println("Sent ERROR response.");
     }
     
     // ------------------- Network Methods -------------------
 
-    public void startListening() throws InterruptedException{
+    private static void startListening() throws InterruptedException{
         boolean droneIsConnected;
         //Create buffer array with right size
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -183,9 +185,11 @@ public class Simulator extends JPanel{
                 //Waiting for a Packet and to receive a datagram
                 socket.receive(recivePacket);
                 //Read Packet content
-                String message = new String(recivePacket.getData());
+                String message = new String(recivePacket.getData()).trim();
+                
+                System.out.println("Recieved packet, content: " + message);
 
-                if((message.trim()).equals("command")){
+                if((message).equals("command")){
                     sendOK();
                     droneIsConnected = true;
                     while(droneIsConnected){
@@ -194,15 +198,14 @@ public class Simulator extends JPanel{
                         //Waiting for a Packet and to receive a datagram
                         socket.receive(recivePacket);
                         //Read Packet content
-                        String command = new String(recivePacket.getData());
-                        command = command.trim();
+                        String command = new String(recivePacket.getData()).trim();
                         if(command != null){
                             if(command.charAt(command.length() - 1) == '?'){
                                 //Getter commands 
-                                if(commandReader.getterCommandExists(command) == Integer.MIN_VALUE){
-                                    sendERROR();
-                                }else{
+                                if(commandReader.getterCommandExists(command) != Integer.MIN_VALUE){
                                     sendOK();
+                                }else{
+                                    sendERROR();
                                 }
                             }else if(!command.contains(" ")){
                                 //Void commands
