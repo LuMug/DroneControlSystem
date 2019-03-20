@@ -244,6 +244,6 @@ public class Simulator extends JPanel{
     // ------------------- Other Methods -------------------
     
     public void stopMotors(){
-        //Stop all four motors immediatly.
+        //Stop all four motors immediately.
     }
 }
