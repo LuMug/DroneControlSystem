@@ -14,12 +14,7 @@ import java.util.logging.Logger;
 public class FrameHelper {
     private Frame currentFrame = new Frame();
     private Frame lastFrame;
-
-    public FrameHelper() {
-    }
-
     
-
     public float getHandX(Hand hand) {
         if (hand != null) {
             return hand.palmPosition().getX();
@@ -44,6 +39,8 @@ public class FrameHelper {
             return 0;
         }
     }
+    
+    
 
     public Hand getRightHand(Frame frame) {
         Hand rhand = frame.hands().rightmost();
@@ -96,8 +93,12 @@ public class FrameHelper {
         }
     }
     
-    public float getDeltaZ(){
-        return getHandZ(getLeftHand(currentFrame)) - getHandZ(getLeftHand(lastFrame));        
+    public float getDeltaY(){
+        return getHandY(getLeftHand(currentFrame)) - getHandY(getLeftHand(lastFrame));        
+    }
+    
+    public float getRotationY(){
+        return getHandX(getLeftHand(currentFrame)) - getHandX(getLeftHand(lastFrame));
     }
     
     public synchronized void setFrame(Frame frame) {

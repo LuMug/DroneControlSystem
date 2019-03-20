@@ -31,14 +31,14 @@ public class CommandManager  {
      * @param command Command to send to the drone.
      */
     public void sendCommand(String command){
-        System.out.println("sending command" + command);
+        System.out.println("sending command: " + command);
         //Create a socket for sending the data
         try {
             //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
            
             //Creo il pacchetto
             byte[] commandData = command.getBytes();
-            
+
             DatagramPacket packet = new DatagramPacket(
                     commandData,
                     commandData.length, 
@@ -55,7 +55,7 @@ public class CommandManager  {
                     5555
             );
             */
-//            System.out.println("packet: " + packet.getPort());
+
             commandSocket.send(packet);
             
             System.out.println("Message sent to " + packet.getSocketAddress());

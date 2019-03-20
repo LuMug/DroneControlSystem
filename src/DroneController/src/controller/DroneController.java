@@ -40,38 +40,19 @@ public class DroneController extends Listener implements Runnable {
     }
 
     public void onConnect(Controller controller) {
-        System.out.println("Connected");
+        System.out.println("Connected leap");
     }
 
     public void onFrame(Controller controller) {
-//        helper.setFrame(controller.frame());
-//
-//        float altitude = helper.getHandZ(helper.getLeftHand(helper.getFrame()));
-//        float lastZ = helper.getDeltaZ();
-//        deltas.add(lastZ);
-//        float average = getAverageDeltas();
-////        System.out.println("average: " + getAverageDeltas());
-//
-//        if (lastZ > average || lastZ < -average) {
-//            System.out.println("movement detected: " + altitude);
-////            System.out.println("average: " + average);
-//
-//            String message = altitude > 0 ? Commands.up(altitude) : Commands.down(altitude);
-//
-//            System.out.println("sending message: " + message);
-//
-//            commandManager.sendCommand(message);
-//
-//        }
 
     }
 
     public float getAverageDeltas() {
         float tot = 0;
-        for (Float delta : deltas) {
+        for (float delta : deltas) {
             tot += Math.abs(delta);
         }
-        return tot / deltas.size();
+        return tot / (float) deltas.size();
     }
 
     public float translateAltitude(float altitude, float step) {
@@ -81,8 +62,15 @@ public class DroneController extends Listener implements Runnable {
         return translated;
     }
 
+    public void shiftDeltas() {
+        for (int i = deltas.size() - 1; i > 0; i--) {
+            deltas.set(i, deltas.get(i - 1));
+        }
+    }
+
     @Override
     public void run() {
+
         System.out.println("reading");
 //        try {
 //            System.in.read();
@@ -91,28 +79,36 @@ public class DroneController extends Listener implements Runnable {
 //            System.err.println("IOException io.read:" + ex.getMessage());
 //        }
 
+        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
-            helper.setFrame(controller.frame());
+            Frame frame = controller.frame();
+            helper.setFrame(frame);
+//            System.out.println("frame: " + frame.id());
+            if (helper.getFrame().id() != helper.getLastFrame().id()) {
+//            int altitude = helper.getHandY(helper.getLeftHand(helper.getFrame()));
+                float lastY = helper.getDeltaY();
+                if (deltas.size() < 10) {
+                    deltas.add(lastY);
+                } else {
+                    shiftDeltas();
+                    deltas.set(0, lastY);
 
-            float altitude = helper.getHandZ(helper.getLeftHand(helper.getFrame()));
-            float lastZ = helper.getDeltaZ();
-            deltas.add(lastZ);
-            float average = getAverageDeltas();
-//        System.out.println("average: " + getAverageDeltas());
+                }
+                float average = getAverageDeltas();
 
-            if (lastZ > average || lastZ < -average) {
-                System.out.println("movement detected: " + altitude);
-//            System.out.println("average: " + average);
+                if ((lastY > average || lastY < -average) && average > 0.1) {
+//                    System.out.println("movement detected: " + average);
+                    String message = lastY > 0 ? Commands.up((int) lastY) : Commands.down((int) lastY);
+                    if ((int) lastY != 0) {
 
-                String message = altitude > 0 ? Commands.up(altitude) : Commands.down(altitude);
+                        System.out.println("sending message: " + message);
+                        commandManager.sendCommand(message);
+                    }
 
-                System.out.println("sending message: " + message);
-
-                commandManager.sendCommand(message);
-
+                }
             }
         }
-        System.out.println("finished reading");
+        System.out.println("drone not connected");
     }
 
 }
