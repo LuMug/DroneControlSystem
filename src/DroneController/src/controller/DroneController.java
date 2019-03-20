@@ -97,7 +97,7 @@ public class DroneController extends Listener implements Runnable {
                 if ((lastY > average || lastY < -average) && average > 0.1) {
                     System.out.println("movement detected: " + average);
 
-                    String message = lastY > 0 ? Commands.up(lastY) : Commands.down(lastY);
+                    String message = lastY > 0 ? Commands.up((int)lastY) : Commands.down((int)lastY);
                     System.out.println("sending message: " + message);
 //                commandManager.sendCommand(message);
 

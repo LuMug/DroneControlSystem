@@ -38,7 +38,7 @@ public class CommandManager  {
            
             //Creo il pacchetto
             byte[] commandData = command.getBytes();
-            
+
             DatagramPacket packet = new DatagramPacket(
                     commandData,
                     commandData.length, 
@@ -55,7 +55,7 @@ public class CommandManager  {
                     5555
             );
             */
-//            System.out.println("packet: " + packet.getPort());
+
             commandSocket.send(packet);
             
             System.out.println("Message sent to " + packet.getSocketAddress());
