@@ -21,6 +21,7 @@ public class DroneController extends Listener implements Runnable {
     private FrameHelper helper;
     private Controller controller;
     private List<Float> deltas = new ArrayList<Float>();
+    private final float DEAD_ZONE = 0.55f; 
 
     private static final float STEP = 10f;
 
@@ -72,20 +73,12 @@ public class DroneController extends Listener implements Runnable {
     public void run() {
 
         System.out.println("reading");
-//        try {
-//            System.in.read();
-//
-//        } catch (IOException ex) {
-//            System.err.println("IOException io.read:" + ex.getMessage());
-//        }
 
         commandManager.sendCommand(Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
-//            System.out.println("frame: " + frame.id());
             if (helper.getFrame().id() != helper.getLastFrame().id()) {
-//            int altitude = helper.getHandY(helper.getLeftHand(helper.getFrame()));
                 float lastY = helper.getDeltaY();
                 if (deltas.size() < 10) {
                     deltas.add(lastY);
@@ -95,16 +88,19 @@ public class DroneController extends Listener implements Runnable {
 
                 }
                 float average = getAverageDeltas();
-
-                if ((lastY > average || lastY < -average) && average > 0.1) {
-//                    System.out.println("movement detected: " + average);
-                    String message = lastY > 0 ? Commands.up((int) lastY) : Commands.down((int) lastY);
-                    if ((int) lastY != 0) {
-
-                        System.out.println("sending message: " + message);
+                
+                //Controlla media (per calcolare lo scarto)
+                if ((lastY > average || lastY < -average) && (average < -this.DEAD_ZONE || average > this.DEAD_ZONE)) {
+                    //Casta in integer
+                    int yPos = (int) lastY;
+                    System.out.println("yPos: " + yPos);
+                    
+                    //Costruisce la stringa
+                    String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
+                    if (yPos != 0) {
+                        //Invia la stringa
                         commandManager.sendCommand(message);
                     }
-
                 }
             }
         }

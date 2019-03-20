@@ -10,8 +10,11 @@ Ho continuato con lo sviluppo della classe CommandReader nella quale sto finendo
 Fadil:
 Ho modificato la classe LeapMotionReader rinominandola FrameHelper, poichè conteneva solo metodi utili a ricavare delle informazioni da un frame, in più ho aggiunte altre funzionalità a quella classe. Ho integrato le funzionalità della classe FrameHelper nella classe DroneController. Devo ancora correggere la classe CommandManager di Luca per farla funzionare con la struttura che abbiamo adesso.
 
-##  Problemi riscontrati e soluzioni adottate
+Luca:
+Ho completato la classe Commands, implementando tutti i comandi supportati dal drone DJI Tello. Il comando "curve" ed il comando "rc" non sono ancora stati implementati.
 
+##  Problemi riscontrati e soluzioni adottate
+Non abbiamo riscontrato nessun problema.
 
 ##  Punto della situazione rispetto alla pianificazione
 Siamo al passo con il gantt preventivo.

@@ -6,13 +6,20 @@
 
 Jari:
 
+
 Fadil:
 Io integrato la mia classe DroneController con le classi CommandManager e FrameHelper. Adesso possiamo leggere la posizione della mano tradurla in comandi del drone e mandare il comando al drone.
 
-##  Problemi riscontrati e soluzioni adottate
+Luca: 
+Non era presente alla lezione.
 
+Andrea:
+Non era presente alla lezione.
 
-##  Punto della situazione rispetto alla pianificazione
+## Problemi riscontrati e soluzioni adottate
+Non abbiamo riscontrato nessun problema.
+
+## Punto della situazione rispetto alla pianificazione
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
