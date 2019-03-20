@@ -491,6 +491,6 @@ public class CommandReader{
     }
     
     public static boolean isInsideRange(int value, int min, int max){
-        return (value <= min && value >= max);
+        return (value >= min && value <= max);
     }
 }
