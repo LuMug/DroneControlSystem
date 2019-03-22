@@ -1,20 +1,17 @@
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
+import java.awt.*;
+import org.jfree.chart.*;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.xy.*;
+
 
 
 /**
- * La classe PositionXZPlotFrame é un frame che permette di visualizzare 
+ * La classe PositionXYPlotFrame é un frame che permette di visualizzare la 
+ * posizione del drone su un grafico cartesiano sugli assi X e Z (il drone viene 
+ * visto dall'alto)
  * 
  * @author Andrea Rauso
  */
@@ -64,8 +61,6 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
         XYSeries position = new XYSeries("Posizione");
-                
-//        position.add(-10, -10);
         position.add(this.positionX, this.positionZ);
         
         dataset.addSeries(position);
@@ -90,7 +85,7 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
         XZPositionChart.validate();
     }
     
-    public void  setChartRange(){
+    private void  setChartRange(){
         XYPlot xyPlot = (XYPlot) this.chart.getPlot();
         xyPlot.setDomainCrosshairVisible(true);
         xyPlot.setRangeCrosshairVisible(true);
@@ -108,7 +103,7 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
             domain.setTickUnit(new NumberTickUnit(1));
             domain.setVerticalTickLabels(true);
         }
-        
+
         NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
         if(this.positionZ >= 0){
             range.setRange(-getPositionZ()-5,getPositionZ()+5);

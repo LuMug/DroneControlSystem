@@ -1,6 +1,5 @@
 package settings;
 
-
 /**
  *
  * @author Luca Di Bello
