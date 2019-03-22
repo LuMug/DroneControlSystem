@@ -54,9 +54,9 @@ public class Simulator extends JPanel{
     private int x = 0;
     private int y = 0;
     private int z = 0;
-    private int rotationX = 0;
-    private int rotationY = 0;
-    private int rotationZ = 0;
+    private int roll = 0;
+    private int yaw = 0;
+    private int pitch = 0;
     
     // ------------------- Constructor -------------------
     
@@ -96,42 +96,42 @@ public class Simulator extends JPanel{
         this.z = z;
     }
     
-    public int getRotationX(){
-        return this.rotationX;
+    public int getRoll(){
+        return this.roll;
     }
     
-    public void setRotationX(int rotation){
+    public void setRoll(int rotation){
         if(rotation >= -360 && rotation <= 360){
-            this.rotationX = rotation;
+            this.roll = rotation;
         }else{
             int div = rotation%360;
-            this.rotationX = rotation/div;
+            this.roll = rotation/div;
         }
     }
     
-    public int getRotationY(){
-        return this.rotationY;
+    public int getYaw(){
+        return this.yaw;
     }
     
-    public void setRotationY(int rotation){
+    public void setYaw(int rotation){
         if(rotation >= -360 && rotation <= 360){
-            this.rotationY = rotation;
+            this.yaw = rotation;
         }else{
             int div = rotation%360;
-            this.rotationY = rotation/div;
+            this.yaw = rotation/div;
         }
     }
     
-    public int getRotationZ(){
-        return this.rotationZ;
+    public int getPitch(){
+        return this.pitch;
     }
     
-    public void setRotationZ(int rotation){
+    public void setPitch(int rotation){
         if(rotation >= -360 && rotation <= 360){
-            this.rotationZ = rotation;
+            this.pitch = rotation;
         }else{
             int div = rotation%360;
-            this.rotationZ = rotation/div;
+            this.pitch = rotation/div;
         }
     }
     
@@ -178,7 +178,7 @@ public class Simulator extends JPanel{
 
         System.out.println("Started listener on " + socket.getLocalSocketAddress());
 
-        while (true) {
+        while(true){
             try{
                 //Set packet size
                 recivePacket.setData(new byte[buffer.length]);
