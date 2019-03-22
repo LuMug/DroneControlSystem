@@ -5,7 +5,7 @@
 ## Lavori svolti
 
 Jari:
--
+Ho continuato lo sviluppo della classe CommandReader e assieme a Luca e Fadil abbiamo iniziato a testare la comunicazione fra le svariate classi correggendo i primi errori.
 
 Fadil:
 -
@@ -23,4 +23,4 @@ Non abbiamo riscontrato nessun problema.
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
--
+Jari: Se possibile integrare le classi fatte da Andrea e fare una prima simulazione grafica.

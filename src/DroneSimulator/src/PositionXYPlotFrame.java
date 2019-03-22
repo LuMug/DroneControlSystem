@@ -1,19 +1,15 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
+import java.awt.*;
+import org.jfree.chart.*;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.xy.*;
 
 
 /**
- * La classe PositionXYPlotFrame é un frame che permette di visualizzare 
+ * La classe PositionXYPlotFrame é un frame che permette di visualizzare la 
+ * posizione del drone su un grafico cartesiano sugli assi X e Y (il drone viene 
+ * visto di profilo)
  * 
  * @author Andrea Rauso
  */
@@ -22,15 +18,22 @@ public class PositionXYPlotFrame extends javax.swing.JFrame {
     /**
      * Posizione sull'asse X
      */
-    private float positionX; 
+    private int positionX; 
     
     /**
      * Posizione sull'asse Y
      */
-    private float positionY;
+    private int positionY;
+    
+    /**
+     * Il grafico JFreeChart dove mostrare i dati
+     */
+    private JFreeChart chart;
 
     /**
      * Creates new form PositionXYPlotFrame
+     * @param PositionX posizione sull'asse X
+     * @param PositionY posizione sull'asse Y
      */
     public PositionXYPlotFrame(int PositionX, int PositionY) {
         initComponents();
@@ -38,36 +41,32 @@ public class PositionXYPlotFrame extends javax.swing.JFrame {
         setTitle("DCS Posizione drone vista di profilo");
         this.positionX = PositionX;
         this.positionY = PositionY;
-        // Create Dataset
+
         XYDataset dataset = createDataset();
 
-        //Create chart
-        JFreeChart chart = ChartFactory.createScatterPlot(
+        this.chart = ChartFactory.createScatterPlot(
                 "Simulatore dati posizione DJI Tello, vista di profilo", //Chart Title
                 "Posizione Asse X", // Category axis
                 "Posizione Asse Y", // Value axis
                 dataset
         );
 
-        XYPlot xyPlot = (XYPlot) chart.getPlot();
-        xyPlot.setDomainCrosshairVisible(true);
-        xyPlot.setRangeCrosshairVisible(true);
-        XYItemRenderer renderer = xyPlot.getRenderer();
-        renderer.setSeriesPaint(0, Color.blue);
-        NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
-        domain.setRange(getPositionX()-10,getPositionX()+10);
-        domain.setTickUnit(new NumberTickUnit(1));
-        domain.setVerticalTickLabels(true);
-        NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        range.setRange(getPositionY()-5,getPositionY()+5);
-        range.setTickUnit(new NumberTickUnit(1));
+        setChartRange();
         
-        ChartPanel panel = new ChartPanel(chart);       
+        ChartPanel panel = new ChartPanel(this.chart);       
         XYPositionChart.setLayout(new java.awt.BorderLayout());
         XYPositionChart.add(panel,BorderLayout.CENTER);
         XYPositionChart.validate();
         
     }
+    
+    /**
+     * Il Metodo createDataset permette di creare un dataset di tipo XYDataset
+     * contenente un solo punto cartesiano (la posizione del drone) da usare per
+     * costruire il grafico
+     * 
+     * @return Il dataset contenente le informazioni sulla posizione del drone
+     */
     private XYDataset createDataset() {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
@@ -79,59 +78,100 @@ public class PositionXYPlotFrame extends javax.swing.JFrame {
         return dataset;
     }
     
+    /**
+     * La classe updateAxesChart permette di aggiornare il frame mostrando i 
+     * nuovi dati della posizione del drone
+     */
     private void updateAxesChart(){
         XYDataset dataset = createDataset();
-        JFreeChart chart = ChartFactory.createScatterPlot(
-                "Simulatore dati posizione DJI Tello, vista di profilo", //Chart Title
-                "Poszione asse X", // Category axis
-                "Poszione asse Y", // Value axis
+        this.chart = ChartFactory.createScatterPlot(
+                "Simulatore dati posizione DJI Tello, vista di profilo", 
+                "Poszione asse X", 
+                "Poszione asse Y", 
                 dataset
         );
         
-        XYPlot xyPlot = (XYPlot) chart.getPlot();
-        xyPlot.setDomainCrosshairVisible(true);
-        xyPlot.setRangeCrosshairVisible(true);
-        XYItemRenderer renderer = xyPlot.getRenderer();
-        renderer.setSeriesPaint(0, Color.red);
-        NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
-        domain.setRange(getPositionX()-10,getPositionX()+10);
-        domain.setTickUnit(new NumberTickUnit(1));
-        domain.setVerticalTickLabels(true);
-        NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        range.setRange(getPositionY()-5,getPositionY()+5);
-        range.setTickUnit(new NumberTickUnit(1));
+        setChartRange();
         
-        ChartPanel panel = new ChartPanel(chart);
+        ChartPanel panel = new ChartPanel(this.chart);
         XYPositionChart.revalidate();
         XYPositionChart.add(panel);
         XYPositionChart.validate();
     }
     
-    public float getPositionX() {
+    /**
+     * La classe setChartRange imposta il range dei numeri in cui mostrare i dati
+     */
+    private void  setChartRange(){
+        XYPlot xyPlot = (XYPlot) this.chart.getPlot();
+        xyPlot.setDomainCrosshairVisible(true);
+        xyPlot.setRangeCrosshairVisible(true);
+        
+        XYItemRenderer renderer = xyPlot.getRenderer();
+        renderer.setSeriesPaint(0, Color.blue);
+        
+        NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
+        if(this.positionX >= 0){
+            domain.setRange(-getPositionX()-10,getPositionX()+10);
+            domain.setTickUnit(new NumberTickUnit(1));
+            domain.setVerticalTickLabels(true);
+        }else{
+            domain.setRange(getPositionX()-10,Math.abs(getPositionX())+10);
+            domain.setTickUnit(new NumberTickUnit(1));
+            domain.setVerticalTickLabels(true);
+        }
+        
+        NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
+        if(this.positionY >= 0){
+            range.setRange(-getPositionY()-5,getPositionY()+5);
+            range.setTickUnit(new NumberTickUnit(1));
+        }else{
+            range.setRange(getPositionY()-5,Math.abs(getPositionY())+5);
+            range.setTickUnit(new NumberTickUnit(1));
+        }
+        
+    }
+    
+    /**
+     * Ritorna la posizione sull'asse X
+     * @return posizione sull'asse X
+     */
+    public int getPositionX() {
         return positionX;
     }
 
-    public float getPositionY() {
+    /**
+     * Ritorna la posizione sull'asse Y
+     * @return posizione sull'asse Y
+     */
+    public int getPositionY() {
         return positionY;
     }
     
-
-    public void setPositionX(float positionX) {
+    /**
+     * Imposta il valore della posizione sull'asse X e aggiorna il grafico
+     * @param positionX posizione sull'asse X
+     */
+    public void setPositionX(int positionX) {
         this.positionX += positionX;
         updateAxesChart();
     }
 
-    public void setPositionY(float positionY) {
+    /**
+     * Imposta il valore della posizione sull'asse Y e aggiorna il grafico
+     * @param positionY posizione sull'asse Y
+     */
+    public void setPositionY(int positionY) {
         this.positionY += positionY;
         updateAxesChart();
     }           
 
-    /**
-     * Creates new form PositionXYPlotFrame
-     */
-    public PositionXYPlotFrame() {
-        initComponents();
-    }
+//    /**
+//     * Creates new form PositionXYPlotFrame
+//     */
+//    public PositionXYPlotFrame() {
+//        initComponents();
+//    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -192,7 +232,7 @@ public class PositionXYPlotFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PositionXYPlotFrame(-3,3).setVisible(true);
+                new PositionXYPlotFrame(-3,-3).setVisible(true);
             }
         });
     }

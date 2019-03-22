@@ -21,3 +21,5 @@ src/DroneSimulator/nbproject/private/private.xml
 src/DroneSimulator/build/built-jar.properties
 *.properties
 src/DroneSimulator/build/built-jar.properties
+src/DroneSimulator/nbproject/private/private.xml
+*.xml
