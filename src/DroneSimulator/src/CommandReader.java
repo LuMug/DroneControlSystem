@@ -221,12 +221,18 @@ public class CommandReader{
     
     public static boolean streamon(){
         //VideoStream on
-        return true;
+        
+        //Still Not Implemented
+        
+        return false;
     }
     
     public static boolean streamoff(){
         //VideoStream off
-        return true;
+        
+        //Still Not Implemented
+        
+        return false;
     }
     
     public static boolean emergency(){
