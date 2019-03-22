@@ -29,6 +29,8 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
      * Posizione sull'asse Z
      */
     private double positionZ;
+    
+    private JFreeChart chart;
 
     /**
      * Creates new form PositionXZPlotFrame
@@ -43,27 +45,16 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
         XYDataset dataset = createDataset();
 
         //Create chart
-        JFreeChart chart = ChartFactory.createScatterPlot(
+        this.chart = ChartFactory.createScatterPlot(
                 "Simulatore dati DJI Tello",
                 "Posizione asse X", 
                 "Posizione asse Z", 
                 dataset
         );
         
-        XYPlot xyPlot = (XYPlot) chart.getPlot();
-        xyPlot.setDomainCrosshairVisible(true);
-        xyPlot.setRangeCrosshairVisible(true);
-        XYItemRenderer renderer = xyPlot.getRenderer();
-        renderer.setSeriesPaint(0, Color.blue);
-        NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
-        domain.setRange(getPositionX()-10,getPositionX()+10);
-        domain.setTickUnit(new NumberTickUnit(1));
-        domain.setVerticalTickLabels(true);
-        NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        range.setRange(getPositionZ()-5,getPositionZ()+5);
-        range.setTickUnit(new NumberTickUnit(1));
+        setChartRange();
 
-        ChartPanel panel = new ChartPanel(chart);
+        ChartPanel panel = new ChartPanel(this.chart);
         XZPositionChart.setLayout(new java.awt.BorderLayout());
         XZPositionChart.add(panel,BorderLayout.CENTER);
         XZPositionChart.validate();
@@ -84,30 +75,48 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     
     private void updateAxesChart(){
         XYDataset dataset = createDataset();
-        JFreeChart chart = ChartFactory.createScatterPlot(
+        this.chart = ChartFactory.createScatterPlot(
                 "Simulatore dati rotazione DJI Tello", 
                 "Posizione Asse X", 
                 "Posizione Asse Y", 
                 dataset
         );
         
-        XYPlot xyPlot = (XYPlot) chart.getPlot();
-        xyPlot.setDomainCrosshairVisible(true);
-        xyPlot.setRangeCrosshairVisible(true);
-        XYItemRenderer renderer = xyPlot.getRenderer();
-        renderer.setSeriesPaint(0, Color.blue);
-        NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
-        domain.setRange(getPositionX()-10,getPositionX()+10);
-        domain.setTickUnit(new NumberTickUnit(1));
-        domain.setVerticalTickLabels(true);
-        NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        range.setRange(getPositionZ()-5,getPositionZ()+5);
-        range.setTickUnit(new NumberTickUnit(1));
+        setChartRange();
         
-        ChartPanel panel = new ChartPanel(chart);
+        ChartPanel panel = new ChartPanel(this.chart);
         XZPositionChart.revalidate();
         XZPositionChart.add(panel);
         XZPositionChart.validate();
+    }
+    
+    public void  setChartRange(){
+        XYPlot xyPlot = (XYPlot) this.chart.getPlot();
+        xyPlot.setDomainCrosshairVisible(true);
+        xyPlot.setRangeCrosshairVisible(true);
+        
+        XYItemRenderer renderer = xyPlot.getRenderer();
+        renderer.setSeriesPaint(0, Color.blue);
+        
+        NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
+        if(this.positionX >= 0){
+            domain.setRange(-getPositionX()-10,getPositionX()+10);
+            domain.setTickUnit(new NumberTickUnit(1));
+            domain.setVerticalTickLabels(true);
+        }else{
+            domain.setRange(getPositionX()-10,Math.abs(getPositionX())+10);
+            domain.setTickUnit(new NumberTickUnit(1));
+            domain.setVerticalTickLabels(true);
+        }
+        
+        NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
+        if(this.positionZ >= 0){
+            range.setRange(-getPositionZ()-5,getPositionZ()+5);
+            range.setTickUnit(new NumberTickUnit(1));
+        }else{
+            range.setRange(getPositionZ()-5,Math.abs(getPositionZ())+5);
+            range.setTickUnit(new NumberTickUnit(1));
+        }
     }
     
     public double getPositionX() {
