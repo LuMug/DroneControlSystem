@@ -1,15 +1,9 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
+import java.awt.*;
+import org.jfree.chart.*;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.xy.*;
 
 
 /**
@@ -108,7 +102,7 @@ public class PositionXYPlotFrame extends javax.swing.JFrame {
     /**
      * La classe setChartRange imposta il range dei numeri in cui mostrare i dati
      */
-    public void  setChartRange(){
+    private void  setChartRange(){
         XYPlot xyPlot = (XYPlot) this.chart.getPlot();
         xyPlot.setDomainCrosshairVisible(true);
         xyPlot.setRangeCrosshairVisible(true);
