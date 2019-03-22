@@ -236,7 +236,7 @@ public class Simulator extends JPanel{
                 }
 
             }catch(IOException ioe){
-                System.out.println("IOException in listener: " + ioe.getMessage());
+                System.out.println("IOException in startListening(): " + ioe.getMessage());
             }
         } 
     }
