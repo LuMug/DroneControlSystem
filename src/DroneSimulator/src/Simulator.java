@@ -49,20 +49,26 @@ public class Simulator extends JPanel{
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
-    private static SimulatorPainter painter;
+    private static PositionXYPlotFrame positionXYFrame;
+    private static PositionXZPlotFrame positionXZFrame;
+    private static RotationChartFrame rotationChartFrame;    
+//    private static SimulatorPainter painter;
     //Positioning points
     private int x = 0;
     private int y = 0;
     private int z = 0;
-    private int rotationX = 0;
-    private int rotationY = 0;
-    private int rotationZ = 0;
+    private int roll = 0;
+    private int yaw = 0;
+    private int pitch = 0;
     
     // ------------------- Constructor -------------------
     
     public Simulator() throws SocketException, InterruptedException{
         commandReader = new CommandReader(this);
-        painter = new SimulatorPainter();
+//        painter = new SimulatorPainter();
+        positionXYFrame = new PositionXYPlotFrame(this.x, this.y);
+        positionXZFrame = new PositionXZPlotFrame(this.x, this.z);
+        rotationChartFrame = new RotationChartFrame(this.pitch,this.yaw,this.roll);
         //Start listening on socket
         socket = new DatagramSocket(PORT);
         startListening();
@@ -77,6 +83,8 @@ public class Simulator extends JPanel{
     
     public void setX(int x){
         this.x = x;
+        positionXYFrame.setPositionX(this.x);
+        positionXZFrame.setPositionX(this.x);
     }
     
     @Override
@@ -86,6 +94,7 @@ public class Simulator extends JPanel{
     
     public void setY(int y){
         this.y = y;
+        positionXYFrame.setPositionY(this.y);
     }
     
     public int getZ(){
@@ -94,50 +103,56 @@ public class Simulator extends JPanel{
     
     public void setZ(int z){
         this.z = z;
+        positionXZFrame.setPositionX(this.x);
     }
     
-    public int getRotationX(){
-        return this.rotationX;
+    public int getRoll(){
+        return this.roll;
     }
     
-    public void setRotationX(int rotation){
+    public void setRoll(int rotation){
         if(rotation >= -360 && rotation <= 360){
-            this.rotationX = rotation;
+            this.roll = rotation;
         }else{
             int div = rotation%360;
-            this.rotationX = rotation/div;
+            this.roll = rotation/div;
         }
+        rotationChartFrame.setRoll(this.roll);
     }
     
-    public int getRotationY(){
-        return this.rotationY;
+    public int getYaw(){
+        return this.yaw;
     }
     
-    public void setRotationY(int rotation){
+    public void setYaw(int rotation){
         if(rotation >= -360 && rotation <= 360){
-            this.rotationY = rotation;
+            this.yaw = rotation;
         }else{
             int div = rotation%360;
-            this.rotationY = rotation/div;
+            this.yaw = rotation/div;
         }
+        rotationChartFrame.setYaw(this.yaw);
+
     }
     
-    public int getRotationZ(){
-        return this.rotationZ;
+    public int getPitch(){
+        return this.pitch;
     }
     
-    public void setRotationZ(int rotation){
+    public void setPitch(int rotation){
         if(rotation >= -360 && rotation <= 360){
-            this.rotationZ = rotation;
+            this.pitch = rotation;
         }else{
             int div = rotation%360;
-            this.rotationZ = rotation/div;
+            this.pitch = rotation/div;
         }
+        rotationChartFrame.setPitch(this.pitch);
+
     }
     
     @Override
     public void paint(Graphics g){
-        painter.paint(g);
+//        painter.paint(g);
     }
     
     // ------------------- Helper Methods -------------------
@@ -178,7 +193,7 @@ public class Simulator extends JPanel{
 
         System.out.println("Started listener on " + socket.getLocalSocketAddress());
 
-        while (true) {
+        while(true){
             try{
                 //Set packet size
                 recivePacket.setData(new byte[buffer.length]);
@@ -236,7 +251,7 @@ public class Simulator extends JPanel{
                 }
 
             }catch(IOException ioe){
-                System.out.println("IOException in listener: " + ioe.getMessage());
+                System.out.println("IOException in startListening(): " + ioe.getMessage());
             }
         } 
     }
@@ -244,6 +259,6 @@ public class Simulator extends JPanel{
     // ------------------- Other Methods -------------------
     
     public void stopMotors(){
-        //Stop all four motors immediatly.
+        //Stop all four motors immediately.
     }
 }

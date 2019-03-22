@@ -221,12 +221,18 @@ public class CommandReader{
     
     public static boolean streamon(){
         //VideoStream on
-        return true;
+        
+        //Still Not Implemented
+        
+        return false;
     }
     
     public static boolean streamoff(){
         //VideoStream off
-        return true;
+        
+        //Still Not Implemented
+        
+        return false;
     }
     
     public static boolean emergency(){
@@ -287,7 +293,7 @@ public class CommandReader{
     public static boolean cw(int rotation){
         if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
-            simulator.setRotationX(simulator.getRotationX() + rotation);
+            simulator.setRoll(simulator.getRoll() + rotation);
             return true;
         }
         return false;
@@ -296,7 +302,7 @@ public class CommandReader{
     public static boolean ccw(int rotation){
         if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
-            simulator.setRotationX(simulator.getRotationX() - rotation);
+            simulator.setRoll(simulator.getRoll() - rotation);
             return true;
         }
         return false;
@@ -307,29 +313,29 @@ public class CommandReader{
             switch(where){
                 case 'l':
                     //Left flip on X axis
-                    for(int i = simulator.getRotationX(); i < simulator.getRotationX() + 360; i += 36){
-                        simulator.setRotationX(simulator.getRotationX() + i);
+                    for(int i = simulator.getRoll(); i < simulator.getRoll() + 360; i += 36){
+                        simulator.setRoll(simulator.getRoll() + i);
                         Thread.sleep(100);
                     }
                     return true;
                 case 'r':
                     //Right flip on X axis
-                    for(int i = simulator.getRotationX(); i < simulator.getRotationX() + 360; i += 36){
-                        simulator.setRotationX(simulator.getRotationX() - i);
+                    for(int i = simulator.getRoll(); i < simulator.getRoll() + 360; i += 36){
+                        simulator.setRoll(simulator.getRoll() - i);
                         Thread.sleep(100);
                     }
                     return true;
                 case 'f':
                     //Left flip on Z axis
-                    for(int i = simulator.getRotationZ(); i < simulator.getRotationZ() + 360; i += 36){
-                        simulator.setRotationZ(simulator.getRotationZ() + i);
+                    for(int i = simulator.getPitch(); i < simulator.getPitch() + 360; i += 36){
+                        simulator.setPitch(simulator.getPitch() + i);
                         Thread.sleep(100);
                     }
                     return true;
                 case 'b':
                     //Left flip on Z axis
-                    for(int i = simulator.getRotationZ(); i < simulator.getRotationZ() + 360; i += 36){
-                        simulator.setRotationZ(simulator.getRotationZ() - i);
+                    for(int i = simulator.getPitch(); i < simulator.getPitch() + 360; i += 36){
+                        simulator.setPitch(simulator.getPitch() - i);
                         Thread.sleep(100);
                     }
                     return true;
@@ -445,7 +451,13 @@ public class CommandReader{
         //CONSULT TELLO STATE EXPLANATION
         
         //Still to do
-        
+        /*
+        return new int[]{
+            simulator.getPitch(),
+            simulator.getRoll(),
+            simulator.getYaw()
+        };
+        */
         return 0;
     }
     

@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
@@ -7,84 +6,102 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.*;
 
 
-
 /**
  * La classe PositionXYPlotFrame é un frame che permette di visualizzare la 
- * posizione del drone su un grafico cartesiano sugli assi X e Z (il drone viene 
- * visto dall'alto)
+ * posizione del drone su un grafico cartesiano sugli assi X e Y (il drone viene 
+ * visto di profilo)
  * 
  * @author Andrea Rauso
  */
-public class PositionXZPlotFrame extends javax.swing.JFrame {
+public class PositionXYPlotFrame extends javax.swing.JFrame {
 
     /**
      * Posizione sull'asse X
      */
-    private double positionX; 
+    private int positionX; 
     
     /**
-     * Posizione sull'asse Z
+     * Posizione sull'asse Y
      */
-    private double positionZ;
+    private int positionY;
     
+    /**
+     * Il grafico JFreeChart dove mostrare i dati
+     */
     private JFreeChart chart;
 
     /**
-     * Creates new form PositionXZPlotFrame
+     * Creates new form PositionXYPlotFrame
+     * @param PositionX posizione sull'asse X
+     * @param PositionY posizione sull'asse Y
      */
-    public PositionXZPlotFrame(double PositionX, double PositionZ) {
+    public PositionXYPlotFrame(int PositionX, int PositionY) {
         initComponents();
         setSize(600, 400);
-        setTitle("DCS Posizione drone vista dall'alto");
+        setTitle("DCS Posizione drone vista di profilo");
         this.positionX = PositionX;
-        this.positionZ = PositionZ;
-        // Create Dataset
+        this.positionY = PositionY;
+
         XYDataset dataset = createDataset();
 
-        //Create chart
         this.chart = ChartFactory.createScatterPlot(
-                "Simulatore dati DJI Tello",
-                "Posizione asse X", 
-                "Posizione asse Z", 
+                "Simulatore dati posizione DJI Tello, vista di profilo", //Chart Title
+                "Posizione Asse X", // Category axis
+                "Posizione Asse Y", // Value axis
                 dataset
         );
-        
-        setChartRange();
 
-        ChartPanel panel = new ChartPanel(this.chart);
-        XZPositionChart.setLayout(new java.awt.BorderLayout());
-        XZPositionChart.add(panel,BorderLayout.CENTER);
-        XZPositionChart.validate();
+        setChartRange();
+        
+        ChartPanel panel = new ChartPanel(this.chart);       
+        XYPositionChart.setLayout(new java.awt.BorderLayout());
+        XYPositionChart.add(panel,BorderLayout.CENTER);
+        XYPositionChart.validate();
         
     }
+    
+    /**
+     * Il Metodo createDataset permette di creare un dataset di tipo XYDataset
+     * contenente un solo punto cartesiano (la posizione del drone) da usare per
+     * costruire il grafico
+     * 
+     * @return Il dataset contenente le informazioni sulla posizione del drone
+     */
     private XYDataset createDataset() {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
         XYSeries position = new XYSeries("Posizione");
-        position.add(this.positionX, this.positionZ);
-        
+                
+        position.add(this.positionX,this.positionY);
         dataset.addSeries(position);
         
         return dataset;
     }
     
+    /**
+     * La classe updateAxesChart permette di aggiornare il frame mostrando i 
+     * nuovi dati della posizione del drone
+     */
     private void updateAxesChart(){
         XYDataset dataset = createDataset();
         this.chart = ChartFactory.createScatterPlot(
-                "Simulatore dati rotazione DJI Tello", 
-                "Posizione Asse X", 
-                "Posizione Asse Y", 
+                "Simulatore dati posizione DJI Tello, vista di profilo", 
+                "Poszione asse X", 
+                "Poszione asse Y", 
                 dataset
         );
         
         setChartRange();
         
         ChartPanel panel = new ChartPanel(this.chart);
-        XZPositionChart.revalidate();
-        XZPositionChart.add(panel);
-        XZPositionChart.validate();
+        XYPositionChart.revalidate();
+        XYPositionChart.add(panel);
+        XYPositionChart.validate();
     }
     
+    /**
+     * La classe setChartRange imposta il range dei numeri in cui mostrare i dati
+     */
     private void  setChartRange(){
         XYPlot xyPlot = (XYPlot) this.chart.getPlot();
         xyPlot.setDomainCrosshairVisible(true);
@@ -103,42 +120,58 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
             domain.setTickUnit(new NumberTickUnit(1));
             domain.setVerticalTickLabels(true);
         }
-
+        
         NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        if(this.positionZ >= 0){
-            range.setRange(-getPositionZ()-5,getPositionZ()+5);
+        if(this.positionY >= 0){
+            range.setRange(-getPositionY()-5,getPositionY()+5);
             range.setTickUnit(new NumberTickUnit(1));
         }else{
-            range.setRange(getPositionZ()-5,Math.abs(getPositionZ())+5);
+            range.setRange(getPositionY()-5,Math.abs(getPositionY())+5);
             range.setTickUnit(new NumberTickUnit(1));
         }
+        
     }
     
-    public double getPositionX() {
+    /**
+     * Ritorna la posizione sull'asse X
+     * @return posizione sull'asse X
+     */
+    public int getPositionX() {
         return positionX;
     }
 
-    public double getPositionZ() {
-        return positionZ;
+    /**
+     * Ritorna la posizione sull'asse Y
+     * @return posizione sull'asse Y
+     */
+    public int getPositionY() {
+        return positionY;
     }
     
-
-    public void setPositionX(double rotationX) {
-        this.positionX += rotationX;
+    /**
+     * Imposta il valore della posizione sull'asse X e aggiorna il grafico
+     * @param positionX posizione sull'asse X
+     */
+    public void setPositionX(int positionX) {
+        this.positionX += positionX;
         updateAxesChart();
     }
 
-    public void setPositionZ(double rotationZ) {
-        this.positionZ += rotationZ;
+    /**
+     * Imposta il valore della posizione sull'asse Y e aggiorna il grafico
+     * @param positionY posizione sull'asse Y
+     */
+    public void setPositionY(int positionY) {
+        this.positionY += positionY;
         updateAxesChart();
     }           
 
-    /**
-     * Creates new form PositionXZPlotFrame
-     */
-    public PositionXZPlotFrame() {
-        initComponents();
-    }
+//    /**
+//     * Creates new form PositionXYPlotFrame
+//     */
+//    public PositionXYPlotFrame() {
+//        initComponents();
+//    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,22 +182,22 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        XZPositionChart = new javax.swing.JPanel();
+        XYPositionChart = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout XZPositionChartLayout = new javax.swing.GroupLayout(XZPositionChart);
-        XZPositionChart.setLayout(XZPositionChartLayout);
-        XZPositionChartLayout.setHorizontalGroup(
-            XZPositionChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout XYPositionChartLayout = new javax.swing.GroupLayout(XYPositionChart);
+        XYPositionChart.setLayout(XYPositionChartLayout);
+        XYPositionChartLayout.setHorizontalGroup(
+            XYPositionChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
-        XZPositionChartLayout.setVerticalGroup(
-            XZPositionChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        XYPositionChartLayout.setVerticalGroup(
+            XYPositionChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
-        getContentPane().add(XZPositionChart, java.awt.BorderLayout.CENTER);
+        getContentPane().add(XYPositionChart, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -186,25 +219,25 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PositionXZPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PositionXYPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PositionXZPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PositionXYPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PositionXZPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PositionXYPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PositionXZPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PositionXYPlotFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PositionXZPlotFrame(0,0).setVisible(true);
+                new PositionXYPlotFrame(-3,-3).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel XZPositionChart;
+    private javax.swing.JPanel XYPositionChart;
     // End of variables declaration//GEN-END:variables
 }

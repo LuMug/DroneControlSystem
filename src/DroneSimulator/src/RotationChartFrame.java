@@ -1,11 +1,7 @@
 
-import java.awt.BorderLayout;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+import java.awt.*;
+import org.jfree.chart.*;
+import org.jfree.data.category.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,7 +11,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  * La classe RotationChartFrame é un frame che permette di visualizzare i dati
- * relativi alla rotazione del drone sui tre assi
+ * relativi alla rotazione del drone sui tre assi cartesiani
  * 
  * @author Andrea Rauso
  */
@@ -24,40 +20,42 @@ public class RotationChartFrame extends javax.swing.JFrame {
     /**
      * Rotazione sull'asse X (Pitch)
      */
-    private float rotationY; 
+    private int pitch; 
     
     /**
      * Rotazione sull'asse Y (Yaw)
      */
-    private float rotationX; 
+    private int yaw; 
     
     /**
      * Rotazione sull'asse Z (Roll)
      */
-    private float rotationZ; 
+    private int roll; 
     
     
     /**
      * Creates new form AxesChartFrame
+     * 
+     * @param pitch rotazione sull'asse X
+     * @param yaw rotazione sull'asse Y
+     * @param roll rotazione sull'asse Z
      */
-    public RotationChartFrame(int rotationX, int rotationY, int rotationZ) {
+    public RotationChartFrame(int pitch, int yaw, int roll) {
         initComponents();
         setSize(600, 400);
         setTitle("DCS Grafico assi di rotazione");
-        this.rotationX = rotationX;
-        this.rotationY = rotationY;
-        this.rotationZ = rotationZ;
-        // Create Dataset
+        this.pitch = pitch;
+        this.yaw = yaw;
+        this.roll = roll;
+
         CategoryDataset dataset = createDataset();
 
-        //Create chart
+
         JFreeChart chart = ChartFactory.createBarChart(
-                "Simulatore dati DJI Tello", //Chart Title
-                "Dati Sensori", // Category axis
-                "Valore sensore", // Value axis
-                dataset,
-                PlotOrientation.VERTICAL,
-                false, true, false
+                "Simulatore dati DJI Tello rotazione del drone", //Chart Title
+                "Assi di rotazione", // Category axis
+                "Valore rotazione", 
+                dataset
         );
 
         ChartPanel panel = new ChartPanel(chart);
@@ -69,53 +67,55 @@ public class RotationChartFrame extends javax.swing.JFrame {
     private CategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        // Population in 2005
-        dataset.addValue(this.rotationY, "Sensore", "Yaw(Imbardata)");
-        dataset.addValue(this.rotationX, "Sensore", "Pitch (Beccheggio)");
-        dataset.addValue(this.rotationZ, "Sensore", "Roll (Rollio)");
+        dataset.addValue(this.pitch, "Asse", "Pitch (Beccheggio)");
+        dataset.addValue(this.yaw, "Asse", "Yaw(Imbardata)");
+        dataset.addValue(this.roll, "Asse", "Roll (Rollio)");
         return dataset;
     }
     
     private void updateAxesChart(){
         CategoryDataset dataset = createDataset();
+        
         JFreeChart chart = ChartFactory.createBarChart(
-                "Simulatore dati rotazione DJI Tello", //Chart Title
-                "Dati Sensori", // Category axis
-                "Valore sensore", // Value axis
-                dataset,
-                PlotOrientation.VERTICAL,
-                false, true, false
+                "Simulatore dati rotazione DJI Tello", 
+                "Dati Sensori", 
+                "Valore sensore", 
+                dataset
         );
+        
         ChartPanel panel = new ChartPanel(chart);
         rotationChart.revalidate();
         rotationChart.add(panel);
         rotationChart.validate();
     }
     
-    public float getRotationY() {
-        return rotationY;
-    }
-
-    public float getRotationX() {
-        return rotationX;
-    }
-
-    public float getRotationZ() {
-        return rotationZ;
+    //pitch
+    public int getPitch() {
+        return pitch;
     }
     
-    public void setRotationY(float rotationY) {
-        this.rotationY += rotationY;
+    //yaw
+    public int getYaw() {
+        return yaw;
+    }
+
+    //roll
+    public int getRoll() {
+        return roll;
+    }
+    
+    public void setYaw(int yaw) {
+        this.yaw += yaw;
         updateAxesChart();
     }
 
-    public void setRotationX(float rotationX) {
-        this.rotationX += rotationX;
+    public void setPitch(int pitch) {
+        this.pitch += pitch;
         updateAxesChart();
     }
 
-    public void setRotationZ(float rotationZ) {
-        this.rotationZ += rotationZ;
+    public void setRoll(int roll) {
+        this.roll += roll;
         updateAxesChart();
     }           
 
@@ -176,11 +176,11 @@ public class RotationChartFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new RotationChartFrame().setVisible(true);
-//            }
-//        });
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new RotationChartFrame(0,0,0).setVisible(true);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

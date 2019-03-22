@@ -2,16 +2,17 @@ package controller;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Listener;
 import communication.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import settings.SettingsManager;
+=======
+>>>>>>> 5b885bde8dbf36cd90d502148747bd328964f4fc
 
 /**
  *
@@ -24,11 +25,7 @@ public class DroneController extends Listener implements Runnable {
     private FrameHelper helper;
     private Controller controller;
     private List<Float> deltas = new ArrayList<Float>();
-    private final float DEAD_ZONE = 0.55f; 
-
-    private static final float STEP = 10f;
-
-    private static final int AVERAGE_POINTS = 10;
+    private final float DEAD_ZONE = 2f;
 
     public DroneController() {
         controller = new Controller();
@@ -73,42 +70,74 @@ public class DroneController extends Listener implements Runnable {
         }
     }
 
+    public void checkHeightControl() {
+
+        float lastY = helper.getDeltaY();
+
+        float handSpeed = helper.getHandSpeedY(helper.getLeftHand()) / 10;
+//        //Controlla media (per calcolare lo scarto)
+        if ((handSpeed < -this.DEAD_ZONE || handSpeed > this.DEAD_ZONE) && lastY != 0.0) {
+            if (deltas.size() < 20) {
+                deltas.add(lastY);
+            } else {
+                shiftDeltas();
+                deltas.set(0, lastY);
+            }
+            float average = getAverageDeltas();
+
+            System.out.println("average: " + average);
+
+            int yPos = (int) lastY;
+
+            //Costruisce la stringa
+            if (yPos != 0 && (yPos < average || yPos > -average)) {
+                String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
+
+                //Invia la stringa
+                //commandManager.sendCommand(message);
+                System.out.println("sending message: " + message);
+            }
+        }
+
+    }
+
+    public void checkMovementControl() {
+        float pitchValue = helper.getPitch(helper.getRightHand());
+        float rollValue = helper.getRoll(helper.getRightHand());
+        float yawValue = helper.getYaw(helper.getRightHand());
+
+        if (pitchValue != 180 && pitchValue != 0.0) {
+            System.out.println("pitch: " + pitchValue);
+        }
+
+        if (yawValue != 180 && yawValue != 0.0) {
+            System.out.println("yaw: " + yawValue);
+        }
+
+        if (rollValue != 180 && rollValue != 0.0) {
+            System.out.println("roll: " + rollValue);
+        }
+
+    }
+
     @Override
     public void run() {
 
         System.out.println("reading");
-
-        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
+//        disabled for testing
+//        commandManager.sendCommand(Commands.ENABLE_COMMANDS); 
+        System.out.println("sending command: " + Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
             if (helper.getFrame().id() != helper.getLastFrame().id()) {
-                float lastY = helper.getDeltaY();
-                if (deltas.size() < 10) {
-                    deltas.add(lastY);
-                } else {
-                    shiftDeltas();
-                    deltas.set(0, lastY);
+                checkHeightControl();
 
-                }
-                float average = getAverageDeltas();
-                
-                //Controlla media (per calcolare lo scarto)
-                if ((lastY > average || lastY < -average) && (average < -this.DEAD_ZONE || average > this.DEAD_ZONE)) {
-                    //Casta in integer
-                    int yPos = (int) lastY;
-                    System.out.println("yPos: " + yPos);
-                    
-                    //Costruisce la stringa
-                    String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
-                    if (yPos != 0) {
-                        //Invia la stringa
-                        commandManager.sendCommand(message);
-                    }
-                }
+//                checkMovementControl();
             }
         }
-        System.out.println("drone not connected");
+
+        System.out.println("controller not connected");
     }
 
 }
