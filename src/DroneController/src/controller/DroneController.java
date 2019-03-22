@@ -8,8 +8,10 @@ import communication.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import settings.SettingsManager;
 
 /**
  *
@@ -18,6 +20,7 @@ import java.util.logging.Logger;
 public class DroneController extends Listener implements Runnable {
 
     private static CommandManager commandManager;
+    private static SettingsManager settingsManager;
     private FrameHelper helper;
     private Controller controller;
     private List<Float> deltas = new ArrayList<Float>();
@@ -32,6 +35,7 @@ public class DroneController extends Listener implements Runnable {
         controller.addListener(this);
         helper = new FrameHelper();
         commandManager = new CommandManager();
+        settingsManager = new SettingsManager();
     }
 
     public static void main(String[] args) {

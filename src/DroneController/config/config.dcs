@@ -1,0 +1,14 @@
+# Config file per il controller del drone.
+
+#Sensibilità di lettura del leap motion
+sensibility=0.3
+
+#Indirizzi ip per testing e non
+tello_address=192.168.43.47
+jari_address=192.168.43.47
+
+#Porte utilizzate
+tello_command_send_port=8889
+tello_command_listen_port=8889
+tello_state_listen_port=8890
+tello_video_listen_port=11111
