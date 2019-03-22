@@ -49,7 +49,10 @@ public class Simulator extends JPanel{
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
-    private static SimulatorPainter painter;
+    private static PositionXYPlotFrame positionXYFrame;
+    private static PositionXZPlotFrame positionXZFrame;
+    private static RotationChartFrame rotationChartFrame;    
+//    private static SimulatorPainter painter;
     //Positioning points
     private int x = 0;
     private int y = 0;
@@ -62,7 +65,10 @@ public class Simulator extends JPanel{
     
     public Simulator() throws SocketException, InterruptedException{
         commandReader = new CommandReader(this);
-        painter = new SimulatorPainter();
+//        painter = new SimulatorPainter();
+        positionXYFrame = new PositionXYPlotFrame(this.x, this.y);
+        positionXZFrame = new PositionXZPlotFrame(this.x, this.z);
+        rotationChartFrame = new RotationChartFrame(this.pitch,this.yaw,this.roll);
         //Start listening on socket
         socket = new DatagramSocket(PORT);
         startListening();
@@ -77,6 +83,8 @@ public class Simulator extends JPanel{
     
     public void setX(int x){
         this.x = x;
+        positionXYFrame.setPositionX(this.x);
+        positionXZFrame.setPositionX(this.x);
     }
     
     @Override
@@ -86,6 +94,7 @@ public class Simulator extends JPanel{
     
     public void setY(int y){
         this.y = y;
+        positionXYFrame.setPositionY(this.y);
     }
     
     public int getZ(){
@@ -94,6 +103,7 @@ public class Simulator extends JPanel{
     
     public void setZ(int z){
         this.z = z;
+        positionXZFrame.setPositionX(this.x);
     }
     
     public int getRoll(){
@@ -107,6 +117,7 @@ public class Simulator extends JPanel{
             int div = rotation%360;
             this.roll = rotation/div;
         }
+        rotationChartFrame.setRoll(this.roll);
     }
     
     public int getYaw(){
@@ -120,6 +131,8 @@ public class Simulator extends JPanel{
             int div = rotation%360;
             this.yaw = rotation/div;
         }
+        rotationChartFrame.setYaw(this.yaw);
+
     }
     
     public int getPitch(){
@@ -133,11 +146,13 @@ public class Simulator extends JPanel{
             int div = rotation%360;
             this.pitch = rotation/div;
         }
+        rotationChartFrame.setPitch(this.pitch);
+
     }
     
     @Override
     public void paint(Graphics g){
-        painter.paint(g);
+//        painter.paint(g);
     }
     
     // ------------------- Helper Methods -------------------
