@@ -1,12 +1,10 @@
 
-import java.awt.Graphics;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import javax.swing.JPanel;
 
 /*
  * The MIT License
@@ -52,7 +50,6 @@ public class Simulator{
     private static PositionXYPlotFrame positionXYFrame;
     private static PositionXZPlotFrame positionXZFrame;
     private static RotationChartFrame rotationChartFrame;    
-//    private static SimulatorPainter painter;
     //Positioning points
     private int x = 0;
     private int y = 0;
@@ -65,15 +62,13 @@ public class Simulator{
     
     public Simulator() throws SocketException, InterruptedException{
         commandReader = new CommandReader(this);
-//        painter = new SimulatorPainter();
         positionXYFrame = new PositionXYPlotFrame(this.x, this.y);
         positionXZFrame = new PositionXZPlotFrame(this.x, this.z);
         rotationChartFrame = new RotationChartFrame(this.pitch,this.yaw,this.roll);
-        
+        //Start Frames
         positionXYFrame.setVisible(true);
         positionXZFrame.setVisible(true);
         rotationChartFrame.setVisible(true);
-        
         //Start listening on socket
         socket = new DatagramSocket(PORT);
         startListening();
@@ -184,7 +179,9 @@ public class Simulator{
     // ------------------- Network Methods -------------------
 
     private static void startListening() throws InterruptedException{
+        
         boolean droneIsConnected;
+        
         //Create buffer array with right size
         byte[] buffer = new byte[BUFFER_SIZE];
 
