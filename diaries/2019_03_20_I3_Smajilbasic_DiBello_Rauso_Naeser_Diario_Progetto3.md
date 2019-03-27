@@ -8,7 +8,7 @@ Jari:
 Ho continuato lo sviluppo della classe CommandReader e assieme a Luca e Fadil abbiamo iniziato a testare la comunicazione fra le svariate classi correggendo i primi errori.
 
 Fadil:
--
+Ho corretto vari errori nella classe DroneController e ho migliorato il modo in cui scopo il movimento della mano.
 
 Luca:
 -
