@@ -6,13 +6,11 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.*;
 
-
-
 /**
- * La classe PositionXYPlotFrame é un frame che permette di visualizzare la 
- * posizione del drone su un grafico cartesiano sugli assi X e Z (il drone viene 
+ * La classe PositionXYPlotFrame é un frame che permette di visualizzare la
+ * posizione del drone su un grafico cartesiano sugli assi X e Z (il drone viene
  * visto dall'alto)
- * 
+ *
  * @author Andrea Rauso
  */
 public class PositionXZPlotFrame extends javax.swing.JFrame {
@@ -20,13 +18,13 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     /**
      * Posizione sull'asse X
      */
-    private double positionX; 
-    
+    private double positionX;
+
     /**
      * Posizione sull'asse Z
      */
     private double positionZ;
-    
+
     private JFreeChart chart;
 
     /**
@@ -44,76 +42,66 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
         //Create chart
         this.chart = ChartFactory.createScatterPlot(
                 "Simulatore dati DJI Tello",
-                "Posizione asse X", 
-                "Posizione asse Z", 
+                "Posizione asse X",
+                "Posizione asse Z",
                 dataset
         );
-        
+
         setChartRange();
 
         ChartPanel panel = new ChartPanel(this.chart);
         XZPositionChart.setLayout(new java.awt.BorderLayout());
-        XZPositionChart.add(panel,BorderLayout.CENTER);
+        XZPositionChart.add(panel, BorderLayout.CENTER);
         XZPositionChart.validate();
-        
+
     }
+
     private XYDataset createDataset() {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
         XYSeries position = new XYSeries("Posizione");
         position.add(this.positionX, this.positionZ);
-        
+
         dataset.addSeries(position);
-        
+
         return dataset;
     }
-    
-    private void updateAxesChart(){
+
+    private void updateAxesChart() {
         XYDataset dataset = createDataset();
         this.chart = ChartFactory.createScatterPlot(
-                "Simulatore dati rotazione DJI Tello", 
-                "Posizione Asse X", 
-                "Posizione Asse Y", 
+                "Simulatore dati rotazione DJI Tello",
+                "Posizione Asse X",
+                "Posizione Asse Y",
                 dataset
         );
-        
+
         setChartRange();
-        
+
         ChartPanel panel = new ChartPanel(this.chart);
         XZPositionChart.revalidate();
         XZPositionChart.add(panel);
         XZPositionChart.validate();
     }
-    
-    private void  setChartRange(){
+
+    private void setChartRange() {
         XYPlot xyPlot = (XYPlot) this.chart.getPlot();
         xyPlot.setDomainCrosshairVisible(true);
         xyPlot.setRangeCrosshairVisible(true);
-        
+
         XYItemRenderer renderer = xyPlot.getRenderer();
         renderer.setSeriesPaint(0, Color.blue);
-        
+
         NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
-        if(this.positionX >= 0){
-            domain.setRange(-getPositionX()-10,getPositionX()+10);
-            domain.setTickUnit(new NumberTickUnit(1));
-            domain.setVerticalTickLabels(true);
-        }else{
-            domain.setRange(getPositionX()-10,Math.abs(getPositionX())+10);
-            domain.setTickUnit(new NumberTickUnit(1));
-            domain.setVerticalTickLabels(true);
-        }
+        domain.setRange(-500, 500);
+        domain.setTickUnit(new NumberTickUnit(100));
+        domain.setVerticalTickLabels(true);
 
         NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-        if(this.positionZ >= 0){
-            range.setRange(-getPositionZ()-5,getPositionZ()+5);
-            range.setTickUnit(new NumberTickUnit(1));
-        }else{
-            range.setRange(getPositionZ()-5,Math.abs(getPositionZ())+5);
-            range.setTickUnit(new NumberTickUnit(1));
-        }
+        range.setRange(-500, 500);
+        range.setTickUnit(new NumberTickUnit(50));
     }
-    
+
     public double getPositionX() {
         return positionX;
     }
@@ -121,7 +109,6 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     public double getPositionZ() {
         return positionZ;
     }
-    
 
     public void setPositionX(double rotationX) {
         this.positionX += rotationX;
@@ -131,7 +118,7 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     public void setPositionZ(double rotationZ) {
         this.positionZ += rotationZ;
         updateAxesChart();
-    }           
+    }
 
     /**
      * Creates new form PositionXZPlotFrame
@@ -139,7 +126,7 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     public PositionXZPlotFrame() {
         initComponents();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -199,7 +186,7 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PositionXZPlotFrame(0,0).setVisible(true);
+                new PositionXZPlotFrame(0, 0).setVisible(true);
             }
         });
     }
