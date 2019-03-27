@@ -40,12 +40,12 @@ import javax.swing.JPanel;
  * @author Jari Näser
  * @version 15.02.2019 - xx.xx.xxxx
  */
-public class Simulator extends JPanel{
+public class Simulator{
     
     // ------------------- General Variables -------------------
     
     private static final int PORT = 8889;
-    private static final String ADDRESS_TO_SEND = "192.168.43.16";
+    private static final String ADDRESS_TO_SEND = "192.168.43.246";
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
@@ -69,6 +69,11 @@ public class Simulator extends JPanel{
         positionXYFrame = new PositionXYPlotFrame(this.x, this.y);
         positionXZFrame = new PositionXZPlotFrame(this.x, this.z);
         rotationChartFrame = new RotationChartFrame(this.pitch,this.yaw,this.roll);
+        
+        positionXYFrame.setVisible(true);
+        positionXZFrame.setVisible(true);
+        rotationChartFrame.setVisible(true);
+        
         //Start listening on socket
         socket = new DatagramSocket(PORT);
         startListening();
@@ -76,7 +81,7 @@ public class Simulator extends JPanel{
     
     // ------------------- Setters and Getters -------------------
     
-    @Override
+
     public int getX(){
         return this.x;
     }
@@ -87,7 +92,7 @@ public class Simulator extends JPanel{
         positionXZFrame.setPositionX(this.x);
     }
     
-    @Override
+
     public int getY(){
         return this.y;
     }
@@ -148,11 +153,6 @@ public class Simulator extends JPanel{
         }
         rotationChartFrame.setPitch(this.pitch);
 
-    }
-    
-    @Override
-    public void paint(Graphics g){
-//        painter.paint(g);
     }
     
     // ------------------- Helper Methods -------------------
