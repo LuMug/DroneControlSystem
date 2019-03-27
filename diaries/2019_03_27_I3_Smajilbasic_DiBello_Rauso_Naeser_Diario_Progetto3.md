@@ -5,10 +5,12 @@
 ## Lavori svolti
 
 Jari:
--
+Assieme a Fadil e Andrea abbiamo messo assieme tutte le classi e abbiamo ottenuto una prima simulazione grafica funzionante del movimento del drone sull'asse Y.
+Inoltre abbiamo ragionato su come trattare il pitch, roll e yaw; Sia per la rappresentazione grafica che per il passaggio dei dati tramite i pacchetti.
+Questa cosa sarà da stabilire e da metterci d'accordo con il resto del gruppo.
 
 Fadil:
-Io e Jari abbiamo lavorato ancora al collegamento tra il controller e il drone. Ho provato a leggere i valori del rollio beccheggio e imbardata dai fettori creati alle punta delle dita al posto di prendere quelli valori dal centro della mano. Devo ancora valutare quale approcio scegliere. 
+Io e Jari abbiamo lavorato ancora al collegamento tra il controller e il drone. Ho provato a leggere i valori del rollio beccheggio e imbardata dai fettori creati alle punta delle dita al posto di prendere quelli valori dal centro della mano. Devo ancora valutare quale approcio scegliere.
 
 Luca:
 -
