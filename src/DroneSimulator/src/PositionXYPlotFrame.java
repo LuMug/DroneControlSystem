@@ -148,7 +148,7 @@ public class PositionXYPlotFrame extends javax.swing.JFrame {
      * @param positionX posizione sull'asse X
      */
     public void setPositionX(int positionX) {
-        this.positionX += positionX;
+        this.positionX = positionX;
         updateAxesChart();
     }
 
@@ -158,7 +158,7 @@ public class PositionXYPlotFrame extends javax.swing.JFrame {
      * @param positionY posizione sull'asse Y
      */
     public void setPositionY(int positionY) {
-        this.positionY += positionY;
+        this.positionY = positionY;
         updateAxesChart();
     }
 

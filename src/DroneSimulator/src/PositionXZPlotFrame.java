@@ -111,12 +111,12 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
     }
 
     public void setPositionX(double rotationX) {
-        this.positionX += rotationX;
+        this.positionX = rotationX;
         updateAxesChart();
     }
 
     public void setPositionZ(double rotationZ) {
-        this.positionZ += rotationZ;
+        this.positionZ = rotationZ;
         updateAxesChart();
     }
 
