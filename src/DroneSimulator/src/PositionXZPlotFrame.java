@@ -94,12 +94,12 @@ public class PositionXZPlotFrame extends javax.swing.JFrame {
 
         NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
         domain.setRange(-500, 500);
-        domain.setTickUnit(new NumberTickUnit(100));
+        domain.setTickUnit(new NumberTickUnit(50));
         domain.setVerticalTickLabels(true);
 
         NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
         range.setRange(-500, 500);
-        range.setTickUnit(new NumberTickUnit(50));
+        range.setTickUnit(new NumberTickUnit(100));
     }
 
     public double getPositionX() {
