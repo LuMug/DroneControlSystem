@@ -243,7 +243,7 @@ public class CommandReader{
     // ------------------------- COMMANDS -------------------------
     
     public static boolean up(int distance){
-        if(isInsideRange(distance, 20, 500)){
+        if(isInsideRange(distance, 0, 500)){
             simulator.setY(simulator.getY() + distance);
             return true;
         }
@@ -251,7 +251,7 @@ public class CommandReader{
     }
     
     public static boolean down(int distance){
-        if(isInsideRange(distance, 20, 500)){
+        if(isInsideRange(distance, 0, 500)){
             simulator.setY(simulator.getY() - distance);
             return true;
         }
