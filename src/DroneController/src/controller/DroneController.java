@@ -1,22 +1,17 @@
 package controller;
 
 import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import settings.SettingsManager;
-=======
->>>>>>> 5b885bde8dbf36cd90d502148747bd328964f4fc
 
 /**
  *
- * @author Luca Di Bello
+ * @author Fadil Smajilbasic
  */
 public class DroneController extends Listener implements Runnable {
 
@@ -74,9 +69,9 @@ public class DroneController extends Listener implements Runnable {
 
         float lastY = helper.getDeltaY();
 
-        float handSpeed = helper.getHandSpeedY(helper.getLeftHand()) / 10;
-//        //Controlla media (per calcolare lo scarto)
-        if ((handSpeed < -this.DEAD_ZONE || handSpeed > this.DEAD_ZONE) && lastY != 0.0) {
+        float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 10);
+
+        if ((handSpeed > this.DEAD_ZONE) && lastY != 0.0) {
             if (deltas.size() < 20) {
                 deltas.add(lastY);
             } else {
@@ -85,8 +80,7 @@ public class DroneController extends Listener implements Runnable {
             }
             float average = getAverageDeltas();
 
-            System.out.println("average: " + average);
-
+            //System.out.println("average: " + average);
             int yPos = (int) lastY;
 
             //Costruisce la stringa
@@ -94,30 +88,46 @@ public class DroneController extends Listener implements Runnable {
                 String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
 
                 //Invia la stringa
-                //commandManager.sendCommand(message);
-                System.out.println("sending message: " + message);
+                commandManager.sendCommand(message);
+                System.out.println("average: " + average);
+                System.out.println("Sending message: " + message);
+
             }
         }
 
     }
 
     public void checkMovementControl() {
-        float pitchValue = helper.getPitch(helper.getRightHand());
-        float rollValue = helper.getRoll(helper.getRightHand());
-        float yawValue = helper.getYaw(helper.getRightHand());
-
-        if (pitchValue != 180 && pitchValue != 0.0) {
-            System.out.println("pitch: " + pitchValue);
+        float pitchValue = -helper.getPitch(helper.getRightHand());
+        float rollValue = -helper.getRoll(helper.getRightHand());
+        float yawValue = -helper.getYaw(helper.getRightHand());
+        float handSpeed = Math.abs(helper.getHandSpeedY(helper.getRightHand()) / 10);
+        float tot = 0;
+        for(Finger finger : helper.getRightHand().fingers()){
+            tot += (float) Math.toDegrees(finger.tipPosition().roll());
+            
         }
+        
+        System.out.println("medium roll: " + tot/5);
+        
+//        System.out.println("hand speed: " + handSpeed);
+        if (handSpeed > DEAD_ZONE) {
+            System.out.println("movement detected");
+            if (pitchValue != 180 && pitchValue != 0.0) {
+                System.out.println("pitch: " + pitchValue);
 
-        if (yawValue != 180 && yawValue != 0.0) {
-            System.out.println("yaw: " + yawValue);
+            }
+
+            if (yawValue != 180 && yawValue != 0.0) {
+                System.out.println("yaw: " + yawValue);
+            }
+
+            if (rollValue != 180 && rollValue != 0.0) {
+                String message = rollValue > 90 ? Commands.right((int) rollValue - 90) : Commands.left(Math.abs((int) rollValue));
+                System.out.println("message: " + message);
+                System.out.println("roll: " + rollValue);
+            }
         }
-
-        if (rollValue != 180 && rollValue != 0.0) {
-            System.out.println("roll: " + rollValue);
-        }
-
     }
 
     @Override
@@ -125,15 +135,14 @@ public class DroneController extends Listener implements Runnable {
 
         System.out.println("reading");
 //        disabled for testing
-//        commandManager.sendCommand(Commands.ENABLE_COMMANDS); 
+//        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
         System.out.println("sending command: " + Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
             if (helper.getFrame().id() != helper.getLastFrame().id()) {
                 checkHeightControl();
-
-//                checkMovementControl();
+                checkMovementControl();
             }
         }
 

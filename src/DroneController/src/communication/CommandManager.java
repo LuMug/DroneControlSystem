@@ -58,7 +58,7 @@ public class CommandManager  {
 
             commandSocket.send(packet);
             
-            System.out.println("Message sent to " + packet.getSocketAddress());
+//            System.out.println("Message sent to " + packet.getSocketAddress());
             
             //Wait for response
             System.out.println("Wait for response from drone");
@@ -67,10 +67,10 @@ public class CommandManager  {
 
             String response = new String(packet.getData()).trim();
             
-            System.out.println("Response read: " + response);
+//            System.out.println("Response read: " + response);
            
             if(response.equals("OK")){
-                System.out.println("--> " + new String(command) + " is ok");
+//                System.out.println("--> " + new String(command) + " is ok");
             }
             else{
                 System.err.println("--> " + new String(command) + " ERROR");
