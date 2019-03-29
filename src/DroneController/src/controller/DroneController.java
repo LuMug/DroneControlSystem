@@ -20,24 +20,24 @@ public class DroneController extends Listener implements Runnable {
     private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
     private float controllerSensibility;
-
+    private float controllerDeltaPoints;
+    
     public DroneController() {
         final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
+        final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
+        
         controller.addListener(this);
         
-        try{
-            this.controllerSensibility = Float.parseFloat(settingsManager.getSetting("sensibility"));
-        }
-        catch(NumberFormatException ex){
-            System.err.println("[Parse error] Can't parse 'sensibility' value from settings, set the default one.");
-            this.controllerSensibility = CONTROLLER_SENSIBILITY_DEFAULT_VALUE;
-        }
+        this.controllerSensibility = getFloatValueFromSetting("sensibility",CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
+        this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number",CONTROLLER_HEIGHT_DELTA_POINTS);
+
+        System.out.println("Deltas: " + controllerDeltaPoints);
     }
 
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
         DroneController controller = new DroneController();
-        controller.run();
+        //controller.run();
     }
 
     public void onConnect(Controller controller) {
@@ -76,7 +76,7 @@ public class DroneController extends Listener implements Runnable {
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 10);
 
         if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
-            if (deltas.size() < 20) {
+            if (deltas.size() < this.controllerDeltaPoints) {
                 deltas.add(lastY);
             } else {
                 shiftDeltas();
@@ -156,5 +156,19 @@ public class DroneController extends Listener implements Runnable {
 
         System.out.println("controller not connected");
     }
-
+    
+    
+    public static float getFloatValueFromSetting(String settingName, float defaultValue){
+        try{
+            return Float.parseFloat(settingsManager.getSetting(settingName));
+        }
+        catch(NumberFormatException ex){
+            System.err.println("[Parse error] Can't parse '"+ settingName +"' value from settings, set the default one.");
+            return defaultValue;
+        }
+        catch(IllegalArgumentException ex){
+            System.err.println("[Settings name error] Can't get setting value with name: '"+ settingName +"'");
+            return defaultValue;
+        }
+    }
 }
