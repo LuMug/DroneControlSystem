@@ -19,7 +19,7 @@ public class DroneController extends Listener implements Runnable {
     private FrameHelper helper;
     private Controller controller;
     private List<Float> deltas = new ArrayList<Float>();
-    private final float DEAD_ZONE = 2f;
+    private final float SENSIBILITY = 2f;
 
     public DroneController() {
         controller = new Controller();
@@ -70,7 +70,7 @@ public class DroneController extends Listener implements Runnable {
 
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 10);
 
-        if ((handSpeed > this.DEAD_ZONE) && lastY != 0.0) {
+        if ((handSpeed > this.SENSIBILITY) && lastY != 0.0) {
             if (deltas.size() < 20) {
                 deltas.add(lastY);
             } else {
@@ -111,7 +111,7 @@ public class DroneController extends Listener implements Runnable {
         System.out.println("real   roll: " + rollValue);
 
 //        System.out.println("hand speed: " + handSpeed);
-        if (handSpeed > DEAD_ZONE) {
+        if (handSpeed > SENSIBILITY) {
             System.out.println("movement detected");
             if (pitchValue != 180 && pitchValue != 0.0) {
                 System.out.println("pitch: " + pitchValue);
