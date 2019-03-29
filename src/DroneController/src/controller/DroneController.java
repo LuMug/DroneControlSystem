@@ -14,8 +14,14 @@ import settings.SettingsManager;
  */
 public class DroneController extends Listener implements Runnable {
 
+<<<<<<< HEAD
     private static CommandManager commandManager = new CommandManager();;
     public static SettingsManager settingsManager = new SettingsManager();
+=======
+    private static CommandManager commandManager = new CommandManager();
+    ;
+    private static SettingsManager settingsManager = new SettingsManager();
+>>>>>>> 6a74976d8dc372557aa36e42b7ce96b6d31bb6ac
     private FrameHelper helper = new FrameHelper();
     private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
@@ -77,12 +83,7 @@ public class DroneController extends Listener implements Runnable {
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 10);
 
         if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
-            if (deltas.size() < this.controllerDeltaPoints) {
-                deltas.add(lastY);
-            } else {
-                shiftDeltas();
-                deltas.set(0, lastY);
-            }
+            addDeltasValue(lastY);
             float average = getAverageDeltas();
 
             //System.out.println("average: " + average);
@@ -102,22 +103,23 @@ public class DroneController extends Listener implements Runnable {
 
     }
 
+    private void addDeltasValue(float value) {
+        if (deltas.size() < 20) {
+            deltas.add(value);
+        } else {
+            shiftDeltas();
+            deltas.set(0, value);
+        }
+    }
+
     public void checkMovementControl() {
         float pitchValue = -helper.getPitch(helper.getRightHand());
-        float rollValueReal = -helper.getRoll(helper.getRightHand());
+        float rollValue = -helper.getRoll(helper.getRightHand());
         float yawValue = -helper.getYaw(helper.getRightHand());
+
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getRightHand()) / 10);
-        float rollValue = helper.getHandAngle(helper.getRightHand());
 
-//        if (rollValue > 0) {
-//            rollValue = 180 - rollValue;
-//        } else {
-//            rollValue = -(180 + rollValue);
-//        }
-        
-//        System.out.println("real roll: " + rollValueReal);
-        System.out.println("calc roll: " + rollValue);
-
+//        System.out.println("calc roll: " + rollValue;
 //        System.out.println("hand speed: " + handSpeed);
         if (handSpeed > controllerSensibility) {
 //            System.out.println("movement detected");
@@ -130,8 +132,8 @@ public class DroneController extends Listener implements Runnable {
 //                System.out.println("yaw: " + yawValue);
 //            }
 
-            if (rollValue != 180 && rollValue != 0.0) {
-                String message = rollValue > 90 ? Commands.right((int) rollValue - 90) : Commands.left(Math.abs((int) rollValue));
+            if (rollValue != 0.0 && Math.abs(rollValue) > this.controllerSensibility) {
+                String message = rollValue > 0 ? Commands.right((int) Math.abs(rollValue)) : Commands.left(Math.abs((int) rollValue));
                 System.out.println("message: " + message);
                 System.out.println("roll: " + rollValue);
 //                commandManager.sendCommand(message);
@@ -145,7 +147,6 @@ public class DroneController extends Listener implements Runnable {
         System.out.println("reading");
 //        disabled for testing
 //        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
-        System.out.println("sending command: " + Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);

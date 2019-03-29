@@ -10,7 +10,7 @@ Inoltre abbiamo ragionato su come trattare il pitch, roll e yaw; Sia per la rapp
 Questa cosa sarà da stabilire e da metterci d'accordo con il resto del gruppo.
 
 Fadil:
-Io e Jari abbiamo lavorato ancora al collegamento tra il controller e il drone. Ho provato a leggere i valori del rollio beccheggio e imbardata dai fettori creati alle punta delle dita al posto di prendere quelli valori dal centro della mano. Devo ancora valutare quale approcio scegliere.
+Io e Jari abbiamo lavorato ancora al collegamento tra il controller e il simulatore. Ho provato a leggere i valori del rollio beccheggio e imbardata dai vettori creati alle punta delle dita al posto di prendere quelli letti dal centro della mano. Devo ancora valutare quale approcio scegliere.
 
 Luca:
 -
