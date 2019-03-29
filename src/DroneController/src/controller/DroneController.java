@@ -14,14 +14,8 @@ import settings.SettingsManager;
  */
 public class DroneController extends Listener implements Runnable {
 
-<<<<<<< HEAD
     private static CommandManager commandManager = new CommandManager();;
     public static SettingsManager settingsManager = new SettingsManager();
-=======
-    private static CommandManager commandManager = new CommandManager();
-    ;
-    private static SettingsManager settingsManager = new SettingsManager();
->>>>>>> 6a74976d8dc372557aa36e42b7ce96b6d31bb6ac
     private FrameHelper helper = new FrameHelper();
     private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
