@@ -15,29 +15,30 @@ import settings.SettingsManager;
 public class DroneController extends Listener implements Runnable {
 
     private static CommandManager commandManager = new CommandManager();;
-    private static SettingsManager settingsManager = new SettingsManager();
+    public static SettingsManager settingsManager = new SettingsManager();
     private FrameHelper helper = new FrameHelper();
     private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
     private float controllerSensibility;
     private float controllerDeltaPoints;
+    private float controllerDegreesSensibility;
     
     public DroneController() {
         final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
         final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
+        final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
         
         controller.addListener(this);
         
         this.controllerSensibility = getFloatValueFromSetting("sensibility",CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
         this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number",CONTROLLER_HEIGHT_DELTA_POINTS);
-
-        System.out.println("Deltas: " + controllerDeltaPoints);
+        this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
     }
 
     public static void main(String[] args) {
         System.out.println("Started Controller :)");
         DroneController controller = new DroneController();
-        //controller.run();
+        controller.run();
     }
 
     public void onConnect(Controller controller) {
@@ -158,7 +159,7 @@ public class DroneController extends Listener implements Runnable {
     }
     
     
-    public static float getFloatValueFromSetting(String settingName, float defaultValue){
+    private static float getFloatValueFromSetting(String settingName, float defaultValue){
         try{
             return Float.parseFloat(settingsManager.getSetting(settingName));
         }
