@@ -14,19 +14,15 @@ import settings.SettingsManager;
  */
 public class DroneController extends Listener implements Runnable {
 
-    private static CommandManager commandManager;
-    private static SettingsManager settingsManager;
-    private FrameHelper helper;
-    private Controller controller;
+    private static CommandManager commandManager = new CommandManager();;
+    private static SettingsManager settingsManager = new SettingsManager();
+    private FrameHelper helper = new FrameHelper();
+    private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
     private final float SENSIBILITY = 2f;
 
     public DroneController() {
-        controller = new Controller();
         controller.addListener(this);
-        helper = new FrameHelper();
-        commandManager = new CommandManager();
-        settingsManager = new SettingsManager();
     }
 
     public static void main(String[] args) {
