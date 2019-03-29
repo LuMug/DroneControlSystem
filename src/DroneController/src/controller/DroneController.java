@@ -18,7 +18,7 @@ public class DroneController extends Listener implements Runnable {
     private static SettingsManager settingsManager = new SettingsManager();
     private FrameHelper helper = new FrameHelper();
     private Controller controller = new Controller();
-    private List<Float> deltas = new ArrayList<Float>();
+    private List<Float> deltas = new ArrayList<>();
     private float controllerSensibility;
 
     public DroneController() {
