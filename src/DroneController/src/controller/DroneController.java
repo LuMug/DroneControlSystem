@@ -19,10 +19,19 @@ public class DroneController extends Listener implements Runnable {
     private FrameHelper helper = new FrameHelper();
     private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
-    private final float SENSIBILITY = 2f;
+    private float controllerSensibility;
 
     public DroneController() {
+        final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
         controller.addListener(this);
+        
+        try{
+            this.controllerSensibility = Float.parseFloat(settingsManager.getSetting("sensibility"));
+        }
+        catch(NumberFormatException ex){
+            System.err.println("[Parse error] Can't parse 'sensibility' value from settings, set the default one.");
+            this.controllerSensibility = CONTROLLER_SENSIBILITY_DEFAULT_VALUE;
+        }
     }
 
     public static void main(String[] args) {
@@ -66,7 +75,7 @@ public class DroneController extends Listener implements Runnable {
 
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 10);
 
-        if ((handSpeed > this.SENSIBILITY) && lastY != 0.0) {
+        if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
             if (deltas.size() < 20) {
                 deltas.add(lastY);
             } else {
@@ -107,7 +116,7 @@ public class DroneController extends Listener implements Runnable {
         System.out.println("real   roll: " + rollValue);
 
 //        System.out.println("hand speed: " + handSpeed);
-        if (handSpeed > SENSIBILITY) {
+        if (handSpeed > controllerSensibility) {
             System.out.println("movement detected");
             if (pitchValue != 180 && pitchValue != 0.0) {
                 System.out.println("pitch: " + pitchValue);
