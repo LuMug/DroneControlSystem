@@ -15,23 +15,24 @@ import settings.SettingsManager;
 public class DroneController extends Listener implements Runnable {
 
     private static CommandManager commandManager = new CommandManager();;
-    private static SettingsManager settingsManager = new SettingsManager();
+    public static SettingsManager settingsManager = new SettingsManager();
     private FrameHelper helper = new FrameHelper();
     private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
     private float controllerSensibility;
-
+    private float controllerDeltaPoints;
+    private float controllerDegreesSensibility;
+    
     public DroneController() {
         final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
+        final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
+        final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
+        
         controller.addListener(this);
         
-        try{
-            this.controllerSensibility = Float.parseFloat(settingsManager.getSetting("sensibility"));
-        }
-        catch(NumberFormatException ex){
-            System.err.println("[Parse error] Can't parse 'sensibility' value from settings, set the default one.");
-            this.controllerSensibility = CONTROLLER_SENSIBILITY_DEFAULT_VALUE;
-        }
+        this.controllerSensibility = getFloatValueFromSetting("sensibility",CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
+        this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number",CONTROLLER_HEIGHT_DELTA_POINTS);
+        this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
     }
 
     public static void main(String[] args) {
@@ -76,12 +77,7 @@ public class DroneController extends Listener implements Runnable {
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 10);
 
         if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
-            if (deltas.size() < 20) {
-                deltas.add(lastY);
-            } else {
-                shiftDeltas();
-                deltas.set(0, lastY);
-            }
+            addDeltasValue(lastY);
             float average = getAverageDeltas();
 
             //System.out.println("average: " + average);
@@ -101,22 +97,23 @@ public class DroneController extends Listener implements Runnable {
 
     }
 
+    private void addDeltasValue(float value) {
+        if (deltas.size() < 20) {
+            deltas.add(value);
+        } else {
+            shiftDeltas();
+            deltas.set(0, value);
+        }
+    }
+
     public void checkMovementControl() {
         float pitchValue = -helper.getPitch(helper.getRightHand());
-        float rollValueReal = -helper.getRoll(helper.getRightHand());
+        float rollValue = -helper.getRoll(helper.getRightHand());
         float yawValue = -helper.getYaw(helper.getRightHand());
+
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getRightHand()) / 10);
-        float rollValue = helper.getHandAngle(helper.getRightHand());
 
-//        if (rollValue > 0) {
-//            rollValue = 180 - rollValue;
-//        } else {
-//            rollValue = -(180 + rollValue);
-//        }
-        
-//        System.out.println("real roll: " + rollValueReal);
-        System.out.println("calc roll: " + rollValue);
-
+//        System.out.println("calc roll: " + rollValue;
 //        System.out.println("hand speed: " + handSpeed);
         if (handSpeed > controllerSensibility) {
 //            System.out.println("movement detected");
@@ -129,8 +126,8 @@ public class DroneController extends Listener implements Runnable {
 //                System.out.println("yaw: " + yawValue);
 //            }
 
-            if (rollValue != 180 && rollValue != 0.0) {
-                String message = rollValue > 90 ? Commands.right((int) rollValue - 90) : Commands.left(Math.abs((int) rollValue));
+            if (rollValue != 0.0 && Math.abs(rollValue) > this.controllerSensibility) {
+                String message = rollValue > 0 ? Commands.right((int) Math.abs(rollValue)) : Commands.left(Math.abs((int) rollValue));
                 System.out.println("message: " + message);
                 System.out.println("roll: " + rollValue);
 //                commandManager.sendCommand(message);
@@ -144,7 +141,6 @@ public class DroneController extends Listener implements Runnable {
         System.out.println("reading");
 //        disabled for testing
 //        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
-        System.out.println("sending command: " + Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
@@ -156,5 +152,19 @@ public class DroneController extends Listener implements Runnable {
 
         System.out.println("controller not connected");
     }
-
+    
+    
+    private static float getFloatValueFromSetting(String settingName, float defaultValue){
+        try{
+            return Float.parseFloat(settingsManager.getSetting(settingName));
+        }
+        catch(NumberFormatException ex){
+            System.err.println("[Parse error] Can't parse '"+ settingName +"' value from settings, set the default one.");
+            return defaultValue;
+        }
+        catch(IllegalArgumentException ex){
+            System.err.println("[Settings name error] Can't get setting value with name: '"+ settingName +"'");
+            return defaultValue;
+        }
+    }
 }

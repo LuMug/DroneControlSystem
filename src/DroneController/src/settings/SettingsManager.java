@@ -127,7 +127,11 @@ public class SettingsManager {
         if (data != null) {
             return data;
         } else {
-            throw new IllegalArgumentException("Invalid setting name: " + settingName);
+            throw new IllegalArgumentException(
+                    "Invalid setting name: " + settingName + " maybe the "
+                            + "setting hasn't any value or it's not "
+                            + "present in the configuration file."
+            );
         }
     }
     

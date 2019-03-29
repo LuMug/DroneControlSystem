@@ -1,12 +1,13 @@
 package communication;
 
+import static controller.DroneController.settingsManager;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import settings.TelloComunicationData;
+import settings.SettingsManager;
 
 /**
  * 
@@ -15,11 +16,17 @@ import settings.TelloComunicationData;
 public class CommandManager  {
 
     private DatagramSocket commandSocket;
+    private SettingsManager manager = new SettingsManager();
+    private final String JARI_ADDRESS = manager.getSetting("jari_address");
+    private final int TELLO_COMMAND_LISTEN_PORT = Integer.parseInt(manager.getSetting("tello_command_listen_port"));
+    private final int TELLO_COMMAND_SEND_PORT = Integer.parseInt(manager.getSetting("tello_command_send_port"));
     
     public CommandManager() {
         try{
-            commandSocket = new DatagramSocket(TelloComunicationData.TELLO_COMMAND_LISTEN_PORT);
-            System.out.println("[SUCCESS] Listening on port " + TelloComunicationData.TELLO_COMMAND_LISTEN_PORT);
+            commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
+            System.out.println("[SUCCESS] Listening on port " + this.TELLO_COMMAND_LISTEN_PORT);
+        
+            
         }
         catch(SocketException ex){
             System.err.println("Can't create client socket: " + ex.getMessage());
@@ -42,8 +49,8 @@ public class CommandManager  {
             DatagramPacket packet = new DatagramPacket(
                     commandData,
                     commandData.length, 
-                    InetAddress.getByName(TelloComunicationData.JARI_ADDRESS), 
-                    TelloComunicationData.TELLO_COMMAND_SEND_PORT
+                    InetAddress.getByName(this.JARI_ADDRESS), 
+                    TELLO_COMMAND_SEND_PORT
             );
             
             /*
@@ -58,16 +65,12 @@ public class CommandManager  {
 
             commandSocket.send(packet);
             
-//            System.out.println("Message sent to " + packet.getSocketAddress());
-            
             //Wait for response
             System.out.println("Wait for response from drone");
             packet.setData(new byte[64]);
             commandSocket.receive(packet);
 
             String response = new String(packet.getData()).trim();
-            
-//            System.out.println("Response read: " + response);
            
             if(response.equals("OK")){
 //                System.out.println("--> " + new String(command) + " is ok");
