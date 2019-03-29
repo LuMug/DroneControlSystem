@@ -87,11 +87,13 @@ public class FrameHelper {
     }
 
     public float getRoll(Hand hand) {
-        if (hand != null) {
-            return (float) Math.toDegrees(hand.direction().roll());
-        } else {
-            return 0;
-        }
+        Finger lFinger = hand.fingers().leftmost();
+        Vector lVector = lFinger.tipPosition();
+        Finger rFinger = hand.fingers().rightmost();
+        Vector rVector = rFinger.tipPosition();
+        float angle = (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
+
+        return angle;
     }
 
     public float getYaw(Hand hand) {
@@ -117,18 +119,6 @@ public class FrameHelper {
         } else {
             return 0;
         }
-    }
-
-    public float getHandAngle(Hand hand) {
-        Finger lFinger = hand.fingers().leftmost();
-        Vector lVector = lFinger.tipPosition();
-        Finger rFinger = hand.fingers().rightmost();
-        Vector rVector = rFinger.tipPosition();
-        float angle = (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
-        if (angle < 0) {
-            angle += 360;
-        }
-        return angle;
     }
 
     public float getDeltaY() {
