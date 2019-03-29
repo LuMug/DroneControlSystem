@@ -98,35 +98,37 @@ public class DroneController extends Listener implements Runnable {
 
     public void checkMovementControl() {
         float pitchValue = -helper.getPitch(helper.getRightHand());
-        float rollValue = -helper.getRoll(helper.getRightHand());
+        float rollValueReal = -helper.getRoll(helper.getRightHand());
         float yawValue = -helper.getYaw(helper.getRightHand());
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getRightHand()) / 10);
+        float rollValue = helper.getHandAngle(helper.getRightHand());
 
-
-        if (rollValue > 0) {
-            rollValue = 180 - rollValue;
-        } else {
-            rollValue = -(180 + rollValue);
-        }
-        System.out.println("real   roll: " + rollValue);
+//        if (rollValue > 0) {
+//            rollValue = 180 - rollValue;
+//        } else {
+//            rollValue = -(180 + rollValue);
+//        }
+        
+//        System.out.println("real roll: " + rollValueReal);
+        System.out.println("calc roll: " + rollValue);
 
 //        System.out.println("hand speed: " + handSpeed);
         if (handSpeed > DEAD_ZONE) {
-            System.out.println("movement detected");
-            if (pitchValue != 180 && pitchValue != 0.0) {
-                System.out.println("pitch: " + pitchValue);
-
-            }
-
-            if (yawValue != 180 && yawValue != 0.0) {
-                System.out.println("yaw: " + yawValue);
-            }
+//            System.out.println("movement detected");
+//            if (pitchValue != 180 && pitchValue != 0.0) {
+//                System.out.println("pitch: " + pitchValue);
+//
+//            }
+//
+//            if (yawValue != 180 && yawValue != 0.0) {
+//                System.out.println("yaw: " + yawValue);
+//            }
 
             if (rollValue != 180 && rollValue != 0.0) {
                 String message = rollValue > 90 ? Commands.right((int) rollValue - 90) : Commands.left(Math.abs((int) rollValue));
                 System.out.println("message: " + message);
                 System.out.println("roll: " + rollValue);
-                commandManager.sendCommand(message);
+//                commandManager.sendCommand(message);
             }
         }
     }
@@ -136,14 +138,14 @@ public class DroneController extends Listener implements Runnable {
 
         System.out.println("reading");
 //        disabled for testing
-        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
+//        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
         System.out.println("sending command: " + Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
             if (helper.getFrame().id() != helper.getLastFrame().id()) {
                 checkHeightControl();
-//                checkMovementControl();
+                checkMovementControl();
             }
         }
 
