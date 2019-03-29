@@ -14,19 +14,24 @@ import settings.SettingsManager;
  */
 public class DroneController extends Listener implements Runnable {
 
-    private static CommandManager commandManager;
-    private static SettingsManager settingsManager;
-    private FrameHelper helper;
-    private Controller controller;
+    private static CommandManager commandManager = new CommandManager();;
+    private static SettingsManager settingsManager = new SettingsManager();
+    private FrameHelper helper = new FrameHelper();
+    private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
-    private final float DEAD_ZONE = 2f;
+    private float controllerSensibility;
 
     public DroneController() {
-        controller = new Controller();
+        final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
         controller.addListener(this);
-        helper = new FrameHelper();
-        commandManager = new CommandManager();
-        settingsManager = new SettingsManager();
+        
+        try{
+            this.controllerSensibility = Float.parseFloat(settingsManager.getSetting("sensibility"));
+        }
+        catch(NumberFormatException ex){
+            System.err.println("[Parse error] Can't parse 'sensibility' value from settings, set the default one.");
+            this.controllerSensibility = CONTROLLER_SENSIBILITY_DEFAULT_VALUE;
+        }
     }
 
     public static void main(String[] args) {
@@ -70,7 +75,7 @@ public class DroneController extends Listener implements Runnable {
 
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 10);
 
-        if ((handSpeed > this.DEAD_ZONE) && lastY != 0.0) {
+        if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
             if (deltas.size() < 20) {
                 deltas.add(lastY);
             } else {
