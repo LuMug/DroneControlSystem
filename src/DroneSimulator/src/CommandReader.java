@@ -34,9 +34,9 @@ public class CommandReader{
     /************
      * TO DO:.
      * 
-     * - Complete all methods.
      * - fix setters for pitch, roll and yaw; if angle 
      *   exceeds 360 or -360 go back to 0.
+     * - discuss stopMotors method.
      * - Add safety feature, drone lands after 15 seconds without any commands.
      * - On simulation add informations such as battery, flight time, 
      *   temperature, pressure and so on...
@@ -49,7 +49,8 @@ public class CommandReader{
      * Methods left empty because of the simulation:
      * - streamon
      * - streamoff
-     * - wifi
+     * - getWifi
+     * - getTof
      */
     
     private static final int BATTERY_PERCENTAGE = 100;
@@ -115,12 +116,8 @@ public class CommandReader{
                         return getHeight();
                     case "temp?":
                         return getTemperature();
-                    case "attitude?":
-                        return getAttitude();
                     case "baro?":
                         return getBarometer();
-                    case "acceleration?":
-                        return getAcceleration();
                     case "tof?":
                         return getTof();
                     case "wifi?":
@@ -129,6 +126,20 @@ public class CommandReader{
             }
         }
         return Integer.MIN_VALUE;
+    }
+    
+    public int[] getterCommandArrayExists(String command){
+        for(String s:GET_COMMANDS){
+            if(command.equals(s)){
+                switch(s){
+                    case "attitude?":
+                        return getAttitude();     
+                    case "acceleration?":
+                        return getAcceleration();            
+                }
+            }
+        }
+        return new int[]{Integer.MIN_VALUE};
     }
     
     public boolean instructionCommandExists(String command) throws InterruptedException{
@@ -479,21 +490,12 @@ public class CommandReader{
         return ACTUAL_TEMPERATURE;
     }
     
-    public static int getAttitude(){
-        
-        //Not sure about the return type.
-        //On the SDK it's 'pitch roll yaw'.
-        //CONSULT TELLO STATE EXPLANATION
-        
-        //Still to do
-        /*
+    public static int[] getAttitude(){
         return new int[]{
             simulator.getPitch(),
             simulator.getRoll(),
             simulator.getYaw()
         };
-        */
-        return 0;
     }
     
     public static int getBarometer(){
@@ -501,26 +503,22 @@ public class CommandReader{
         return BAROMETER_PRESSURE;
     }
     
-    public static int getAcceleration(){
-        
-        //Not sure about the return type.
-        //On the SDK it's 'get IMU angular acceleration data (0.001g)'
-        //and it should return 'x y z'.
-        //CONSULT TELLO STATE EXPLANATION
-        
-        //Still to do
-        
-        return 0;
+    public static int[] getAcceleration(){
+        return new int[]{
+            simulator.getX(),
+            simulator.getY(),
+            simulator.getZ()
+        };
     }
     
     public static int getTof(){   
         //Can't do it in the simulation, range imaging camera should be required.
-        return -1;
+        return Integer.MIN_VALUE;
     }
     
     public static int getWifi(){   
         //Wifi not implemented yet.
-        return -1;
+        return Integer.MIN_VALUE;
     }
     
     // ------------------------- HELPER METHODS -------------------------
