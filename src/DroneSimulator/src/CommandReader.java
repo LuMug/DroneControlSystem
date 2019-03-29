@@ -283,7 +283,7 @@ public class CommandReader{
     }
     
     public static boolean left(int distance){
-        if(isInsideRange(distance, 20, 500)){
+        if(isInsideRange(distance, 0, 500)){
             simulator.setX(simulator.getX() - distance);
             return true;
         }
@@ -291,7 +291,7 @@ public class CommandReader{
     }
     
     public static boolean right(int distance){
-        if(isInsideRange(distance, 20, 500)){
+        if(isInsideRange(distance, 0, 500)){
             simulator.setX(simulator.getX() + distance);
             return true;
         }
@@ -299,7 +299,7 @@ public class CommandReader{
     }
     
     public static boolean forward(int distance){
-        if(isInsideRange(distance, 20, 500)){
+        if(isInsideRange(distance, 0, 500)){
             simulator.setZ(simulator.getZ() - distance);
             return true;
         }
@@ -307,7 +307,7 @@ public class CommandReader{
     }
     
     public static boolean back(int distance){
-        if(isInsideRange(distance, 20, 500)){
+        if(isInsideRange(distance, 0, 500)){
             simulator.setZ(simulator.getZ() + distance);
             return true;
         }
