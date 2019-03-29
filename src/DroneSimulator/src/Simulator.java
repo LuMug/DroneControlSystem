@@ -5,6 +5,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 /*
  * The MIT License
@@ -176,6 +177,23 @@ public class Simulator{
         System.err.println("Sent ERROR response.");
     }
     
+    private static void returnValues(int[] values) throws UnknownHostException, IOException{
+        //Converting int array to byte array
+        byte[] response = new byte[values.length];
+        for(int i = 0; i < response.length; i++){
+            response[i] = (byte)values[i];
+        }
+        //Send packet
+        DatagramPacket packet = new DatagramPacket(
+            response, 
+            response.length, 
+            InetAddress.getByName(ADDRESS_TO_SEND), 
+            PORT
+        );       
+        socket.send(packet);
+        System.err.println("Sent return values: " + Arrays.toString(values));
+    }
+    
     // ------------------- Network Methods -------------------
 
     private static void startListening() throws InterruptedException{
@@ -219,8 +237,14 @@ public class Simulator{
                                 //Getter commands 
                                 if(commandReader.getterCommandExists(command) != Integer.MIN_VALUE){
                                     sendOK();
+                                    returnValues(new int[]{commandReader.getterCommandExists(command)});
                                 }else{
-                                    sendERROR();
+                                    if(commandReader.getterCommandArrayExists(command) != new int[]{Integer.MIN_VALUE}){
+                                        sendOK();
+                                        returnValues(commandReader.getterCommandArrayExists(command));
+                                    }else{
+                                       sendERROR(); 
+                                    }
                                 }
                             }else if(!command.contains(" ")){
                                 //Void commands
