@@ -108,7 +108,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
     private void updateXYPlotPanel() {
         XYDataset dataset = createXYDataset();
         this.xyPositionPanel = ChartFactory.createScatterPlot(
-                "Simulatore dati posizione DJI Tello, vista di profilo",
+                "Posizione DJI Tello, vista di profilo",
                 "Poszione asse X",
                 "Poszione asse Y",
                 dataset
@@ -125,24 +125,24 @@ public class TelloChartFrame extends javax.swing.JFrame {
     private void updateXZPlotPanel() {
         XYDataset dataset = createXZDataset();
         this.xzPositionPanel = ChartFactory.createScatterPlot(
-                "Simulatore dati posizione DJI Tello, vista di profilo",
-                "Poszione asse X",
-                "Poszione asse Z",
+                "Posizione DJI Tello, vista dall'alto",
+                "Posizione asse X",
+                "Posizione asse Z",
                 dataset
         );
         setChartRange((XYPlot) xzPositionPanel.getPlot());
         ChartPanel panel = new ChartPanel(this.xzPositionPanel);
-        positionXYPlotPanel.revalidate();
-        positionXYPlotPanel.add(panel);
-        positionXYPlotPanel.validate();
+        positionXZPlotPanel.revalidate();
+        positionXZPlotPanel.add(panel);
+        positionXZPlotPanel.validate();
     }
 
     private void updateAxesChart() {
         CategoryDataset dataset = createCategoryDataset();
         this.rotationPanel = ChartFactory.createBarChart(
-                "Simulatore dati rotazione DJI Tello",
-                "Dati Sensori",
-                "Valore sensore",
+                "Rotazione DJI Tello",
+                "Assi di rotazione",
+                "Valore rotazione",
                 dataset
         );
         ChartPanel panel = new ChartPanel(this.rotationPanel);
