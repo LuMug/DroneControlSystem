@@ -16,7 +16,7 @@ Luca:
 -
 
 Andrea:
--
+Ho cominciato a unificare tutte le classi di visualizzazione dei dati sotto un unico frame in modo da ottenere un unica finestra contenente tutti i dati e non 3 finestre separate. Ho modificato il piano cartesiano dove viene mostrata la posizione dall'alto e di profilo, i valori sui 2 assi in entrambi i piani vanno da -500 a +500.
 
 ## Problemi riscontrati e soluzioni adottate
 Non abbiamo riscontrato nessun problema.
