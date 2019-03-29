@@ -5,6 +5,9 @@
 ## Lavori svolti
 
 Jari:
+Io ho continuato e terminato lo sviluppo ed implementazione dei metodi della SDK di tello nella classe CommandReader.
+Inoltre ho anche implementato la risposta via pacchetto UDP ai metodi getter che finiscono per '?' ad esempio: 'battery?'.
+Infine ho contribuito a migliorare la cominicazione e il funzionamento fra le varie classi una volta messe assieme.
 
 Fadil:
 
@@ -25,4 +28,4 @@ https://stackoverflow.com/a/9970297
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
--
+Jari: Continuare a sviluppare le classi CommandReader e Simulator con le features scritte sotto forma di commento nella classe CommandReader.
