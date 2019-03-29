@@ -14,24 +14,25 @@ import settings.SettingsManager;
  */
 public class DroneController extends Listener implements Runnable {
 
-    private static CommandManager commandManager = new CommandManager();
-    ;
-    private static SettingsManager settingsManager = new SettingsManager();
+    private static CommandManager commandManager = new CommandManager();;
+    public static SettingsManager settingsManager = new SettingsManager();
     private FrameHelper helper = new FrameHelper();
     private Controller controller = new Controller();
     private List<Float> deltas = new ArrayList<Float>();
     private float controllerSensibility;
     private float controllerDeltaPoints;
-
+    private float controllerDegreesSensibility;
+    
     public DroneController() {
         final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
         final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
-
+        final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
+        
         controller.addListener(this);
-
-        this.controllerSensibility = getFloatValueFromSetting("sensibility", CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
-        this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number", CONTROLLER_HEIGHT_DELTA_POINTS);
-
+        
+        this.controllerSensibility = getFloatValueFromSetting("sensibility",CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
+        this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number",CONTROLLER_HEIGHT_DELTA_POINTS);
+        this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
         System.out.println("sensibility: " + controllerSensibility);
     }
 
@@ -140,9 +141,9 @@ public class DroneController extends Listener implements Runnable {
 
         System.out.println("controller not connected");
     }
-
-    private static float getFloatValueFromSetting(String settingName, float defaultValue) {
-        try {
+    
+    private static float getFloatValueFromSetting(String settingName, float defaultValue){
+        try{
             return Float.parseFloat(settingsManager.getSetting(settingName));
         } catch (NumberFormatException ex) {
             System.err.println("[Parse error] Can't parse '" + settingName + "' value from settings, set the default one.");

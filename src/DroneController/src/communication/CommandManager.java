@@ -1,5 +1,6 @@
 package communication;
 
+import static controller.DroneController.settingsManager;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,6 +8,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import settings.TelloComunicationData;
+import settings.SettingsManager;
 
 /**
  * 
@@ -15,15 +17,21 @@ import settings.TelloComunicationData;
 public class CommandManager  {
 
     private DatagramSocket commandSocket;
+    private SettingsManager manager = controller.DroneController.settingsManager;
+    private String jariPacketAddress;
     
     public CommandManager() {
         try{
             commandSocket = new DatagramSocket(TelloComunicationData.TELLO_COMMAND_LISTEN_PORT);
             System.out.println("[SUCCESS] Listening on port " + TelloComunicationData.TELLO_COMMAND_LISTEN_PORT);
+        
+            
         }
         catch(SocketException ex){
             System.err.println("Can't create client socket: " + ex.getMessage());
         }
+        
+        this.jariPacketAddress = settingsManager.getSetting("jari_address");
     }
     
     /**
@@ -42,7 +50,7 @@ public class CommandManager  {
             DatagramPacket packet = new DatagramPacket(
                     commandData,
                     commandData.length, 
-                    InetAddress.getByName(TelloComunicationData.JARI_ADDRESS), 
+                    InetAddress.getByName(this.jariPacketAddress), 
                     TelloComunicationData.TELLO_COMMAND_SEND_PORT
             );
             
