@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import settings.ControllerSettings;
 import settings.SettingsManager;
 
 /**
@@ -16,10 +17,12 @@ import settings.SettingsManager;
 public class CommandManager  {
 
     private DatagramSocket commandSocket;
-    private SettingsManager manager = new SettingsManager();
-    private final String JARI_ADDRESS = manager.getSetting("jari_address");
-    private final int TELLO_COMMAND_LISTEN_PORT = Integer.parseInt(manager.getSetting("tello_command_listen_port"));
-    private final int TELLO_COMMAND_SEND_PORT = Integer.parseInt(manager.getSetting("tello_command_send_port"));
+    
+    private ControllerSettings settings = new ControllerSettings();
+    
+    private final String JARI_ADDRESS = settings.getCommunicationJariAddress();
+    private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
+    private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
     
     public CommandManager() {
         try{
