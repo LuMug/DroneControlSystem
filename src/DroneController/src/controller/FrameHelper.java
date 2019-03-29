@@ -119,6 +119,18 @@ public class FrameHelper {
         }
     }
 
+    public float getHandAngle(Hand hand) {
+        Finger lFinger = hand.fingers().leftmost();
+        Vector lVector = lFinger.tipPosition();
+        Finger rFinger = hand.fingers().rightmost();
+        Vector rVector = rFinger.tipPosition();
+        float angle = (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
+        if (angle < 0) {
+            angle += 360;
+        }
+        return angle;
+    }
+
     public float getDeltaY() {
         return getHandY(getLeftHand(currentFrame)) - getHandY(getLeftHand(lastFrame));
     }
