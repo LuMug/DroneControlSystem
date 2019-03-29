@@ -7,7 +7,7 @@
 Jari:
 
 Fadil:
-
+Ho implementato il calcolo dell'angolo di rollio tra il pollice e il mignolo della mano destra e assieme a Luca abbiamo aggiunto la possibilità di assegnare dei parametri al DroneController grazie a un file di config
 Luca:
 -
 

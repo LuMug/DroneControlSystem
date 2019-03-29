@@ -87,7 +87,7 @@ public class FrameHelper {
             return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getZ() - lVector.getZ()));
 
         } catch (NullPointerException npe) {
-            System.err.println("[ERROR] Unable to get hand object from frame");
+//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
@@ -101,7 +101,7 @@ public class FrameHelper {
             return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
 
         } catch (NullPointerException npe) {
-            System.err.println("[ERROR] Unable to get hand object from frame");
+//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
@@ -133,6 +133,10 @@ public class FrameHelper {
 
     public float getDeltaY() {
         return getHandY(getLeftHand(currentFrame)) - getHandY(getLeftHand(lastFrame));
+    }
+
+    public float getDeltaRoll() {
+        return getRoll(getRightHand(currentFrame)) - getRoll(getRightHand(lastFrame));
     }
 
     public synchronized void setFrame(Frame frame) {

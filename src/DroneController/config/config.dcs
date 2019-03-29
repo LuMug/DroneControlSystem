@@ -1,9 +1,9 @@
 # Config file per il controller del drone.
 
 #Sensibilità di lettura del leap motion
-sensibility=0.3
+sensibility=2
 height_points_number=30
-degrees_sensibility=5
+degrees_sensibility=1
 
 #Indirizzi ip per testing e non
 tello_address=192.168.43.47
