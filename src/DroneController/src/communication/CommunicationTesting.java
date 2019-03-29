@@ -1,7 +1,5 @@
 package communication;
 
-import settings.TelloComunicationData;
-
 /**
  * The scope of this class is to test the communication between the controller and 
  * the drone simulator.
