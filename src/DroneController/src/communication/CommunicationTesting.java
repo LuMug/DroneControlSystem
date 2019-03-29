@@ -17,10 +17,7 @@ public class CommunicationTesting {
         while(true){
             try{
                 String[] commands = new String[]{Commands.ENABLE_COMMANDS,Commands.TAKEOFF,Commands.up(130)};
-                
-                System.out.println(commands[2]);
                 manager.sendCommands(commands);
-
                 Thread.sleep(2000);
             }
             catch(InterruptedException ex){}
