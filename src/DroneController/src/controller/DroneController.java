@@ -118,7 +118,7 @@ public class DroneController extends Listener implements Runnable {
         System.out.println("calc roll: " + rollValue);
 
 //        System.out.println("hand speed: " + handSpeed);
-        if (handSpeed > DEAD_ZONE) {
+        if (handSpeed > controllerSensibility) {
 //            System.out.println("movement detected");
 //            if (pitchValue != 180 && pitchValue != 0.0) {
 //                System.out.println("pitch: " + pitchValue);
