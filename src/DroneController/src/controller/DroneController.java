@@ -1,7 +1,6 @@
 package controller;
 
 import com.leapmotion.leap.Controller;
-import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
 import communication.*;
@@ -102,14 +101,15 @@ public class DroneController extends Listener implements Runnable {
         float rollValue = -helper.getRoll(helper.getRightHand());
         float yawValue = -helper.getYaw(helper.getRightHand());
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getRightHand()) / 10);
-        float tot = 0;
-        for(Finger finger : helper.getRightHand().fingers()){
-            tot += (float) Math.toDegrees(finger.tipPosition().roll());
-            
+
+
+        if (rollValue > 0) {
+            rollValue = 180 - rollValue;
+        } else {
+            rollValue = -(180 + rollValue);
         }
-        
-        System.out.println("medium roll: " + tot/5);
-        
+        System.out.println("real   roll: " + rollValue);
+
 //        System.out.println("hand speed: " + handSpeed);
         if (handSpeed > DEAD_ZONE) {
             System.out.println("movement detected");
@@ -126,6 +126,7 @@ public class DroneController extends Listener implements Runnable {
                 String message = rollValue > 90 ? Commands.right((int) rollValue - 90) : Commands.left(Math.abs((int) rollValue));
                 System.out.println("message: " + message);
                 System.out.println("roll: " + rollValue);
+                commandManager.sendCommand(message);
             }
         }
     }
@@ -135,14 +136,14 @@ public class DroneController extends Listener implements Runnable {
 
         System.out.println("reading");
 //        disabled for testing
-//        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
+        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
         System.out.println("sending command: " + Commands.ENABLE_COMMANDS);
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
             if (helper.getFrame().id() != helper.getLastFrame().id()) {
                 checkHeightControl();
-                checkMovementControl();
+//                checkMovementControl();
             }
         }
 
