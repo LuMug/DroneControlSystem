@@ -5,6 +5,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 /*
  * The MIT License
@@ -47,9 +48,7 @@ public class Simulator{
     private static final int BUFFER_SIZE = 64;
     private static CommandReader commandReader;
     private static DatagramSocket socket;
-    private static PositionXYPlotFrame positionXYFrame;
-    private static PositionXZPlotFrame positionXZFrame;
-    private static RotationChartFrame rotationChartFrame;    
+    private static TelloChartFrame telloChartFrame;
     //Positioning points
     private int x = 0;
     private int y = 0;
@@ -62,13 +61,9 @@ public class Simulator{
     
     public Simulator() throws SocketException, InterruptedException{
         commandReader = new CommandReader(this);
-        positionXYFrame = new PositionXYPlotFrame(this.x, this.y);
-        positionXZFrame = new PositionXZPlotFrame(this.x, this.z);
-        rotationChartFrame = new RotationChartFrame(this.pitch,this.yaw,this.roll);
+        telloChartFrame = new TelloChartFrame(x,y,z,pitch,yaw,roll);
         //Start Frames
-        positionXYFrame.setVisible(true);
-        positionXZFrame.setVisible(true);
-        rotationChartFrame.setVisible(true);
+        telloChartFrame.setVisible(true);
         //Start listening on socket
         socket = new DatagramSocket(PORT);
         startListening();
@@ -83,8 +78,8 @@ public class Simulator{
     
     public void setX(int x){
         this.x = x;
-        positionXYFrame.setPositionX(this.x);
-        positionXZFrame.setPositionX(this.x);
+        telloChartFrame.setPositionX(this.x);
+        telloChartFrame.setPositionX(this.x);
     }
     
 
@@ -94,7 +89,7 @@ public class Simulator{
     
     public void setY(int y){
         this.y = y;
-        positionXYFrame.setPositionY(this.y);
+        telloChartFrame.setPositionY(this.y);
     }
     
     public int getZ(){
@@ -103,7 +98,7 @@ public class Simulator{
     
     public void setZ(int z){
         this.z = z;
-        positionXZFrame.setPositionX(this.x);
+        telloChartFrame.setPositionX(this.x);
     }
     
     public int getRoll(){
@@ -117,7 +112,7 @@ public class Simulator{
             int div = rotation%360;
             this.roll = rotation/div;
         }
-        rotationChartFrame.setRoll(this.roll);
+        telloChartFrame.setRoll(this.roll);
     }
     
     public int getYaw(){
@@ -131,7 +126,7 @@ public class Simulator{
             int div = rotation%360;
             this.yaw = rotation/div;
         }
-        rotationChartFrame.setYaw(this.yaw);
+        telloChartFrame.setYaw(this.yaw);
 
     }
     
@@ -146,7 +141,7 @@ public class Simulator{
             int div = rotation%360;
             this.pitch = rotation/div;
         }
-        rotationChartFrame.setPitch(this.pitch);
+        telloChartFrame.setPitch(this.pitch);
 
     }
     
@@ -174,6 +169,23 @@ public class Simulator{
         );       
         socket.send(packet);
         System.err.println("Sent ERROR response.");
+    }
+    
+    private static void returnValues(int[] values) throws UnknownHostException, IOException{
+        //Converting int array to byte array
+        byte[] response = new byte[values.length];
+        for(int i = 0; i < response.length; i++){
+            response[i] = (byte)values[i];
+        }
+        //Send packet
+        DatagramPacket packet = new DatagramPacket(
+            response, 
+            response.length, 
+            InetAddress.getByName(ADDRESS_TO_SEND), 
+            PORT
+        );       
+        socket.send(packet);
+        System.err.println("Sent return values: " + Arrays.toString(values));
     }
     
     // ------------------- Network Methods -------------------
@@ -219,8 +231,14 @@ public class Simulator{
                                 //Getter commands 
                                 if(commandReader.getterCommandExists(command) != Integer.MIN_VALUE){
                                     sendOK();
+                                    returnValues(new int[]{commandReader.getterCommandExists(command)});
                                 }else{
-                                    sendERROR();
+                                    if(commandReader.getterCommandArrayExists(command) != new int[]{Integer.MIN_VALUE}){
+                                        sendOK();
+                                        returnValues(commandReader.getterCommandArrayExists(command));
+                                    }else{
+                                       sendERROR(); 
+                                    }
                                 }
                             }else if(!command.contains(" ")){
                                 //Void commands
