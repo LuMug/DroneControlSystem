@@ -31,13 +31,32 @@
  */
 public class CommandReader{
     
+    /************
+     * TO DO:.
+     * 
+     * - Complete all methods.
+     * - fix setters for pitch, roll and yaw; if angle 
+     *   exceeds 360 or -360 go back to 0.
+     * - Add safety feature, drone lands after 15 seconds without any commands.
+     * - On simulation add informations such as battery, flight time, 
+     *   temperature, pressure and so on...
+     * - Maybe make battery percentage drop with the drone usage.
+     */
+    
+    /********
+     * NOTE:.
+     * 
+     * Methods left empty because of the simulation:
+     * - streamon
+     * - streamoff
+     * - wifi
+     */
+    
     private static final int BATTERY_PERCENTAGE = 100;
     private static final int ACTUAL_TEMPERATURE = 24;
     private static final int BAROMETER_PRESSURE = 1;
     private static Simulator simulator;
     private static int speed;
-    private static String ssid;
-    private static String password;
     private static long takeoffTime;
 
     public CommandReader(Simulator simulator){
@@ -220,18 +239,12 @@ public class CommandReader{
     }
     
     public static boolean streamon(){
-        //VideoStream on
-        
-        //Still Not Implemented
-        
+        //VideoStream on, not implemented yet in the simulation.
         return false;
     }
     
     public static boolean streamoff(){
-        //VideoStream off
-        
-        //Still Not Implemented
-        
+        //VideoStream off, not implemented yet in the simulation.
         return false;
     }
     
@@ -402,22 +415,44 @@ public class CommandReader{
     }
     
     public static boolean rc(int a, int b, int c, int d){
-        
-        //Still to do
-        
-        return true;
+        /**
+         * a: left/right
+         * b: forward/backward
+         * c: up/down
+         * d: yaw
+         */
+        if(isInsideRange(a, -100, 100) && isInsideRange(b, -100, 100) 
+                && isInsideRange(c, -100, 100) && isInsideRange(d, -100, 100)){
+            if(a > -1){
+                right(a);
+            }else{
+                left(a);
+            }
+            
+            if(b > -1){
+                forward(b);
+            }else{
+                back(b);
+            }
+            
+            if(c > -1){
+                up(c);
+            }else{
+                down(c);
+            }
+            
+            if(d > -1){
+                simulator.setYaw(simulator.getYaw() + d);
+            }else{
+                simulator.setYaw(simulator.getYaw() - d);
+            }
+            return true;
+        }
+        return false;
     }
     
     public static boolean wifi(String ssidValue, String passwordValue){
-        if(passwordValue.length() > 0 && ssidValue.length() > 0){
-            password = passwordValue;
-            ssid = ssidValue;
-            
-            //Join network or do what needed.
-            //Still to discuss and modify.
-            
-            return true;
-        }
+        //Should join a network
         return false;
     }
     
@@ -479,27 +514,19 @@ public class CommandReader{
     }
     
     public static int getTof(){   
-        
-        //Still to do
-        
-        return 0;
+        //Can't do it in the simulation, range imaging camera should be required.
+        return -1;
     }
     
     public static int getWifi(){   
-        
-        //Not sure about the return type.
-        //On the SDK it's ' get Wi-Fi SNR' and it should return 'snr'.
-        //CONSULT TELLO STATE EXPLANATION
-        
-        //Still to do
-        
-        return 0;
+        //Wifi not implemented yet.
+        return -1;
     }
     
     // ------------------------- HELPER METHODS -------------------------
     
     public static int unsign(int value){
-        return (value < 0)?value*-1:value;
+        return Math.abs(value);
     }
     
     public static boolean isInsideRange(int value, int min, int max){
