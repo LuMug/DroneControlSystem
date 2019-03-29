@@ -15,7 +15,7 @@ Luca:
 -
 
 Andrea:
--
+Ho collegato le classi di visualizzazione di dati al simulatore in modo che si possa vedere i valori mandati dal drone. Inoltre all'interno di queste classi ho cambiato il tipo di valore da float a int in modo da essere in regola con la struttura dei dati del simulatore.
 
 ## Problemi riscontrati e soluzioni adottate
 Non abbiamo riscontrato nessun problema.
