@@ -79,21 +79,31 @@ public class FrameHelper {
     }
 
     public float getPitch(Hand hand) {
-        if (hand != null) {
-            return (float) Math.toDegrees(hand.direction().pitch());
-        } else {
+        try {
+            Finger lFinger = hand.fingers().leftmost();
+            Vector lVector = lFinger.tipPosition();
+            Finger rFinger = hand.fingers().rightmost();
+            Vector rVector = rFinger.tipPosition();
+            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getZ() - lVector.getZ()));
+
+        } catch (NullPointerException npe) {
+            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
 
     public float getRoll(Hand hand) {
-        Finger lFinger = hand.fingers().leftmost();
-        Vector lVector = lFinger.tipPosition();
-        Finger rFinger = hand.fingers().rightmost();
-        Vector rVector = rFinger.tipPosition();
-        float angle = (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
+        try {
+            Finger lFinger = hand.fingers().leftmost();
+            Vector lVector = lFinger.tipPosition();
+            Finger rFinger = hand.fingers().rightmost();
+            Vector rVector = rFinger.tipPosition();
+            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
 
-        return angle;
+        } catch (NullPointerException npe) {
+            System.err.println("[ERROR] Unable to get hand object from frame");
+            return 0;
+        }
     }
 
     public float getYaw(Hand hand) {
