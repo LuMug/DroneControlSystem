@@ -6,8 +6,6 @@ import com.leapmotion.leap.Listener;
 import communication.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import settings.SettingsManager;
 
 /**
@@ -17,11 +15,10 @@ import settings.SettingsManager;
 public class DroneController extends Listener implements Runnable {
 
     private static CommandManager commandManager = new CommandManager();
-    ;
     public static SettingsManager settingsManager = new SettingsManager();
-    private FrameHelper helper = new FrameHelper();
-    private Controller controller = new Controller();
-    private List<Float> deltas = new ArrayList<Float>();
+    private final FrameHelper helper = new FrameHelper();
+    private final Controller controller = new Controller();
+    private final List<Float> deltas = new ArrayList<>();
     private float controllerSensibility;
     private float controllerDeltaPoints;
     private float controllerDegreesSensibility;
@@ -30,21 +27,9 @@ public class DroneController extends Listener implements Runnable {
     private long lastMessageTimestamp = System.currentTimeMillis();
 
     public DroneController() {
-        final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
-        final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
-        final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
-        final float MOVEMENT_DELAY_DEFAULT_VALUE = 500;
-        final float DELTA_AVERAGE_MULTIPLIER = 1.5f;
 
         controller.addListener(this);
 
-        this.controllerSensibility = getFloatValueFromSetting("sensibility", CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
-        this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number", CONTROLLER_HEIGHT_DELTA_POINTS);
-        this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
-        this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
-        this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", MOVEMENT_DELAY_DEFAULT_VALUE);
-
-        System.out.println("sensibility: " + controllerDegreesSensibility);
     }
 
     public static void main(String[] args) {
@@ -55,9 +40,32 @@ public class DroneController extends Listener implements Runnable {
 
     public void onConnect(Controller controller) {
         System.out.println("Connected leap");
+        loadVariables();
     }
 
     public void onFrame(Controller controller) {
+
+    }
+
+    public void loadVariables() {
+        final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
+        final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
+        final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
+        final float MOVEMENT_DELAY_DEFAULT_VALUE = 500;
+        final float DELTA_AVERAGE_MULTIPLIER = 1.5f;
+
+        this.controllerSensibility = getFloatValueFromSetting("sensibility", CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
+        this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number", CONTROLLER_HEIGHT_DELTA_POINTS);
+        this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
+        this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
+        this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", DELTA_AVERAGE_MULTIPLIER);
+        System.out.println("===========================");
+        System.out.println("controllerSensibility: " + controllerSensibility);
+        System.out.println("controllerDeltaPoints: " + controllerDeltaPoints);
+        System.out.println("degrees_sensibility: " + controllerDegreesSensibility);
+        System.out.println("movementDelay: " + movementDelay);
+        System.out.println("deltaAverageMultiplier: " + deltaAverageMultiplier);
+        System.out.println("===========================");
 
     }
 
@@ -101,19 +109,14 @@ public class DroneController extends Listener implements Runnable {
             float average = getAverageDeltas();
             int yPos = (int) lastY;
 
-            //Costruisce la stringa
-            if (Math.abs(yPos) > average * deltaAverageMultiplier) {
+            if (Math.abs(yPos) < average * deltaAverageMultiplier) {
                 if (yPos != 0) {
                     String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
 
-                    //Invia la stringa
 //                commandManager.sendCommand(message);
-                    System.out.println("average: " + average);
-                    System.out.println("Sending message: " + message);
                 }
-            } else {
-                System.err.println("Value not accepted: " + yPos);
             }
+
         }
 
         addDeltasValue(lastY);
@@ -138,10 +141,8 @@ public class DroneController extends Listener implements Runnable {
                     String message = rollValue < 0
                             ? Commands.right((int) Math.abs(rollValue - controllerDegreesSensibility))
                             : Commands.left((int) (rollValue - controllerDegreesSensibility));
-
-//                commandManager.sendCommand(message);
-//                    System.out.println("message: " + message);
                     commands[0] = message;
+                    System.out.println(message);
                 }
 
             }
@@ -151,9 +152,8 @@ public class DroneController extends Listener implements Runnable {
                     String message = pitchValue > 0
                             ? Commands.back((int) (pitchValue - controllerDegreesSensibility))
                             : Commands.forward((int) Math.abs(pitchValue - controllerDegreesSensibility));
-//                    System.out.println("message: " + message);
-//                    commandManager.sendCommand(message);
                     commands[1] = message;
+                    System.out.println(message);
 
                 }
             }
@@ -163,9 +163,8 @@ public class DroneController extends Listener implements Runnable {
                     String message = yawValue > 0
                             ? Commands.rotateCounterClockwise((int) (yawValue - controllerDegreesSensibility))
                             : Commands.rotateClockwise((int) Math.abs(yawValue - controllerDegreesSensibility));
-//                    System.out.println("message: " + message);
-//                    commandManager.sendCommand(message);
                     commands[1] = message;
+                    System.out.println(message);
 
                 }
             }
