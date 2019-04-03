@@ -79,27 +79,36 @@ public class FrameHelper {
     }
 
     public float getPitch(Hand hand) {
-        if (hand != null) {
-            return (float) Math.toDegrees(hand.direction().pitch());
-        } else {
+        try {
+            Vector middleFinger = hand.fingers().get(2).tipPosition();
+            Vector palmCenter = hand.palmPosition();
+            return (float) -Math.toDegrees(Math.atan2(palmCenter.getY() - middleFinger.getY(), palmCenter.getZ() - middleFinger.getZ()));
+
+        } catch (NullPointerException npe) {
+//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
 
     public float getRoll(Hand hand) {
-        Finger lFinger = hand.fingers().leftmost();
-        Vector lVector = lFinger.tipPosition();
-        Finger rFinger = hand.fingers().rightmost();
-        Vector rVector = rFinger.tipPosition();
-        float angle = (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
+        try {
+            Vector lVector = hand.fingers().leftmost().tipPosition();
+            Vector rVector = hand.fingers().rightmost().tipPosition();
+            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
 
-        return angle;
+        } catch (NullPointerException npe) {
+            return 0;
+        }
     }
 
     public float getYaw(Hand hand) {
-        if (hand != null) {
-            return (float) Math.toDegrees(hand.direction().yaw());
-        } else {
+        try {
+            Vector middleFinger = hand.fingers().get(2).tipPosition();
+            Vector palmCenter = hand.palmPosition();
+            return (float) Math.toDegrees(Math.atan2(palmCenter.getX() - middleFinger.getX(), palmCenter.getZ() - middleFinger.getZ()));
+
+        } catch (NullPointerException npe) {
+//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
@@ -123,6 +132,10 @@ public class FrameHelper {
 
     public float getDeltaY() {
         return getHandY(getLeftHand(currentFrame)) - getHandY(getLeftHand(lastFrame));
+    }
+
+    public float getDeltaRoll() {
+        return getRoll(getRightHand(currentFrame)) - getRoll(getRightHand(lastFrame));
     }
 
     public synchronized void setFrame(Frame frame) {
