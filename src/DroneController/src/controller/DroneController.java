@@ -6,6 +6,8 @@ import com.leapmotion.leap.Listener;
 import communication.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import settings.SettingsManager;
 
 /**
@@ -23,18 +25,22 @@ public class DroneController extends Listener implements Runnable {
     private float controllerSensibility;
     private float controllerDeltaPoints;
     private float controllerDegreesSensibility;
+    private float movementDelay;
+    private long lastMessageTimestamp = System.currentTimeMillis();
 
     public DroneController() {
         final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
         final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
         final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
+        final float MOVEMENT_DELAY_DEFAULT_VALUE = 500;
 
         controller.addListener(this);
 
         this.controllerSensibility = getFloatValueFromSetting("sensibility", CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
         this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number", CONTROLLER_HEIGHT_DELTA_POINTS);
         this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
-        System.out.println("sensibility: " + controllerSensibility);
+        this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
+        System.out.println("sensibility: " + controllerDegreesSensibility);
     }
 
     public static void main(String[] args) {
@@ -99,8 +105,8 @@ public class DroneController extends Listener implements Runnable {
 
                 //Invia la stringa
 //                commandManager.sendCommand(message);
-//                System.out.println("average: " + average);
-//                System.out.println("Sending message: " + message);
+                System.out.println("average: " + average);
+                System.out.println("Sending message: " + message);
 
             }
         }
@@ -108,24 +114,58 @@ public class DroneController extends Listener implements Runnable {
     }
 
     private void checkMovementControl() {
-        float pitchValue = helper.getPitch(helper.getRightHand());
-        float rollValue = helper.getRoll(helper.getRightHand())/10;
-//        float yawValue = helper.getYaw(helper.getRightHand());
+        String[] commands = new String[3];
 
-        float handSpeed = Math.abs(helper.getHandSpeedY(helper.getRightHand()) / 10);
+        if ((System.currentTimeMillis() - lastMessageTimestamp) > movementDelay) {
+            float pitchValue = helper.getPitch(helper.getRightHand()) / 10;
+            float rollValue = helper.getRoll(helper.getRightHand()) / 10;
+            float yawValue = helper.getYaw(helper.getRightHand()) / 10;
 
-        System.out.println("roll: " + rollValue);
-//        System.out.println("hand speed: " + handSpeed);
+            float handSpeed = Math.abs(helper.getHandSpeedY(helper.getRightHand()) / 10);
+
+//        System.out.println("yawValue: " + yawValue);
 //
-        if (handSpeed > controllerSensibility && Math.abs(rollValue) > controllerDegreesSensibility) {
-            if (((int) rollValue - controllerDegreesSensibility) != 0 ) {
-                String message = rollValue < 0 ? 
-                    Commands.right((int) Math.abs(rollValue - controllerDegreesSensibility) ) : 
-                    Commands.left((int)( rollValue - controllerDegreesSensibility ));
-                System.out.println("message: " + message);
+            if (Math.abs(rollValue) > controllerDegreesSensibility) {
+
+                if (((int) rollValue - controllerDegreesSensibility) != 0) {
+                    String message = rollValue < 0
+                            ? Commands.right((int) Math.abs(rollValue - controllerDegreesSensibility))
+                            : Commands.left((int) (rollValue - controllerDegreesSensibility));
+
 //                commandManager.sendCommand(message);
+//                    System.out.println("message: " + message);
+                    commands[0] = message;
+                }
+
             }
+
+            if (Math.abs(pitchValue) > controllerDegreesSensibility) {
+                if (((int) pitchValue - controllerDegreesSensibility) != 0) {
+                    String message = pitchValue > 0
+                            ? Commands.back((int) (pitchValue - controllerDegreesSensibility))
+                            : Commands.forward((int) Math.abs(pitchValue - controllerDegreesSensibility));
+//                    System.out.println("message: " + message);
+//                    commandManager.sendCommand(message);
+                    commands[1] = message;
+
+                }
+            }
+
+            if (Math.abs(yawValue) > controllerDegreesSensibility) {
+                if (((int) yawValue - controllerDegreesSensibility) != 0) {
+                    String message = yawValue > 0
+                            ? Commands.rotateCounterClockwise((int) (yawValue - controllerDegreesSensibility))
+                            : Commands.rotateClockwise((int) Math.abs(yawValue - controllerDegreesSensibility));
+//                    System.out.println("message: " + message);
+//                    commandManager.sendCommand(message);
+                    commands[1] = message;
+
+                }
+            }
+            lastMessageTimestamp = System.currentTimeMillis();
         }
+
+//        commandManager.sendCommands(commands);
     }
 
     @Override
@@ -134,6 +174,11 @@ public class DroneController extends Listener implements Runnable {
         System.out.println("reading");
 //        disabled for testing
 //        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException ex) {
+        }
+
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);

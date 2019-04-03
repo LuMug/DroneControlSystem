@@ -80,11 +80,9 @@ public class FrameHelper {
 
     public float getPitch(Hand hand) {
         try {
-            Finger lFinger = hand.fingers().leftmost();
-            Vector lVector = lFinger.tipPosition();
-            Finger rFinger = hand.fingers().rightmost();
-            Vector rVector = rFinger.tipPosition();
-            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getZ() - lVector.getZ()));
+            Vector middleFinger = hand.fingers().get(2).tipPosition();
+            Vector palmCenter = hand.palmPosition();
+            return (float) -Math.toDegrees(Math.atan2(palmCenter.getY() - middleFinger.getY(), palmCenter.getZ() - middleFinger.getZ()));
 
         } catch (NullPointerException npe) {
 //            System.err.println("[ERROR] Unable to get hand object from frame");
@@ -94,22 +92,23 @@ public class FrameHelper {
 
     public float getRoll(Hand hand) {
         try {
-            Finger lFinger = hand.fingers().leftmost();
-            Vector lVector = lFinger.tipPosition();
-            Finger rFinger = hand.fingers().rightmost();
-            Vector rVector = rFinger.tipPosition();
+            Vector lVector = hand.fingers().leftmost().tipPosition();
+            Vector rVector = hand.fingers().rightmost().tipPosition();
             return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(), rVector.getX() - lVector.getX()));
 
         } catch (NullPointerException npe) {
-//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
 
     public float getYaw(Hand hand) {
-        if (hand != null) {
-            return (float) Math.toDegrees(hand.direction().yaw());
-        } else {
+        try {
+            Vector middleFinger = hand.fingers().get(2).tipPosition();
+            Vector palmCenter = hand.palmPosition();
+            return (float) Math.toDegrees(Math.atan2(palmCenter.getX() - middleFinger.getX(), palmCenter.getZ() - middleFinger.getZ()));
+
+        } catch (NullPointerException npe) {
+//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
