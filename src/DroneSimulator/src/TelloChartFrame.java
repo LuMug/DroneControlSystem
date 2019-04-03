@@ -39,7 +39,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
         this.roll = roll;
 
         //XY Panel
-        XYDataset xyDataset = createXYDataset();
+        XYDataset xyDataset = createDataset("XY");
         this.xyPositionPanel = ChartFactory.createScatterPlot(
                 "Posizione DJI Tello, vista di profilo",
                 "Posizione asse X",
@@ -53,7 +53,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
         positionXYPlotPanel.validate();
 
         //XZ Panel
-        XYDataset xzDataset = createXZDataset();
+        XYDataset xzDataset = createDataset("XZ");
         this.xzPositionPanel = ChartFactory.createScatterPlot(
                 "Posizione DJI Tello, vista dall'alto",
                 "Posizione Asse X",
@@ -81,22 +81,35 @@ public class TelloChartFrame extends javax.swing.JFrame {
 
     }
 
-    public XYDataset createXYDataset() {
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        XYSeries position = new XYSeries("Posizione");
-        position.add(this.positionX, this.positionY);
-        dataset.addSeries(position);
-        return dataset;
+    /**
+     * Metodo createXYDataset, permette di creare il dataset per il grafico
+     * della posizione vista dall'alto
+     * 
+     * @param database il dataset da creare
+     * @return il dataset contenente la posizione
+     */
+    public XYDataset createDataset(String database) {
+        if (database.equalsIgnoreCase("XY")) {
+            XYSeriesCollection dataset = new XYSeriesCollection();
+            XYSeries position = new XYSeries("Posizione");
+            position.add(this.positionX, this.positionY);
+            dataset.addSeries(position);
+            return dataset;
+        } else {
+            XYSeriesCollection dataset = new XYSeriesCollection();
+            XYSeries position = new XYSeries("Posizione");
+            position.add(this.positionX, this.positionZ);
+            dataset.addSeries(position);
+            return dataset;
+        }
     }
 
-    public XYDataset createXZDataset() {
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        XYSeries position = new XYSeries("Posizione");
-        position.add(this.positionX, this.positionZ);
-        dataset.addSeries(position);
-        return dataset;
-    }
-
+    /**
+     * Metodo createCategoryDataset, permette di creare il grafico contenente
+     * le informazioni dei valori di inclinazione sui tre assi di rotazione
+     * 
+     * @return il database contenente i valori dei 3 assi
+     */
     public CategoryDataset createCategoryDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         dataset.addValue(this.pitch, "Asse", "Pitch (Beccheggio)");
@@ -105,36 +118,36 @@ public class TelloChartFrame extends javax.swing.JFrame {
         return dataset;
     }
 
-    private void updateXYPlotPanel() {
-        XYDataset dataset = createXYDataset();
-        this.xyPositionPanel = ChartFactory.createScatterPlot(
-                "Posizione DJI Tello, vista di profilo",
-                "Poszione asse X",
-                "Poszione asse Y",
-                dataset
-        );
+    private void updatePlotPanel(String database) {
+        if (database.equalsIgnoreCase("XY")) {
+            XYDataset dataset = createDataset("XY");
+            this.xyPositionPanel = ChartFactory.createScatterPlot(
+                    "Posizione DJI Tello, vista di profilo",
+                    "Poszione asse X",
+                    "Poszione asse Y",
+                    dataset
+            );
 
-        setChartRange((XYPlot) xyPositionPanel.getPlot());
+            setChartRange((XYPlot) xyPositionPanel.getPlot());
 
-        ChartPanel panel = new ChartPanel(this.xyPositionPanel);
-        positionXYPlotPanel.revalidate();
-        positionXYPlotPanel.add(panel);
-        positionXYPlotPanel.validate();
-    }
-
-    private void updateXZPlotPanel() {
-        XYDataset dataset = createXZDataset();
-        this.xzPositionPanel = ChartFactory.createScatterPlot(
-                "Posizione DJI Tello, vista dall'alto",
-                "Posizione asse X",
-                "Posizione asse Z",
-                dataset
-        );
-        setChartRange((XYPlot) xzPositionPanel.getPlot());
-        ChartPanel panel = new ChartPanel(this.xzPositionPanel);
-        positionXZPlotPanel.revalidate();
-        positionXZPlotPanel.add(panel);
-        positionXZPlotPanel.validate();
+            ChartPanel panel = new ChartPanel(this.xyPositionPanel);
+            positionXYPlotPanel.revalidate();
+            positionXYPlotPanel.add(panel);
+            positionXYPlotPanel.validate();
+        } else {
+            XYDataset dataset = createDataset("XZ");
+            this.xzPositionPanel = ChartFactory.createScatterPlot(
+                    "Posizione DJI Tello, vista dall'alto",
+                    "Posizione asse X",
+                    "Posizione asse Z",
+                    dataset
+            );
+            setChartRange((XYPlot) xzPositionPanel.getPlot());
+            ChartPanel panel = new ChartPanel(this.xzPositionPanel);
+            positionXZPlotPanel.revalidate();
+            positionXZPlotPanel.add(panel);
+            positionXZPlotPanel.validate();
+        }
     }
 
     private void updateAxesChart() {
@@ -169,14 +182,26 @@ public class TelloChartFrame extends javax.swing.JFrame {
         range.setTickUnit(new NumberTickUnit(100));
     }
 
+    /**
+     * Ritorna il valore dell'attributo pitch
+     * @return il valore dell'attributo pitch
+     */
     public int getPitch() {
         return pitch;
     }
 
+    /**
+     * Ritorna il valore dell'attributo yaw
+     * @return il vslore dell'attributo yaw
+     */
     public int getYaw() {
         return yaw;
     }
 
+    /**
+     * Ritorna il valore dell'attributo roll
+     * @return il valore dell'attributo roll
+     */
     public int getRoll() {
         return roll;
     }
@@ -202,8 +227,8 @@ public class TelloChartFrame extends javax.swing.JFrame {
 
     public void setPositionX(int positionX) {
         this.positionX = positionX;
-        updateXYPlotPanel();
-        updateXZPlotPanel();
+        updatePlotPanel("XY");
+        updatePlotPanel("XZ");
     }
 
     public int getPositionY() {
@@ -212,7 +237,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
 
     public void setPositionY(int positionY) {
         this.positionY = positionY;
-        updateXYPlotPanel();
+        updatePlotPanel("XY");
     }
 
     public int getPositionZ() {
@@ -221,7 +246,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
 
     public void setPositionZ(int positionZ) {
         this.positionZ = positionZ;
-        updateXZPlotPanel();
+        updatePlotPanel("XZ");
     }
 
     /**
