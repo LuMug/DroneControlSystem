@@ -26,6 +26,7 @@ public class DroneController extends Listener implements Runnable {
     private float controllerDeltaPoints;
     private float controllerDegreesSensibility;
     private float movementDelay;
+    private float deltaAverageMultiplier;
     private long lastMessageTimestamp = System.currentTimeMillis();
 
     public DroneController() {
@@ -33,6 +34,7 @@ public class DroneController extends Listener implements Runnable {
         final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
         final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
         final float MOVEMENT_DELAY_DEFAULT_VALUE = 500;
+        final float DELTA_AVERAGE_MULTIPLIER = 1.5f;
 
         controller.addListener(this);
 
@@ -40,6 +42,8 @@ public class DroneController extends Listener implements Runnable {
         this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number", CONTROLLER_HEIGHT_DELTA_POINTS);
         this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
         this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
+        this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", MOVEMENT_DELAY_DEFAULT_VALUE);
+
         System.out.println("sensibility: " + controllerDegreesSensibility);
     }
 
@@ -90,26 +94,29 @@ public class DroneController extends Listener implements Runnable {
     private void checkHeightControl() {
 
         float lastY = helper.getDeltaY();
-
         float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand()) / 36);
 
         if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
-            addDeltasValue(lastY);
-            float average = getAverageDeltas();
 
+            float average = getAverageDeltas();
             int yPos = (int) lastY;
 
             //Costruisce la stringa
-            if (yPos != 0 && (yPos < average || yPos > -average)) {
-                String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
+            if (Math.abs(yPos) > average * deltaAverageMultiplier) {
+                if (yPos != 0) {
+                    String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
 
-                //Invia la stringa
+                    //Invia la stringa
 //                commandManager.sendCommand(message);
-                System.out.println("average: " + average);
-                System.out.println("Sending message: " + message);
-
+                    System.out.println("average: " + average);
+                    System.out.println("Sending message: " + message);
+                }
+            } else {
+                System.err.println("Value not accepted: " + yPos);
             }
         }
+
+        addDeltasValue(lastY);
 
     }
 
@@ -172,8 +179,9 @@ public class DroneController extends Listener implements Runnable {
     public void run() {
 
         System.out.println("reading");
-//        disabled for testing
-//        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
+//      disabled for testing
+//      commandManager.sendCommand(Commands.ENABLE_COMMANDS);
+//      sleep required for testing without the simulator
         try {
             Thread.sleep(200);
         } catch (InterruptedException ex) {

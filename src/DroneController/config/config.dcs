@@ -5,6 +5,7 @@ sensibility=2
 height_points_number=30
 degrees_sensibility=1
 movementDelay=25
+deltaAverageMultiplier=1.5
 
 #Indirizzi ip per testing e non
 tello_address=192.168.43.47
