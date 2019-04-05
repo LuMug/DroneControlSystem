@@ -5,7 +5,8 @@
 ## Lavori svolti
 
 Jari:
--
+Ho continuato a raffinare e rendere il più reale possibile il funzionamento di vari metodi del CommandReader come ad esempio il getBattery che si basa sul tempo di volo del drone e sulla capacità reale della batteria.
+Inoltre ho cambiato la struttura di CommadReader e Simulator e sto testando i vari metodi di CommandReader uno per uno.
 
 Fadil:
 -
