@@ -37,6 +37,7 @@ public class CommandReader{
      * - Add safety feature, drone lands after 15 seconds without any commands.
      * - On simulation add informations such as battery, flight time, 
      *   temperature, pressure and so on...
+     * - fix time return type.
      */
     
     private final int TELLO_BATTERY_FLIGHT_TIME = 13;
@@ -469,8 +470,9 @@ public class CommandReader{
     }
     
     public int getTime(){
+        System.err.println("Flight time: " + takeoffTime);
         //In seconds
-        return (int)((System.currentTimeMillis() - takeoffTime)/1000);
+        return (int)takeoffTime;
     }
     
     public int getHeight(){
