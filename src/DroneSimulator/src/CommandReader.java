@@ -34,13 +34,11 @@ public class CommandReader{
     /************
      * TO DO:.
      * 
-     * - fix setters for pitch, roll and yaw; if angle 
-     *   exceeds 360 or -360 go back to 0.
      * - discuss stopMotors method.
      * - Add safety feature, drone lands after 15 seconds without any commands.
      * - On simulation add informations such as battery, flight time, 
      *   temperature, pressure and so on...
-     * - Maybe make battery percentage drop with the drone usage.
+     * - Make battery percentage drop with the drone usage.
      */
     
     /********
@@ -53,18 +51,19 @@ public class CommandReader{
      * - getTof
      */
     
-    private static final int BATTERY_PERCENTAGE = 100;
-    private static final int ACTUAL_TEMPERATURE = 24;
-    private static final int BAROMETER_PRESSURE = 1;
-    private static Simulator simulator;
-    private static int speed;
-    private static long takeoffTime;
+    private final int TELLO_BATTERY_FLIGHT_TIME = 13;
+    private final int ACTUAL_TEMPERATURE = 24;
+    private final int BAROMETER_PRESSURE = 1;
+    private final int BATTERY_PERCENTAGE = 100;
+    private Simulator simulator;
+    private int speed;
+    private long takeoffTime;
 
     public CommandReader(Simulator simulator){
         this.simulator = simulator;
     }
     
-    private static final String[] COMMANDS = {
+    private final String[] COMMANDS = {
         "up",
         "down",
         "left",
@@ -81,7 +80,7 @@ public class CommandReader{
         "wifi"
     };
     
-    private static final String[] GUIDE_COMMANDS = {
+    private final String[] GUIDE_COMMANDS = {
         "takeoff",
         "land",
         "streamon",
@@ -89,7 +88,7 @@ public class CommandReader{
         "emergency"
     };
     
-    private static final String[] GET_COMMANDS = {
+    private final String[] GET_COMMANDS = {
         "speed?",
         "battery?",
         "time?",
@@ -236,37 +235,37 @@ public class CommandReader{
     
     // ------------------------- GUIDE COMMANDS -------------------------
     
-    public static boolean takeoff() throws InterruptedException{
+    public boolean takeoff() throws InterruptedException{
         //From 0,0,0
         takeoffTime = System.currentTimeMillis();
         go(0, 100, 0, 50);
         return true;
     }
     
-    public static boolean land() throws InterruptedException{
+    public boolean land() throws InterruptedException{
         go(simulator.getX(), 0, simulator.getZ(), 50);
         takeoffTime = 0;
         return true;
     }
     
-    public static boolean streamon(){
+    public boolean streamon(){
         //VideoStream on, not implemented yet in the simulation.
         return false;
     }
     
-    public static boolean streamoff(){
+    public boolean streamoff(){
         //VideoStream off, not implemented yet in the simulation.
         return false;
     }
     
-    public static boolean emergency(){
+    public boolean emergency(){
         simulator.stopMotors();
         return true;
     }
     
     // ------------------------- COMMANDS -------------------------
     
-    public static boolean up(int distance){
+    public boolean up(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setY(simulator.getY() + distance);
             return true;
@@ -274,7 +273,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean down(int distance){
+    public boolean down(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setY(simulator.getY() - distance);
             return true;
@@ -282,7 +281,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean left(int distance){
+    public boolean left(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setX(simulator.getX() - distance);
             return true;
@@ -290,7 +289,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean right(int distance){
+    public boolean right(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setX(simulator.getX() + distance);
             return true;
@@ -298,7 +297,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean forward(int distance){
+    public boolean forward(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setZ(simulator.getZ() - distance);
             return true;
@@ -306,7 +305,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean back(int distance){
+    public boolean back(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setZ(simulator.getZ() + distance);
             return true;
@@ -314,7 +313,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean cw(int rotation){
+    public boolean cw(int rotation){
         if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
             simulator.setRoll(simulator.getRoll() + rotation);
@@ -323,7 +322,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean ccw(int rotation){
+    public boolean ccw(int rotation){
         if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
             simulator.setRoll(simulator.getRoll() - rotation);
@@ -332,7 +331,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean flip(char where) throws InterruptedException{
+    public boolean flip(char where) throws InterruptedException{
         if(where == 'l' || where == 'r' || where == 'f' || where == 'b'){
             switch(where){
                 case 'l':
@@ -368,7 +367,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean go(int x, int y, int z, int speed) throws InterruptedException{
+    public boolean go(int x, int y, int z, int speed) throws InterruptedException{
         if(isInsideRange(x, 20, 500) || isInsideRange(x, -500, -20) &&
                 isInsideRange(y, 20, 500) || isInsideRange(y, -500, -20) &&
                 isInsideRange(z, 20, 500) || isInsideRange(z, -500, -20)){
@@ -397,7 +396,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed) throws InterruptedException{
+    public boolean curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed) throws InterruptedException{
         if(isInsideRange(x1, 20, 500) || isInsideRange(x1, -500, -20) &&
                 isInsideRange(y1, 20, 500) || isInsideRange(y1, -500, -20) &&
                 isInsideRange(z1, 20, 500) || isInsideRange(z1, -500, -20) &&
@@ -417,7 +416,7 @@ public class CommandReader{
     
     // ------------------------- SET COMMANDS -------------------------
     
-    public static boolean speed(int value){
+    public boolean speed(int value){
         if(isInsideRange(value, 10, 100)){
             speed = value;
             return true;
@@ -425,7 +424,7 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean rc(int a, int b, int c, int d){
+    public boolean rc(int a, int b, int c, int d){
         /**
          * a: left/right
          * b: forward/backward
@@ -462,35 +461,35 @@ public class CommandReader{
         return false;
     }
     
-    public static boolean wifi(String ssidValue, String passwordValue){
+    public boolean wifi(String ssidValue, String passwordValue){
         //Should join a network
         return false;
     }
     
     // ------------------------- GET COMMANDS -------------------------
     
-    public static int getSpeed(){
+    public int getSpeed(){
         return speed;
     }
     
-    public static int getBattery(){
+    public int getBattery(){
         return BATTERY_PERCENTAGE;
     }
     
-    public static int getTime(){
+    public int getTime(){
         //In seconds
         return (int)((System.currentTimeMillis() - takeoffTime)/1000);
     }
     
-    public static int getHeight(){
+    public int getHeight(){
         return simulator.getX();
     }
     
-    public static int getTemperature(){
+    public int getTemperature(){
         return ACTUAL_TEMPERATURE;
     }
     
-    public static int[] getAttitude(){
+    public int[] getAttitude(){
         return new int[]{
             simulator.getPitch(),
             simulator.getRoll(),
@@ -498,12 +497,12 @@ public class CommandReader{
         };
     }
     
-    public static int getBarometer(){
+    public int getBarometer(){
         //Return number is in Atmospheres (1 Atmosphere = 101325 Pascal)
         return BAROMETER_PRESSURE;
     }
     
-    public static int[] getAcceleration(){
+    public int[] getAcceleration(){
         return new int[]{
             simulator.getX(),
             simulator.getY(),
@@ -511,23 +510,23 @@ public class CommandReader{
         };
     }
     
-    public static int getTof(){   
+    public int getTof(){   
         //Can't do it in the simulation, range imaging camera should be required.
         return Integer.MIN_VALUE;
     }
     
-    public static int getWifi(){   
+    public int getWifi(){   
         //Wifi not implemented yet.
         return Integer.MIN_VALUE;
     }
     
     // ------------------------- HELPER METHODS -------------------------
     
-    public static int unsign(int value){
+    public int unsign(int value){
         return Math.abs(value);
     }
     
-    public static boolean isInsideRange(int value, int min, int max){
+    public boolean isInsideRange(int value, int min, int max){
         return (value >= min && value <= max);
     }
 }
