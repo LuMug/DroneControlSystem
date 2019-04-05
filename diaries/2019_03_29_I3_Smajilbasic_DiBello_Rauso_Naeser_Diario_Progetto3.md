@@ -11,6 +11,7 @@ Infine ho contribuito a migliorare la cominicazione e il funzionamento fra le va
 
 Fadil:
 Ho implementato il calcolo dell'angolo di rollio tra il pollice e il mignolo della mano destra e assieme a Luca abbiamo aggiunto la possibilità di assegnare dei parametri al DroneController grazie a un file di config
+
 Luca:
 Ho commentato e terminato l'implementazione della classe 'SettingsManager' (la classe che gestisce il file di config). Ho sviluppato anche una classe chiamata 'ControllerSettings', la quale si appoggia alla classe 'SettingsManager', che permette di accedere facilmente ai dati letti dal file di config tramite delle variabili
 in sola lettura.

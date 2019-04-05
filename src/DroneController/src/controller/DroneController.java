@@ -31,6 +31,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         controller.addListener(this);
         commandManager.setSettingsManager(settingsManager);
+
     }
 
     public static void main(String[] args) {
@@ -85,7 +86,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
         this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
         this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", DELTA_AVERAGE_MULTIPLIER);
-        
+
         System.out.println("===========================");
         System.out.println("controllerSensibility: " + controllerSensibility);
         System.out.println("controllerDeltaPoints: " + controllerDeltaPoints);
@@ -96,6 +97,13 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
     }
 
+    /**
+     * returns the average of the delta values of the y axis. This method is
+     * used to determine whether the last Y value of the left hand is normal and
+     * can be used as a command or is it abnormal and to be refused
+     *
+     * @return the average delta of the last n values, where 
+     */
     private float getAverageDeltas() {
         float tot = 0;
         tot = deltas.stream().map((delta) -> Math.abs(delta)).reduce(tot, (accumulator, _item) -> accumulator + _item);
@@ -197,6 +205,14 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 //        commandManager.sendCommands(commands);
     }
 
+    /**
+     * This method uses the settingsManager in order to read the settings values
+     * from the config file
+     *
+     * @param settingName The name of the setting to search
+     * @param defaultValue The default value of that setting
+     * @return the value read from the file
+     */
     private float getFloatValueFromSetting(String settingName, float defaultValue) {
         try {
             return Float.parseFloat(settingsManager.getSetting(settingName));
