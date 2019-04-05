@@ -1,6 +1,8 @@
 package settings;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -8,7 +10,7 @@ import java.io.IOException;
  */
 public class ControllerSettings {
     private SettingsManager manager = new SettingsManager();
-    
+
     //Controller settings
     private float controllerSensibility = 2f;
     private float controllerDegreesSensibility = 5f;
