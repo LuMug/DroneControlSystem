@@ -1,6 +1,6 @@
 package communication;
 
-import static controller.DroneController.settingsManager;
+//import static controller.DroneController.settingsManager;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -17,6 +17,8 @@ import settings.SettingsManager;
 public class CommandManager {
 
     private DatagramSocket commandSocket;
+    
+    private SettingsManager settingsManager;
 
     private ControllerSettings settings = new ControllerSettings();
 
@@ -24,6 +26,12 @@ public class CommandManager {
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
 
+    public void setSettingsManager(SettingsManager settingsManager) {
+        this.settingsManager = settingsManager;
+    }
+
+    
+    
     public CommandManager() {
         try {
             commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
@@ -32,6 +40,8 @@ public class CommandManager {
         } catch (SocketException ex) {
             System.err.println("Can't create client socket: " + ex.getMessage());
         }
+        
+        
     }
 
     /**

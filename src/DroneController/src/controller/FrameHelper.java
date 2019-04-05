@@ -1,78 +1,65 @@
 package controller;
 
 import com.leapmotion.leap.*;
-import java.io.IOException;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * This class contains useful methods in order to extract the necessary data from the Frames read by the LeapMotion
  * @author Fadil Smajilbasic
  */
 public class FrameHelper {
 
+    /**
+     * The most current frame read by the LeapMotion.
+     */
     private Frame currentFrame = new Frame();
+    
+    /**
+     * The Frame that was captured before the currentFrame.
+     * Used primarily in order to calculate the delta values
+     */
     private Frame lastFrame;
 
-    public float getHandX(Hand hand) {
-        if (hand != null) {
-            return hand.palmPosition().getX();
-        } else {
-            return 0;
-        }
-    }
-
+    /**
+     * getHandY checks if the hand parameter is valid and returns the y position of the hand.
+     * @param hand the LeapMotion Hand object.
+     * @return the height, from the origin, of the hand object passed as parameter.
+     */
     public float getHandY(Hand hand) {
-        if (hand != null) {
+        if (hand != null && hand.isValid() == true) {
             return hand.palmPosition().getY();
         } else {
             return 0;
         }
     }
 
-    public float getHandZ(Hand hand) {
-
-        if (hand != null) {
-            return hand.palmPosition().getZ();
-        } else {
-            return 0;
-        }
-    }
-
-    public Hand getRightHand() {
-        Hand rhand = getFrame().hands().rightmost();
-        if (rhand.isRight()) {
-            return rhand;
-        } else {
-            return null;
-        }
-    }
-
+    /**
+     * This method extracts the Hand object of the current Frame 
+     * @param frame 
+     * @return 
+     */
     public Hand getRightHand(Frame frame) {
-        Hand rhand = frame.hands().rightmost();
-        if (rhand.isRight()) {
-            return rhand;
+        Hand rHand;
+        if (frame != null && frame.isValid() == true) {
+            rHand = frame.hands().rightmost();
         } else {
-            return null;
+            rHand = getFrame().hands().rightmost();
         }
-    }
-
-    public Hand getLeftHand() {
-        Hand lhand = getFrame().hands().rightmost();
-        if (lhand.isLeft()) {
-            return lhand;
+        if (rHand.isRight()) {
+            return rHand;
         } else {
             return null;
         }
     }
 
     public Hand getLeftHand(Frame frame) {
-
-        Hand lhand = frame.hands().rightmost();
-        if (lhand.isLeft()) {
-            return lhand;
+        Hand lHand;
+        if (frame != null && frame.isValid() == true) {
+            lHand = frame.hands().rightmost();
+        } else {
+            lHand = getFrame().hands().rightmost();
+        }
+        if (lHand.isLeft()) {
+            return lHand;
         } else {
             return null;
         }
@@ -85,7 +72,6 @@ public class FrameHelper {
             return (float) -Math.toDegrees(Math.atan2(palmCenter.getY() - middleFinger.getY(), palmCenter.getZ() - middleFinger.getZ()));
 
         } catch (NullPointerException npe) {
-//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
@@ -108,22 +94,21 @@ public class FrameHelper {
             return (float) Math.toDegrees(Math.atan2(palmCenter.getX() - middleFinger.getX(), palmCenter.getZ() - middleFinger.getZ()));
 
         } catch (NullPointerException npe) {
-//            System.err.println("[ERROR] Unable to get hand object from frame");
             return 0;
         }
     }
 
     public float getDroneLiftAmount() {
         Hand hand;
-        if ((hand = getLeftHand()) != null) {
-            return getHandZ(hand);
+        if ((hand = getLeftHand(null)) != null) {
+            return hand.palmPosition().getZ();
         } else {
             return 0;
         }
     }
 
     public float getHandSpeedY(Hand hand) {
-        if (hand != null) {
+        if (hand != null && hand.isValid() == true) {
             return hand.palmVelocity().getY();
         } else {
             return 0;
@@ -132,10 +117,6 @@ public class FrameHelper {
 
     public float getDeltaY() {
         return getHandY(getLeftHand(currentFrame)) - getHandY(getLeftHand(lastFrame));
-    }
-
-    public float getDeltaRoll() {
-        return getRoll(getRightHand(currentFrame)) - getRoll(getRightHand(lastFrame));
     }
 
     public synchronized void setFrame(Frame frame) {
