@@ -102,7 +102,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      * used to determine whether the last Y value of the left hand is normal and
      * can be used as a command or is it abnormal and to be refused
      *
-     * @return the average delta of the last n values 
+     * @return the average delta of the last n values, where 
      */
     private float getAverageDeltas() {
         float tot = 0;

@@ -4,6 +4,9 @@
 
 ## Lavori svolti
 
+Andrea:
+-
+
 Jari:
 Ho continuato con lo sviluppo della classe CommandReader nella quale sto finendo di simulare il movimento del drone al ricevimento dei vari comandi della SDK di Tello.
 

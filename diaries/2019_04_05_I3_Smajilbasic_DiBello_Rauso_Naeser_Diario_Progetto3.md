@@ -9,19 +9,19 @@ Ho continuato a raffinare e rendere il più reale possibile il funzionamento di 
 Inoltre ho cambiato la struttura di CommadReader e Simulator e sto testando i vari metodi di CommandReader uno per uno.
 
 Fadil:
--
+Ho iniziato a scrivere i commenti javadoc di tutti i metodi nella classe DroneController e ho commentato tutti i metdoi nella classe FrameHelper.
 
 Luca:
--
+Ho finito l'implementazione del pannello per la modifica delle impostazioni nella GUI.
 
 Andrea:
 Ho lavorato sulla classe TelloChartFrame modificando la struttura dei metodi e commentando i metodi che non avevano ancora una descrizione del loro funzionamento. Ho modificato completamente l'UML relativo alla simulazione del drone aggiornandolo con l'attuale struttura delle classi.
 
 ## Problemi riscontrati e soluzioni adottate
--
 
 ## Punto della situazione rispetto alla pianificazione
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
--
+Luca:
+Implementare log nella GUI
