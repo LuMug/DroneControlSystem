@@ -5,7 +5,7 @@
 ## Lavori svolti
 
 Jari:
--
+Ho continuato con il raffinamento della comunicazione fra le varie classi dando feedback e modificando quello necessario e mi sono informato in modo approfondito sul drone tello per poter simulare al meglio tutte le sue funzionalità e movimenti.
 
 Fadil:
 -
