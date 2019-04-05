@@ -5,9 +5,12 @@
  */
 package gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import settings.SettingsManager;
 import javax.swing.JOptionPane;
+import settings.SettingsListener;
 /**
  *
  * @author luca6
@@ -15,6 +18,8 @@ import javax.swing.JOptionPane;
 public class DroneControllerMonitor extends javax.swing.JFrame {
    
     private SettingsManager manager;
+    private List<SettingsListener> listeners = new ArrayList<>();
+
     /**
      * Creates new form DroneControllerMonitor
      */
@@ -149,17 +154,25 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
             manager.setSetting("height_points_number", this.heightPointsValueTextBox.getText());
             
             System.out.println("[Success] Settings applied successfully");
+            
+            notifyChangeSettings();
         } else if (cake == JOptionPane.NO_OPTION) {
             this.updateSettingsValues(manager);
            System.err.println("Apply settings operation aborted.");
         }
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.updateSettingsValues(manager);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+        
+    public void notifyChangeSettings(){
+        for(SettingsListener listener : listeners){
+            listener.settingsChanged();
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -205,6 +218,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
         this.heightPointsValueTextBox.setText(options.get("height_points_number"));
     }
     
+      public void addSettingsListener(SettingsListener listener){
+        this.listeners.add(listener);
+    }
+    
+    public void removeSettingsListener(SettingsListener listener){
+        this.listeners.remove(listener);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField DegreesSensibilityValueTextBox;
