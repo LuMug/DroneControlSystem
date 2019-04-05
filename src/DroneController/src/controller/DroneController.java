@@ -6,13 +6,14 @@ import com.leapmotion.leap.Listener;
 import communication.*;
 import java.util.ArrayList;
 import java.util.List;
+import settings.SettingsListener;
 import settings.SettingsManager;
 
 /**
  *
  * @author Fadil Smajilbasic
  */
-public class DroneController extends Listener implements Runnable {
+public class DroneController extends Listener implements Runnable, SettingsListener {
 
     private final CommandManager commandManager = new CommandManager();
     private final SettingsManager settingsManager = new SettingsManager();
@@ -52,7 +53,7 @@ public class DroneController extends Listener implements Runnable {
         while (controller.isConnected()) {
             Frame frame = controller.frame();
             helper.setFrame(frame);
-            if (helper.getFrame().id() != helper.getLastFrame().id()) {
+            if (helper.getCurrentFrame().id() != helper.getLastFrame().id()) {
                 checkHeightControl();
                 checkMovementControl();
             }
@@ -206,5 +207,13 @@ public class DroneController extends Listener implements Runnable {
             System.err.println("[Settings name error] Can't get setting value with name: '" + settingName + "'");
             return defaultValue;
         }
+    }
+
+    /**
+     * Method called when the user updates the settings from the GUI
+     */
+    @Override
+    public void settingsChanged() {
+        loadVariables();
     }
 }
