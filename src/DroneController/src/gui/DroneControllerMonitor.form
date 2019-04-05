@@ -112,27 +112,87 @@
                 </Container>
               </SubComponents>
             </Container>
-            <Container class="gui.SettingsPanel" name="settingsPanel1">
+            <Container class="javax.swing.JPanel" name="jPanelSettings">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="tab2">
-                    <Property name="tabTitle" type="java.lang.String" value="tab2"/>
+                  <JTabbedPaneConstraints tabName="Settings">
+                    <Property name="tabTitle" type="java.lang.String" value="Settings"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
 
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="375" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                <Property name="columns" type="int" value="2"/>
+                <Property name="rows" type="int" value="6"/>
               </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="jLabel2">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Sensibility"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="sensibilityValueTextBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="VALUE"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel3">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Height Points"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="heightPointsValueTextBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="VALUE"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel4">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Degrees Sensibility"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="DegreesSensibilityValueTextBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="VALUE"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel5">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Moviment Delay"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="MovementDelayValueTextBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="VALUE"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel6">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Delta Average Multiplier"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="DeltaAverageMultiplierValueTextBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="VALUE"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButton1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Apply settings"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButton2">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Refresh settings"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
             </Container>
           </SubComponents>
         </Container>
