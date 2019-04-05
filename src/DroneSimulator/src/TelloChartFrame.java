@@ -25,7 +25,13 @@ public class TelloChartFrame extends javax.swing.JFrame {
     private JFreeChart rotationPanel;
 
     /**
-     * Creates new form TelloChartFrame
+     * Costruttore parametrizzato
+     * @param positionX la posizione sull'asse x del drone
+     * @param positionY la posizione sull'asse y del drone
+     * @param positionZ la posizione sull'asse z del drone
+     * @param pitch la rotazione sull'asse x
+     * @param yaw la rotazione sull'asse y
+     * @param roll la rotazione sull'asse Z
      */
     public TelloChartFrame(int positionX, int positionY, int positionZ,
             int pitch, int yaw, int roll) {
@@ -38,7 +44,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
         this.yaw = yaw;
         this.roll = roll;
 
-        //XY Panel
+        //Creazione del grafico della posizione di profilo
         XYDataset xyDataset = createDataset("XY");
         this.xyPositionPanel = ChartFactory.createScatterPlot(
                 "Posizione DJI Tello, vista di profilo",
@@ -52,7 +58,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
         positionXYPlotPanel.add(XYPanel, BorderLayout.CENTER);
         positionXYPlotPanel.validate();
 
-        //XZ Panel
+        //Creazione del grafico della posizione dall'alto
         XYDataset xzDataset = createDataset("XZ");
         this.xzPositionPanel = ChartFactory.createScatterPlot(
                 "Posizione DJI Tello, vista dall'alto",
@@ -66,7 +72,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
         positionXZPlotPanel.add(XZpanel, BorderLayout.CENTER);
         positionXZPlotPanel.validate();
 
-        //Rotation Panel
+        //Creazione del grafico delle rotazioni sugli assi
         CategoryDataset dataset = createCategoryDataset();
         this.rotationPanel = ChartFactory.createBarChart(
                 "Rotazione DJI Tello",
@@ -82,11 +88,11 @@ public class TelloChartFrame extends javax.swing.JFrame {
     }
 
     /**
-     * Metodo createXYDataset, permette di creare il dataset per il grafico
-     * della posizione vista dall'alto
+     * Questo metodo permette di creare il dataset per il grafico
+     * della posizione in vase al valore passato
      * 
      * @param database il dataset da creare
-     * @return il dataset contenente la posizione
+     * @return il dataset contenente la posizione del drone
      */
     public XYDataset createDataset(String database) {
         if (database.equalsIgnoreCase("XY")) {
@@ -105,7 +111,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
     }
 
     /**
-     * Metodo createCategoryDataset, permette di creare il grafico contenente
+     * Questo metodo permette di creare il grafico contenente
      * le informazioni dei valori di inclinazione sui tre assi di rotazione
      * 
      * @return il database contenente i valori dei 3 assi
@@ -118,6 +124,10 @@ public class TelloChartFrame extends javax.swing.JFrame {
         return dataset;
     }
 
+    /**
+     * Questo metodo permette di aggiornare i grafici della posizione del drone
+     * @param database il database che si vuole aggiornare
+     */
     private void updatePlotPanel(String database) {
         if (database.equalsIgnoreCase("XY")) {
             XYDataset dataset = createDataset("XY");
@@ -150,6 +160,10 @@ public class TelloChartFrame extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Questo metodo permette di aggiornare il grafico contenente la rotazione 
+     * del drone sugli assi cartesiani
+     */
     private void updateAxesChart() {
         CategoryDataset dataset = createCategoryDataset();
         this.rotationPanel = ChartFactory.createBarChart(
@@ -164,6 +178,11 @@ public class TelloChartFrame extends javax.swing.JFrame {
         rotationChartPanel.validate();
     }
 
+    /**
+     * Questo metodo permette di impostare il range dei numeri mostrati sui 2 
+     * assi cartesiani del grafico
+     * @param plot il grafico che bisogna impostare 
+     */
     private void setChartRange(XYPlot plot) {
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
@@ -206,44 +225,89 @@ public class TelloChartFrame extends javax.swing.JFrame {
         return roll;
     }
 
+    /**
+     * Imposta il valore all'attributo yaw e aggiorna il grafico della rotazione
+     * del drone 
+     * 
+     * @param yaw il valore della rotazione sull'asse y
+     */
     public void setYaw(int yaw) {
         this.yaw = yaw;
         updateAxesChart();
     }
 
+    /**
+     * Imposta il valore dell'attributo pitch e aggiorna il grafico della rotazione
+     * del drone 
+     * 
+     * @param pitch il valore della rotazione sull'asse x
+     */
     public void setPitch(int pitch) {
         this.pitch = pitch;
         updateAxesChart();
     }
 
+    /**
+     * Imposta il valore dell'attributo roll e aggiorna il grafico della rotazione 
+     * del drone
+     * 
+     * @param roll il valore della rotazione sull'asse z
+     */
     public void setRoll(int roll) {
         this.roll = roll;
         updateAxesChart();
     }
 
+    /**
+     * Ritorna il valore dell'attributo positionX
+     * @return il valore dell'attributo positionX
+     */
     public int getPositionX() {
         return positionX;
     }
 
+    /**
+     * Imposta il valore dell'attributo positionX e aggiorna i grafici della 
+     * posizione
+     * @param positionX il valore della posizione sull'asse x
+     */
     public void setPositionX(int positionX) {
         this.positionX = positionX;
         updatePlotPanel("XY");
         updatePlotPanel("XZ");
     }
 
+    /**
+     * Ritorna il valore dell'attributo positionY
+     * @return il valore dell'attributo positionY
+     */
     public int getPositionY() {
         return positionY;
     }
 
+    /**
+     * Imposta il valore dell'attributo positionY e aggiorna i grafici della 
+     * posizione
+     * @param positionY il valore della posizione sull'asse y
+     */
     public void setPositionY(int positionY) {
         this.positionY = positionY;
         updatePlotPanel("XY");
     }
 
+    /**
+     * Ritorna il valore dell'attributo positionZ
+     * @return il valore dell'attributo positionZ
+     */
     public int getPositionZ() {
         return positionZ;
     }
 
+    /**
+     * Imposta il valore dell'attributo positionZ e aggiorna i grafici della 
+     * posizione
+     * @param positionZ il valore della posizione sull'asse z
+     */
     public void setPositionZ(int positionZ) {
         this.positionZ = positionZ;
         updatePlotPanel("XZ");
