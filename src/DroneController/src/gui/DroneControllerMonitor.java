@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import settings.SettingsListener;
 /**
  *
- * @author luca6
+ * @author Luca Di Bello
  */
 public class DroneControllerMonitor extends javax.swing.JFrame {
    
