@@ -148,21 +148,13 @@ public class SettingsManager {
                     if(line.charAt(0) != '#'){
                         //Not comment
                         String scrapedSetting = line.split(getSettingDelimiter())[0];
-                        System.out.println("Found setting: " + scrapedSetting);
                         if(scrapedSetting.equals(settingName)){
                             //Build new setting string
-                            System.out.println("[SUCCESS!] Found correct setting");
                             String setting = scrapedSetting + getSettingDelimiter() + value;
                             lines.set(i, setting);
                             break;
                         }
                     }
-                    else{
-                        System.out.println("Found commented line");
-                    }
-                }
-                else{
-                    System.out.println("Found empty line");
                 }
             }
 

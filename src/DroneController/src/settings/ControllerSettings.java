@@ -21,8 +21,7 @@ public class ControllerSettings {
     private int communicationListenPortCommand;
 
     public ControllerSettings() {
-        loadControllerSettings();
-        loadCommandManagerSettings();
+        updateSettings();
     }
     
     private void loadControllerSettings() throws IllegalArgumentException{
@@ -66,8 +65,10 @@ public class ControllerSettings {
         }
     }
     
-    
-    
+    public void updateSettings(){
+        loadControllerSettings();
+        loadCommandManagerSettings();
+    }
     
     public float getControllerSensibility() {
         return controllerSensibility;
