@@ -6,10 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -132,6 +134,34 @@ public class SettingsManager {
                             + "setting hasn't any value or it's not "
                             + "present in the configuration file."
             );
+        }
+    }
+    
+    public void setSetting(String settingName, String value) throws IllegalArgumentException{
+        //Read all file lines
+        try{
+            List<String> lines = Files.readAllLines(filePath);
+        
+            for(int i = 0; i < lines.size();i++){
+                String line = lines.get(i);
+                if(line.length() > 0){
+                    if(line.charAt(0) != '#'){
+                        //Not comment
+                        String scrapedSetting = line.split(getSettingDelimiter())[0];
+                        if(scrapedSetting.equals(settingName)){
+                            //Build new setting string
+                            String setting = scrapedSetting + getSettingDelimiter() + value;
+                            lines.set(i, setting);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            Files.write(filePath, lines, Charset.forName("UTF-8"));
+        }
+        catch(IOException ex){
+            System.err.println("IOException: " + ex.getMessage());
         }
     }
     
