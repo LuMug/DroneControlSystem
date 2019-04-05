@@ -43,12 +43,12 @@ public class Simulator{
     
     // ------------------- General Variables -------------------
     
-    private static final int PORT = 8889;
-    private static final String ADDRESS_TO_SEND = "192.168.43.246";
-    private static final int BUFFER_SIZE = 64;
-    private static CommandReader commandReader;
-    private static DatagramSocket socket;
-    private static TelloChartFrame telloChartFrame;
+    private final int PORT = 8889;
+    private final String ADDRESS_TO_SEND = "192.168.43.246";
+    private final int BUFFER_SIZE = 64;
+    private CommandReader commandReader;
+    private DatagramSocket socket;
+    private TelloChartFrame telloChartFrame;
     //Positioning points
     private int x = 0;
     private int y = 0;
@@ -106,12 +106,7 @@ public class Simulator{
     }
     
     public void setRoll(int rotation){
-        if(rotation >= -360 && rotation <= 360){
-            this.roll = rotation;
-        }else{
-            int div = rotation%360;
-            this.roll = rotation/div;
-        }
+        this.roll = rotation%360;
         telloChartFrame.setRoll(this.roll);
     }
     
@@ -120,12 +115,7 @@ public class Simulator{
     }
     
     public void setYaw(int rotation){
-        if(rotation >= -360 && rotation <= 360){
-            this.yaw = rotation;
-        }else{
-            int div = rotation%360;
-            this.yaw = rotation/div;
-        }
+        this.yaw = rotation%360;
         telloChartFrame.setYaw(this.yaw);
 
     }
@@ -135,19 +125,13 @@ public class Simulator{
     }
     
     public void setPitch(int rotation){
-        if(rotation >= -360 && rotation <= 360){
-            this.pitch = rotation;
-        }else{
-            int div = rotation%360;
-            this.pitch = rotation/div;
-        }
+        this.pitch = rotation%360;
         telloChartFrame.setPitch(this.pitch);
-
     }
     
     // ------------------- Helper Methods -------------------
     
-    private static void sendOK() throws UnknownHostException, IOException{
+    private void sendOK() throws UnknownHostException, IOException{
         byte[] response = "OK".getBytes();
         DatagramPacket packet = new DatagramPacket(
             response, 
@@ -159,7 +143,7 @@ public class Simulator{
         System.out.println("Sent OK response.");
     }
     
-    private static void sendERROR() throws UnknownHostException, IOException{
+    private void sendERROR() throws UnknownHostException, IOException{
         byte[] response = "ERROR".getBytes();
         DatagramPacket packet = new DatagramPacket(
             response, 
@@ -171,7 +155,7 @@ public class Simulator{
         System.err.println("Sent ERROR response.");
     }
     
-    private static void returnValues(int[] values) throws UnknownHostException, IOException{
+    private void returnValues(int[] values) throws UnknownHostException, IOException{
         //Converting int array to byte array
         byte[] response = new byte[values.length];
         for(int i = 0; i < response.length; i++){
@@ -190,7 +174,7 @@ public class Simulator{
     
     // ------------------- Network Methods -------------------
 
-    private static void startListening() throws InterruptedException{
+    private void startListening() throws InterruptedException{
         
         boolean droneIsConnected;
         
