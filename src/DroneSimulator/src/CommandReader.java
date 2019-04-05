@@ -54,7 +54,6 @@ public class CommandReader{
     private final int TELLO_BATTERY_FLIGHT_TIME = 13;
     private final int ACTUAL_TEMPERATURE = 24;
     private final int BAROMETER_PRESSURE = 1;
-    private final int BATTERY_PERCENTAGE = 100;
     private Simulator simulator;
     private int speed;
     private long takeoffTime;
@@ -473,7 +472,7 @@ public class CommandReader{
     }
     
     public int getBattery(){
-        return BATTERY_PERCENTAGE;
+        return (TELLO_BATTERY_FLIGHT_TIME * 60 - getTime())/TELLO_BATTERY_FLIGHT_TIME*100;
     }
     
     public int getTime(){

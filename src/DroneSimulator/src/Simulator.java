@@ -60,13 +60,13 @@ public class Simulator{
     // ------------------- Constructor -------------------
     
     public Simulator() throws SocketException, InterruptedException{
-        commandReader = new CommandReader(this);
-        telloChartFrame = new TelloChartFrame(x,y,z,pitch,yaw,roll);
+        this.commandReader = new CommandReader(this);
+        this.telloChartFrame = new TelloChartFrame(x,y,z,pitch,yaw,roll);
         //Start Frames
-        telloChartFrame.setVisible(true);
+        this.telloChartFrame.setVisible(true);
         //Start listening on socket
-        socket = new DatagramSocket(PORT);
-        startListening();
+        this.socket = new DatagramSocket(PORT);
+        this.startListening();
     }
     
     // ------------------- Setters and Getters -------------------
@@ -78,8 +78,7 @@ public class Simulator{
     
     public void setX(int x){
         this.x = x;
-        telloChartFrame.setPositionX(this.x);
-        telloChartFrame.setPositionX(this.x);
+        this.telloChartFrame.setPositionX(this.x);
     }
     
 
@@ -89,7 +88,7 @@ public class Simulator{
     
     public void setY(int y){
         this.y = y;
-        telloChartFrame.setPositionY(this.y);
+        this.telloChartFrame.setPositionY(this.y);
     }
     
     public int getZ(){
@@ -98,7 +97,7 @@ public class Simulator{
     
     public void setZ(int z){
         this.z = z;
-        telloChartFrame.setPositionX(this.x);
+        this.telloChartFrame.setPositionZ(this.z);
     }
     
     public int getRoll(){
@@ -107,7 +106,7 @@ public class Simulator{
     
     public void setRoll(int rotation){
         this.roll = rotation%360;
-        telloChartFrame.setRoll(this.roll);
+        this.telloChartFrame.setRoll(this.roll);
     }
     
     public int getYaw(){
@@ -116,7 +115,7 @@ public class Simulator{
     
     public void setYaw(int rotation){
         this.yaw = rotation%360;
-        telloChartFrame.setYaw(this.yaw);
+        this.telloChartFrame.setYaw(this.yaw);
 
     }
     
@@ -126,7 +125,7 @@ public class Simulator{
     
     public void setPitch(int rotation){
         this.pitch = rotation%360;
-        telloChartFrame.setPitch(this.pitch);
+        this.telloChartFrame.setPitch(this.pitch);
     }
     
     // ------------------- Helper Methods -------------------
