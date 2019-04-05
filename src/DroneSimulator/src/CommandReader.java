@@ -34,32 +34,22 @@ public class CommandReader{
     /************
      * TO DO:.
      * 
-     * - discuss stopMotors method.
      * - Add safety feature, drone lands after 15 seconds without any commands.
      * - On simulation add informations such as battery, flight time, 
      *   temperature, pressure and so on...
-     * - Make battery percentage drop with the drone usage.
-     */
-    
-    /********
-     * NOTE:.
-     * 
-     * Methods left empty because of the simulation:
-     * - streamon
-     * - streamoff
-     * - getWifi
-     * - getTof
      */
     
     private final int TELLO_BATTERY_FLIGHT_TIME = 13;
     private final int ACTUAL_TEMPERATURE = 24;
     private final int BAROMETER_PRESSURE = 1;
     private Simulator simulator;
+    private BatteryThread batteryThread;
     private int speed;
     private long takeoffTime;
 
     public CommandReader(Simulator simulator){
         this.simulator = simulator;
+        takeoffTime = System.currentTimeMillis();
     }
     
     private final String[] COMMANDS = {
@@ -236,14 +226,16 @@ public class CommandReader{
     
     public boolean takeoff() throws InterruptedException{
         //From 0,0,0
-        takeoffTime = System.currentTimeMillis();
+        this.batteryThread = new BatteryThread(this);
+        this.batteryThread.start();
         go(0, 100, 0, 50);
         return true;
     }
     
     public boolean land() throws InterruptedException{
         go(simulator.getX(), 0, simulator.getZ(), 50);
-        takeoffTime = 0;
+        this.takeoffTime = 0;
+        this.batteryThread.interrupt();
         return true;
     }
     
@@ -257,8 +249,10 @@ public class CommandReader{
         return false;
     }
     
-    public boolean emergency(){
-        simulator.stopMotors();
+    public boolean emergency() throws InterruptedException{
+        go(simulator.getX(), 0, simulator.getZ(), 100);
+        this.takeoffTime = 0;
+        this.batteryThread.interrupt();
         return true;
     }
     
@@ -369,9 +363,9 @@ public class CommandReader{
     public boolean go(int x, int y, int z, int speed) throws InterruptedException{
         if(isInsideRange(x, 20, 500) || isInsideRange(x, -500, -20) &&
                 isInsideRange(y, 20, 500) || isInsideRange(y, -500, -20) &&
-                isInsideRange(z, 20, 500) || isInsideRange(z, -500, -20)){
-            if(speed >= 10 && speed <= 100){
-                
+                isInsideRange(z, 20, 500) || isInsideRange(z, -500, -20) &&
+                isInsideRange(speed, 10, 100)){
+            
                 int biggest;
                 if(unsign(x) > unsign(y)){
                     biggest = x;
@@ -391,7 +385,6 @@ public class CommandReader{
                 }
                 return true;
             }
-        }
         return false;
     }
     
@@ -472,7 +465,7 @@ public class CommandReader{
     }
     
     public int getBattery(){
-        return (TELLO_BATTERY_FLIGHT_TIME * 60 - getTime())/TELLO_BATTERY_FLIGHT_TIME*100;
+        return ((TELLO_BATTERY_FLIGHT_TIME * 60 - getTime())/(TELLO_BATTERY_FLIGHT_TIME*60)*100);
     }
     
     public int getTime(){
