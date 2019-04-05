@@ -168,7 +168,7 @@ public class Simulator{
             PORT
         );       
         socket.send(packet);
-        System.err.println("Sent return values: " + Arrays.toString(values));
+        System.out.println("Sent return values: " + Arrays.toString(values));
     }
     
     // ------------------- Network Methods -------------------
@@ -252,11 +252,5 @@ public class Simulator{
                 System.out.println("IOException in startListening(): " + ioe.getMessage());
             }
         } 
-    }
-    
-    // ------------------- Other Methods -------------------
-    
-    public void stopMotors(){
-        //Stop all four motors immediately.
     }
 }
