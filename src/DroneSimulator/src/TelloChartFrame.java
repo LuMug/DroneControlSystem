@@ -20,9 +20,9 @@ public class TelloChartFrame extends javax.swing.JFrame {
     private int pitch;
     private int yaw;
     private int roll;
-    private JFreeChart xyPositionPanel;
-    private JFreeChart xzPositionPanel;
-    private JFreeChart rotationPanel;
+    private JFreeChart xyPositionChart;
+    private JFreeChart xzPositionChart;
+    private JFreeChart rotationChart;
 
     /**
      * Costruttore parametrizzato
@@ -46,41 +46,41 @@ public class TelloChartFrame extends javax.swing.JFrame {
 
         //Creazione del grafico della posizione di profilo
         XYDataset xyDataset = createDataset("XY");
-        this.xyPositionPanel = ChartFactory.createScatterPlot(
+        this.xyPositionChart = ChartFactory.createScatterPlot(
                 "Posizione DJI Tello, vista di profilo",
                 "Posizione asse X",
                 "Posizione asse Y",
                 xyDataset
         );
-        setChartRange((XYPlot) xyPositionPanel.getPlot());
-        ChartPanel XYPanel = new ChartPanel(this.xyPositionPanel);
+        setChartRange((XYPlot) xyPositionChart.getPlot());
+        ChartPanel XYPanel = new ChartPanel(this.xyPositionChart);
         positionXYPlotPanel.setLayout(new java.awt.BorderLayout());
         positionXYPlotPanel.add(XYPanel, BorderLayout.CENTER);
         positionXYPlotPanel.validate();
 
         //Creazione del grafico della posizione dall'alto
         XYDataset xzDataset = createDataset("XZ");
-        this.xzPositionPanel = ChartFactory.createScatterPlot(
+        this.xzPositionChart = ChartFactory.createScatterPlot(
                 "Posizione DJI Tello, vista dall'alto",
                 "Posizione Asse X",
                 "Posizione Asse Z",
                 xzDataset
         );
-        setChartRange((XYPlot) xzPositionPanel.getPlot());
-        ChartPanel XZpanel = new ChartPanel(this.xzPositionPanel);
+        setChartRange((XYPlot) xzPositionChart.getPlot());
+        ChartPanel XZpanel = new ChartPanel(this.xzPositionChart);
         positionXZPlotPanel.setLayout(new java.awt.BorderLayout());
         positionXZPlotPanel.add(XZpanel, BorderLayout.CENTER);
         positionXZPlotPanel.validate();
 
         //Creazione del grafico delle rotazioni sugli assi
         CategoryDataset dataset = createCategoryDataset();
-        this.rotationPanel = ChartFactory.createBarChart(
+        this.rotationChart = ChartFactory.createBarChart(
                 "Rotazione DJI Tello",
                 "Assi di rotazione",
                 "Valore rotazione",
                 dataset
         );
-        ChartPanel panel = new ChartPanel(this.rotationPanel);
+        ChartPanel panel = new ChartPanel(this.rotationChart);
         rotationChartPanel.setLayout(new java.awt.BorderLayout());
         rotationChartPanel.add(panel, BorderLayout.CENTER);
         rotationChartPanel.validate();
@@ -128,32 +128,32 @@ public class TelloChartFrame extends javax.swing.JFrame {
      * Questo metodo permette di aggiornare i grafici della posizione del drone
      * @param database il database che si vuole aggiornare
      */
-    private void updatePlotPanel(String database) {
+    private void updatePlotChart(String database) {
         if (database.equalsIgnoreCase("XY")) {
             XYDataset dataset = createDataset("XY");
-            this.xyPositionPanel = ChartFactory.createScatterPlot(
+            this.xyPositionChart = ChartFactory.createScatterPlot(
                     "Posizione DJI Tello, vista di profilo",
                     "Poszione asse X",
                     "Poszione asse Y",
                     dataset
             );
 
-            setChartRange((XYPlot) xyPositionPanel.getPlot());
+            setChartRange((XYPlot) xyPositionChart.getPlot());
 
-            ChartPanel panel = new ChartPanel(this.xyPositionPanel);
+            ChartPanel panel = new ChartPanel(this.xyPositionChart);
             positionXYPlotPanel.revalidate();
             positionXYPlotPanel.add(panel);
             positionXYPlotPanel.validate();
         } else {
             XYDataset dataset = createDataset("XZ");
-            this.xzPositionPanel = ChartFactory.createScatterPlot(
+            this.xzPositionChart = ChartFactory.createScatterPlot(
                     "Posizione DJI Tello, vista dall'alto",
                     "Posizione asse X",
                     "Posizione asse Z",
                     dataset
             );
-            setChartRange((XYPlot) xzPositionPanel.getPlot());
-            ChartPanel panel = new ChartPanel(this.xzPositionPanel);
+            setChartRange((XYPlot) xzPositionChart.getPlot());
+            ChartPanel panel = new ChartPanel(this.xzPositionChart);
             positionXZPlotPanel.revalidate();
             positionXZPlotPanel.add(panel);
             positionXZPlotPanel.validate();
@@ -166,13 +166,13 @@ public class TelloChartFrame extends javax.swing.JFrame {
      */
     private void updateAxesChart() {
         CategoryDataset dataset = createCategoryDataset();
-        this.rotationPanel = ChartFactory.createBarChart(
+        this.rotationChart = ChartFactory.createBarChart(
                 "Rotazione DJI Tello",
                 "Assi di rotazione",
                 "Valore rotazione",
                 dataset
         );
-        ChartPanel panel = new ChartPanel(this.rotationPanel);
+        ChartPanel panel = new ChartPanel(this.rotationChart);
         rotationChartPanel.revalidate();
         rotationChartPanel.add(panel);
         rotationChartPanel.validate();
@@ -273,8 +273,8 @@ public class TelloChartFrame extends javax.swing.JFrame {
      */
     public void setPositionX(int positionX) {
         this.positionX = positionX;
-        updatePlotPanel("XY");
-        updatePlotPanel("XZ");
+        updatePlotChart("XY");
+        updatePlotChart("XZ");
     }
 
     /**
@@ -292,7 +292,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
      */
     public void setPositionY(int positionY) {
         this.positionY = positionY;
-        updatePlotPanel("XY");
+        updatePlotChart("XY");
     }
 
     /**
@@ -310,7 +310,7 @@ public class TelloChartFrame extends javax.swing.JFrame {
      */
     public void setPositionZ(int positionZ) {
         this.positionZ = positionZ;
-        updatePlotPanel("XZ");
+        updatePlotChart("XZ");
     }
 
     /**
