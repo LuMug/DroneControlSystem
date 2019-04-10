@@ -8,7 +8,7 @@ Jari:
 -
 
 Fadil:
--
+Ho aggiornato l'UML della parte del DroneController e ho fatto refactor del codice scritto sia da me che da luca.
 
 Luca:
 -
