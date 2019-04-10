@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import settings.ControllerSettings;
-import settings.SettingsManager;
 
 /**
  *
@@ -18,7 +17,6 @@ public class CommandManager {
 
     private DatagramSocket commandSocket;
     
-    private SettingsManager settingsManager;
 
     private ControllerSettings settings = new ControllerSettings();
 
@@ -26,11 +24,6 @@ public class CommandManager {
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
 
-    public void setSettingsManager(SettingsManager settingsManager) {
-        this.settingsManager = settingsManager;
-    }
-
-    
     
     public CommandManager() {
         try {
@@ -65,15 +58,7 @@ public class CommandManager {
                     TELLO_COMMAND_SEND_PORT
             );
 
-            /*
-            //FOR TESTING
-            DatagramPacket packet = new DatagramPacket(
-                    commandData,
-                    commandData.length, 
-                    InetAddress.getByName("127.0.0.1"), 
-                    5555
-            );
-             */
+            
             commandSocket.send(packet);
 
             //Wait for response

@@ -15,11 +15,11 @@ import settings.SettingsManager;
  */
 public class DroneController extends Listener implements Runnable, SettingsListener {
 
-    private final CommandManager commandManager = new CommandManager();
-    private final SettingsManager settingsManager = new SettingsManager();
-    private final FrameHelper helper = new FrameHelper();
-    private final Controller controller = new Controller();
-    private final List<Float> deltas = new ArrayList<>();
+    private final CommandManager COMMAND_MANAGER = new CommandManager();
+    private final SettingsManager SETTINGS_MANAGER = new SettingsManager();
+    private final FrameHelper FRAME_HELPER = new FrameHelper();
+    private final Controller CONTROLLER = new Controller();
+    private List<Float> deltas = new ArrayList<>();
     private float controllerSensibility;
     private float controllerDeltaPoints;
     private float controllerDegreesSensibility;
@@ -29,8 +29,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
     public DroneController() {
 
-        controller.addListener(this);
-        commandManager.setSettingsManager(settingsManager);
+        CONTROLLER.addListener(this);
 
     }
 
@@ -44,17 +43,17 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         System.out.println("reading");
 //      disabled for testing
-//        commandManager.sendCommand(Commands.ENABLE_COMMANDS);
+//        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 //      sleep required for testing without the simulator
         try {
             Thread.sleep(200);
         } catch (InterruptedException ex) {
         }
 
-        while (controller.isConnected()) {
-            Frame frame = controller.frame();
-            helper.setFrame(frame);
-            if (helper.getCurrentFrame().id() != helper.getLastFrame().id()) {
+        while (CONTROLLER.isConnected()) {
+            Frame frame = CONTROLLER.frame();
+            FRAME_HELPER.setFrame(frame);
+            if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
                 checkHeightControl();
                 checkMovementControl();
             }
@@ -69,12 +68,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         loadVariables();
     }
 
-    @Override
-    public void onFrame(Controller controller) {
-
-    }
-
-    public void loadVariables() {
+    private void loadVariables() {
         final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
         final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
         final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
@@ -110,13 +104,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         return tot / (float) deltas.size();
     }
 
-    private float translateAltitude(float altitude, float step) {
-        //MAX 60 CM
-        //Punto 0 -> 30 CM
-        float translated = ((altitude / 10) - 30) / step;
-        return translated;
-    }
-
+    
     private void shiftDeltas() {
         for (int i = deltas.size() - 1; i > 0; i--) {
             deltas.set(i, deltas.get(i - 1));
@@ -134,8 +122,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
     private void checkHeightControl() {
 
-        float lastY = helper.getDeltaY();
-        float handSpeed = Math.abs(helper.getHandSpeedY(helper.getLeftHand(null)) / 36);
+        float lastY = FRAME_HELPER.getDeltaY();
+        float handSpeed = Math.abs(FRAME_HELPER.getHandSpeedY(FRAME_HELPER.getLeftHand(null)) / 36);
 
         if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
 
@@ -146,7 +134,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 if (yPos != 0) {
                     String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
 
-//                commandManager.sendCommand(message);
+//                COMMAND_MANAGER.sendCommand(message);
                     System.out.println(message);
 
                 }
@@ -162,9 +150,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         String[] commands = new String[3];
 
         if ((System.currentTimeMillis() - lastMessageTimestamp) > movementDelay) {
-            float pitchValue = helper.getPitch(helper.getRightHand(null)) / 10;
-            float rollValue = helper.getRoll(helper.getRightHand(null)) / 10;
-            float yawValue = helper.getYaw(helper.getLeftHand(null)) / 10;
+            float pitchValue = FRAME_HELPER.getPitch(FRAME_HELPER.getRightHand(null)) / 10;
+            float rollValue = FRAME_HELPER.getRoll(FRAME_HELPER.getRightHand(null)) / 10;
+            float yawValue = FRAME_HELPER.getYaw(FRAME_HELPER.getLeftHand(null)) / 10;
 
             if (Math.abs(rollValue) > controllerDegreesSensibility) {
 
@@ -202,12 +190,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             lastMessageTimestamp = System.currentTimeMillis();
         }
 
-//        commandManager.sendCommands(commands);
+//        COMMAND_MANAGER.sendCommands(commands);
     }
 
     /**
-     * This method uses the settingsManager in order to read the settings values
-     * from the config file
+     * This method uses the SETTINGS_MANAGER in order to read the settings values
+ from the config file
      *
      * @param settingName The name of the setting to search
      * @param defaultValue The default value of that setting
@@ -215,7 +203,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     private float getFloatValueFromSetting(String settingName, float defaultValue) {
         try {
-            return Float.parseFloat(settingsManager.getSetting(settingName));
+            return Float.parseFloat(SETTINGS_MANAGER.getSetting(settingName));
         } catch (NumberFormatException ex) {
             System.err.println("[Parse error] Can't parse '" + settingName + "' value from settings, set the default one.");
             return defaultValue;
