@@ -36,7 +36,7 @@ import java.util.Arrays;
  * sottoforma di pacchetti UDP e di stamparli su SimulatorFrame simulando un 
  * drone DJI Tello.
  * 
- * @author Jari Näser
+ * @author Jari Näser 
  * @version 15.02.2019 - xx.xx.xxxx
  */
 public class Simulator{

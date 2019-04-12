@@ -5,7 +5,7 @@
 ## Lavori svolti
 
 Jari:
--
+Ho fatto una parte del diagramma UML di DroneController con Fadil e ho continuato a testare i vari metodi della classe CommandReader.
 
 Fadil:
 Ho aggiornato l'UML della parte del DroneController e ho fatto refactor del codice scritto sia da me che da luca.
