@@ -32,33 +32,84 @@ import java.util.Arrays;
  */
 
 /**
- * La classe Simulator si occupa di ricevere i dati dalla classe Controller
- * sottoforma di pacchetti UDP e di stamparli su SimulatorFrame simulando un 
- * drone DJI Tello.
+ * The Simulator class receives all the requests and commands through a socket
+ * listening on port 8889.
+ * It filters the commands and reads, checks and forwards the content to 
+ * CommandReader's various methods.
  * 
  * @author Jari Näser 
- * @version 15.02.2019 - xx.xx.xxxx
+ * @version 15.02.2019
  */
 public class Simulator{
     
-    // ------------------- General Variables -------------------
+    // ------------------------- ATTRIBUTES AND CONSTANTS -------------------------
     
+    /**
+     * Defines the listening port.
+     */
     private final int PORT = 8889;
+    
+    /**
+     * Defines the client's IP address.
+     */
     private final String ADDRESS_TO_SEND = "192.168.43.246";
+    
+    /**
+     * Defines the received packet's buffer size.
+     */
     private final int BUFFER_SIZE = 64;
+    
+    /**
+     * Simulator's CommandReader object.
+     */
     private CommandReader commandReader;
+    
+    /**
+     * Socket used to communicate between client and server.
+     */
     private DatagramSocket socket;
+    
+    /**
+     * Simulator's TelloChartFrame object.
+     */
     private TelloChartFrame telloChartFrame;
+    
+    /**
+     * Simulator's PacketReceivingCheckerThread thread.
+     */
     private PacketReceivingCheckerThread prct;
-    //Positioning points
+    
+    /**
+     * Drone position on the X axis.
+     */
     private int x = 0;
+    
+    /**
+     * Drone position on the Y axis.
+     */
     private int y = 0;
+    
+    /**
+     * Drone position on the Z axis.
+     */
     private int z = 0;
+    
+    /**
+     * Drone roll.
+     */
     private int roll = 0;
+    
+    /**
+     * Drone yaw.
+     */
     private int yaw = 0;
+    
+    /**
+     * Drone pitch.
+     */
     private int pitch = 0;
     
-    // ------------------- Constructor -------------------
+    // ------------------------- CONSTRUCTOR -------------------------
     
     public Simulator() throws SocketException, InterruptedException{
         this.commandReader = new CommandReader(this);
@@ -70,67 +121,117 @@ public class Simulator{
         this.startListening();
     }
     
-    // ------------------- Setters and Getters -------------------
+    // ------------------------- SETTERS AND GETTERS -------------------------
     
-
+    /**
+     * Getter method for the x attribute.
+     * @return Value of x.
+     */
     public int getX(){
         return this.x;
     }
     
+    /**
+     * Setter method for the x attribute
+     * @param x New value to set.
+     */
     public void setX(int x){
         this.x = x;
         this.telloChartFrame.setPositionX(this.x);
     }
     
-
+    /**
+     * Getter method for the y attribute.
+     * @return Value of y.
+     */
     public int getY(){
         return this.y;
     }
     
+    /**
+     * Setter method for the y attribute
+     * @param y New value to set.
+     */
     public void setY(int y){
         this.y = y;
         this.telloChartFrame.setPositionY(this.y);
     }
     
+    /**
+     * Getter method for the z attribute.
+     * @return Value of z.
+     */
     public int getZ(){
         return this.z ;
     }
     
+    /**
+     * Setter method for the z attribute
+     * @param z New value to set.
+     */
     public void setZ(int z){
         this.z = z;
         this.telloChartFrame.setPositionZ(this.z);
     }
     
+    /**
+     * Getter method for the roll attribute.
+     * @return Value of roll.
+     */
     public int getRoll(){
         return this.roll;
     }
     
+    /**
+     * Setter method for the roll attribute
+     * @param rotation New value to set.
+     */
     public void setRoll(int rotation){
         this.roll = rotation%360;
         this.telloChartFrame.setRoll(this.roll);
     }
     
+    /**
+     * Getter method for the yaw attribute.
+     * @return Value of yaw.
+     */
     public int getYaw(){
         return this.yaw;
     }
     
+    /**
+     * Setter method for the yaw attribute
+     * @param rotation New value to set.
+     */
     public void setYaw(int rotation){
         this.yaw = rotation%360;
         this.telloChartFrame.setYaw(this.yaw);
-
     }
     
+    /**
+     * Getter method for the pitch attribute.
+     * @return Value of pitch.
+     */
     public int getPitch(){
         return this.pitch;
     }
     
+    /**
+     * Setter method for the pitch attribute
+     * @param rotation New value to set.
+     */
     public void setPitch(int rotation){
         this.pitch = rotation%360;
         this.telloChartFrame.setPitch(this.pitch);
     }
     
-    // ------------------- Helper Methods -------------------
+    // ------------------------- HELPER METHODS -------------------------
     
+    /**
+     * Method that sends OK response through socket.
+     * @throws UnknownHostException Exception if the host is unknown.
+     * @throws IOException Exception if there is a problem with the socket.
+     */
     private void sendOK() throws UnknownHostException, IOException{
         byte[] response = "OK".getBytes();
         DatagramPacket packet = new DatagramPacket(
@@ -143,6 +244,11 @@ public class Simulator{
         System.out.println("Sent OK response.");
     }
     
+    /**
+     * Method that sends ERROR response through socket.
+     * @throws UnknownHostException Exception if the host is unknown.
+     * @throws IOException Exception if there is a problem with the socket.
+     */
     private void sendERROR() throws UnknownHostException, IOException{
         byte[] response = "ERROR".getBytes();
         DatagramPacket packet = new DatagramPacket(
@@ -155,6 +261,12 @@ public class Simulator{
         System.err.println("Sent ERROR response.");
     }
     
+    /**
+     * Method that returns requested values to the client via getter commands.
+     * @param values Requested values/data.
+     * @throws UnknownHostException Exception if the host is unknown.
+     * @throws IOException Exception if there is a problem with the socket.
+     */
     private void returnValues(int[] values) throws UnknownHostException, IOException{
         //Converting int array to byte array
         byte[] response = new byte[values.length];
@@ -172,8 +284,13 @@ public class Simulator{
         System.out.println("Sent return values: " + Arrays.toString(values));
     }
     
-    // ------------------- Network Methods -------------------
+    // ------------------------- NETWORK METHODS -------------------------
 
+    /**
+     * Method that listens through the socket and calls the right method with
+     * the received message/command.
+     * @throws InterruptedException Exception if a thread gets interrupted.
+     */
     private void startListening() throws InterruptedException{
         
         boolean droneIsConnected;
