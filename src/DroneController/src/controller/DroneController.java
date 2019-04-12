@@ -4,6 +4,7 @@ import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
 import communication.*;
+import gui.CommandListener;
 import java.util.ArrayList;
 import java.util.List;
 import settings.SettingsListener;
@@ -26,22 +27,24 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private float movementDelay;
     private float deltaAverageMultiplier;
     private long lastMessageTimestamp = System.currentTimeMillis();
+    private CommandListener listener;
 
     public DroneController() {
-
         CONTROLLER.addListener(this);
-
     }
 
     public static void main(String[] args) {
         DroneController controller = new DroneController();
-        controller.run();
+        new Thread(controller).start();
     }
 
     @Override
     public void run() {
 
-        System.out.println("reading");
+        if (listener != null) {
+            listener.controllerMessage("DroneController started\n");
+        }
+
 //      disabled for testing
 //        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 //      sleep required for testing without the simulator
@@ -58,13 +61,28 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 checkMovementControl();
             }
         }
+        if (listener != null) {
+            listener.controllerMessage("controller not connected\n");
+        } else {
+            System.out.println("controller not connected");
+        }
+    }
 
-        System.out.println("controller not connected");
+    public void setListener(CommandListener listener) {
+        this.listener = listener;
+    }
+
+    public SettingsManager getSettingsManager() {
+        return SETTINGS_MANAGER;
     }
 
     @Override
     public void onConnect(Controller controller) {
-        System.out.println("Connected leap");
+        if (listener != null) {
+            listener.controllerMessage("Controller connected\n");
+        } else {
+            System.out.println("Controller connected");
+        }
         loadVariables();
     }
 
@@ -76,12 +94,22 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         final float DELTA_AVERAGE_MULTIPLIER = 1.5f;
 
         this.controllerSensibility = getFloatValueFromSetting("sensibility", CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
-        this.controllerDeltaPoints = getFloatValueFromSetting("height_points_number", CONTROLLER_HEIGHT_DELTA_POINTS);
-        this.controllerDegreesSensibility = getFloatValueFromSetting("degrees_sensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
+        this.controllerDeltaPoints = getFloatValueFromSetting("heightPointsNumber", CONTROLLER_HEIGHT_DELTA_POINTS);
+        this.controllerDegreesSensibility = getFloatValueFromSetting("degreesSensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
         this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
         this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", DELTA_AVERAGE_MULTIPLIER);
 
+        if (listener != null) {
+            listener.controllerMessage("Settings updated\n");
+            listener.controllerMessage("Controller sensibility: " + controllerSensibility + "\n");
+            listener.controllerMessage("Controller delta points: " + controllerDeltaPoints + "\n");
+            listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
+            listener.controllerMessage("movement delay: " + movementDelay + "\n");
+            listener.controllerMessage("delta average multiplier: " + deltaAverageMultiplier + "\n");
+        }
+
         System.out.println("===========================");
+        System.out.println("Settings updated");
         System.out.println("controllerSensibility: " + controllerSensibility);
         System.out.println("controllerDeltaPoints: " + controllerDeltaPoints);
         System.out.println("degrees_sensibility: " + controllerDegreesSensibility);
@@ -96,15 +124,14 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      * used to determine whether the last Y value of the left hand is normal and
      * can be used as a command or is it abnormal and to be refused
      *
-     * @return the average delta of the last n values, where 
+     * @return the average delta of the last n values, where
      */
     private float getAverageDeltas() {
         float tot = 0;
         tot = deltas.stream().map((delta) -> Math.abs(delta)).reduce(tot, (accumulator, _item) -> accumulator + _item);
-        return tot / (float) deltas.size();
+        return (tot / (float) deltas.size()) * deltaAverageMultiplier;
     }
 
-    
     private void shiftDeltas() {
         for (int i = deltas.size() - 1; i > 0; i--) {
             deltas.set(i, deltas.get(i - 1));
@@ -130,12 +157,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             float average = getAverageDeltas();
             int yPos = (int) lastY;
 
-            if (Math.abs(yPos) < average * deltaAverageMultiplier) {
+            if (Math.abs(yPos) < average) {
                 if (yPos != 0) {
                     String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
-
 //                COMMAND_MANAGER.sendCommand(message);
-                    System.out.println(message);
+                    listener.commandSent(message + "\n");
 
                 }
             }
@@ -161,7 +187,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                             ? Commands.right((int) Math.abs(rollValue - controllerDegreesSensibility))
                             : Commands.left((int) (rollValue - controllerDegreesSensibility));
                     commands[0] = message;
-                    System.out.println(message);
+                    if (listener != null) {
+                        listener.commandSent(message + "\n");
+                    }
                 }
 
             }
@@ -172,8 +200,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                             ? Commands.back((int) (pitchValue - controllerDegreesSensibility))
                             : Commands.forward((int) Math.abs(pitchValue - controllerDegreesSensibility));
                     commands[1] = message;
-                    System.out.println(message);
-
+                    if (listener != null) {
+                        listener.commandSent(message + "\n");
+                    }
                 }
             }
 
@@ -183,7 +212,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                             ? Commands.rotateCounterClockwise((int) (yawValue - controllerDegreesSensibility))
                             : Commands.rotateClockwise((int) Math.abs(yawValue - controllerDegreesSensibility));
                     commands[1] = message;
-                    System.out.println(message);
+                    if (listener != null) {
+                        listener.commandSent(message + "\n");
+                    }
 
                 }
             }
@@ -194,8 +225,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     /**
-     * This method uses the SETTINGS_MANAGER in order to read the settings values
- from the config file
+     * This method uses the SETTINGS_MANAGER in order to read the settings
+     * values from the config file
      *
      * @param settingName The name of the setting to search
      * @param defaultValue The default value of that setting
@@ -218,6 +249,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     @Override
     public void settingsChanged() {
+        System.out.println("Settings updated");
         loadVariables();
     }
 }
