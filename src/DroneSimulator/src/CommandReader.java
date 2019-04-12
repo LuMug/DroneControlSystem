@@ -23,27 +23,55 @@
  */
 
 /**
- * La classe CommandReader ha lo scopo di ricevere i metodi mandati via pacchetto
- * attraverso i quali muoverà il drone nel modo corretto.
+ * The class CommandReader gets the requested method via Socket and then calls 
+ * it's respective method to simulate in the best way possible the drone's 
+ * behaviour.
  * 
  * @author Jari Näser
- * @version 22.02.2019 - xx.xx.xxxx
+ * @version 22.02.2019
  */
 public class CommandReader{
     
-    private final int TELLO_BATTERY_FLIGHT_TIME = 13;
-    private final int ACTUAL_TEMPERATURE = 24;
-    private final int BAROMETER_PRESSURE = 1;
-    private Simulator simulator;
-    private BatteryThread batteryThread;
-    private int speed;
-    private long takeoffTime;
-
-    public CommandReader(Simulator simulator){
-        this.simulator = simulator;
-        takeoffTime = System.currentTimeMillis();
-    }
+    // ------------------------- ATTRUBUTES AND CONSTANTS -------------------------
     
+    /**
+     * Drone battery lifetime in [minutes].
+     */
+    private final int TELLO_BATTERY_FLIGHT_TIME = 13;
+    
+    /**
+     * Outside temperature on drone.
+     */
+    private final int ACTUAL_TEMPERATURE = 24;
+    
+    /**
+     * Pressure on drone in [bar].
+     */
+    private final int BAROMETER_PRESSURE = 1;
+    
+    /**
+     * CommandReader's Simulator object.
+     */
+    private Simulator simulator;
+    
+    /**
+     * CommandReader's BatteryThread thread.
+     */
+    private BatteryThread batteryThread;
+    
+    /**
+     * The drone's speed.
+     */
+    private int speed;
+    
+    /**
+     * Time passed since takeoff.
+     */
+    private long takeoffTime;
+    
+    /**
+     * All general commands.
+     */
     private final String[] COMMANDS = {
         "up",
         "down",
@@ -61,6 +89,9 @@ public class CommandReader{
         "wifi"
     };
     
+    /**
+     * All guide commands.
+     */
     private final String[] GUIDE_COMMANDS = {
         "takeoff",
         "land",
@@ -69,6 +100,9 @@ public class CommandReader{
         "emergency"
     };
     
+    /**
+     * All getter commands.
+     */
     private final String[] GET_COMMANDS = {
         "speed?",
         "battery?",
@@ -82,6 +116,20 @@ public class CommandReader{
         "wifi?"
     };
     
+    // ------------------------- CONSTRUCTOR -------------------------
+    
+    public CommandReader(Simulator simulator){
+        this.simulator = simulator;
+        takeoffTime = System.currentTimeMillis();
+    }
+    
+    // ------------------------- CHECKER METHODS -------------------------
+    
+    /**
+     * Method that checks if the passed method exists and is a getter type.
+     * @param command Method to check.
+     * @return Respective value of get request.
+     */
     public int getterCommandExists(String command){
         for(String s:GET_COMMANDS){
             if(command.equals(s)){
@@ -108,6 +156,11 @@ public class CommandReader{
         return Integer.MIN_VALUE;
     }
     
+    /**
+     * Method that checks if the passed method exists and is a command type.
+     * @param command Method to check.
+     * @return Respective values of get request.
+     */
     public int[] getterCommandArrayExists(String command){
         for(String s:GET_COMMANDS){
             if(command.equals(s)){
@@ -122,6 +175,12 @@ public class CommandReader{
         return new int[]{Integer.MIN_VALUE};
     }
     
+    /**
+     * Method that checks if the passed method exists and is an instruction type.
+     * @param command Method to check.
+     * @return Boolean value.
+     * @throws InterruptedException Exception when a thread gets interrupted.
+     */
     public boolean instructionCommandExists(String command) throws InterruptedException{
         for(String s:GUIDE_COMMANDS){
             if(command.equals(s)){
@@ -142,6 +201,12 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Method that checks if the passed method exists and is a command type.
+     * @param command Method to check.
+     * @return Boolean value.
+     * @throws InterruptedException Exception when a thread gets interrupted.
+     */
     public boolean commandExists(String command) throws InterruptedException{
         String[] splittedCommand = command.split(" ");
         if(splittedCommand.length > 1 && splittedCommand.length < 9){
@@ -216,6 +281,11 @@ public class CommandReader{
     
     // ------------------------- GUIDE COMMANDS -------------------------
     
+    /**
+     * Makes the drone takeoff.
+     * @return Boolean value.
+     * @throws InterruptedException Exception when a thread gets interrupted. 
+     */
     public boolean takeoff() throws InterruptedException{
         //From 0,0,0
         this.batteryThread = new BatteryThread(this);
@@ -224,6 +294,11 @@ public class CommandReader{
         return true;
     }
     
+    /**
+     * Makes the drone land.
+     * @return Boolean value.
+     * @throws InterruptedException Exception when a thread gets interrupted. 
+     */
     public boolean land() throws InterruptedException{
         go(simulator.getX(), 0, simulator.getZ(), 50);
         this.takeoffTime = 0;
@@ -231,16 +306,29 @@ public class CommandReader{
         return true;
     }
     
+    /**
+     * Method to turn on the Drone's camera video stream.
+     * @return Boolean value.
+     */
     public boolean streamon(){
         //VideoStream on, not implemented yet in the simulation.
         return false;
     }
     
+    /**
+     * Method to turn off the Drone's camera video stream.
+     * @return Boolean value.
+     */
     public boolean streamoff(){
         //VideoStream off, not implemented yet in the simulation.
         return false;
     }
     
+    /**
+     * Makes the drone land quickly.
+     * @return Boolean value.
+     * @throws InterruptedException Exception when a thread gets interrupted. 
+     */
     public boolean emergency() throws InterruptedException{
         go(simulator.getX(), 0, simulator.getZ(), 100);
         this.takeoffTime = 0;
@@ -252,6 +340,11 @@ public class CommandReader{
     
     // ------------------------- COMMANDS -------------------------
     
+    /**
+     * Makes the drone go up on the x axis.
+     * @param distance How much to climb in [cm].
+     * @return Boolean value.
+     */
     public boolean up(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setY(simulator.getY() + distance);
@@ -260,6 +353,11 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone go down on the x axis.
+     * @param distance How much to drop in [cm].
+     * @return Boolean value.
+     */
     public boolean down(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setY(simulator.getY() - distance);
@@ -268,6 +366,11 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone go left.
+     * @param distance How much to go left in [cm].
+     * @return Boolean value.
+     */
     public boolean left(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setX(simulator.getX() - distance);
@@ -276,6 +379,11 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone go right.
+     * @param distance How much to go right in [cm].
+     * @return Boolean value.
+     */
     public boolean right(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setX(simulator.getX() + distance);
@@ -284,6 +392,11 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone go forward.
+     * @param distance How much to go forward in [cm].
+     * @return Boolean value.
+     */
     public boolean forward(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setZ(simulator.getZ() - distance);
@@ -292,6 +405,11 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone go backward.
+     * @param distance How much to go backward in [cm].
+     * @return Boolean value.
+     */
     public boolean back(int distance){
         if(isInsideRange(distance, 0, 500)){
             simulator.setZ(simulator.getZ() + distance);
@@ -300,6 +418,11 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone rotate clockwise.
+     * @param rotation How much to rotate clockwise in [degrees*10].
+     * @return Boolean value.
+     */
     public boolean cw(int rotation){
         if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
@@ -309,6 +432,11 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone rotate counter-clockwise.
+     * @param rotation How much to rotate counter-clockwise in [degrees*10].
+     * @return Boolean value.
+     */
     public boolean ccw(int rotation){
         if(isInsideRange(rotation, 1, 3600)){
             rotation /= 10;
@@ -318,6 +446,12 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone flip in a certain direction.
+     * @param where Which direction to flip the drone.
+     * @return Boolean value.
+     * @throws InterruptedException Exception if a thread gets interrupted.
+     */
     public boolean flip(char where) throws InterruptedException{
         if(where == 'l' || where == 'r' || where == 'f' || where == 'b'){
             switch(where){
@@ -354,6 +488,15 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes drone go from actual point to x,y,z with a certain speed.
+     * @param x X coordinate of the new destination.
+     * @param y Y coordinate of the new destination.
+     * @param z Z coordinate of the new destination.
+     * @param speed Speed used to go there.
+     * @return Boolean value.
+     * @throws InterruptedException Exception if a thread gets interrupted.
+     */
     public boolean go(int x, int y, int z, int speed) throws InterruptedException{
         if(isInsideRange(x, 20, 500) || isInsideRange(x, -500, -20) &&
                 isInsideRange(y, 20, 500) || isInsideRange(y, -500, -20) &&
@@ -382,6 +525,18 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Makes the drone curve from a certain point to another one.
+     * @param x1 X of point where curve starts.
+     * @param y1 Y of point where curve starts.
+     * @param z1 Z of point where curve starts.
+     * @param x2 X of point where curve ends.
+     * @param y2 Y of point where curve ends.
+     * @param z2 Z of point where curve ends.
+     * @param speed Speed used to go there.
+     * @return Boolean value.
+     * @throws InterruptedException Exception if a thread gets interrupted. 
+     */
     public boolean curve(int x1, int y1, int z1, int x2, int y2, int z2, int speed) throws InterruptedException{
         if(isInsideRange(x1, 20, 500) || isInsideRange(x1, -500, -20) &&
                 isInsideRange(y1, 20, 500) || isInsideRange(y1, -500, -20) &&
@@ -402,6 +557,11 @@ public class CommandReader{
     
     // ------------------------- SET COMMANDS -------------------------
     
+    /**
+     * Setter method for speed attribute.
+     * @param value New value to set.
+     * @return Boolean value.
+     */
     public boolean speed(int value){
         if(isInsideRange(value, 10, 100)){
             speed = value;
@@ -410,6 +570,14 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Send RC control via 4 channels.
+     * @param a Left/right
+     * @param b Forward/Backward
+     * @param c Up/Down
+     * @param d Drone's yaw
+     * @return Boolean value.
+     */
     public boolean rc(int a, int b, int c, int d){
         /**
          * a: left/right
@@ -447,6 +615,12 @@ public class CommandReader{
         return false;
     }
     
+    /**
+     * Joins a wifi network.
+     * @param ssidValue Network name.
+     * @param passwordValue Network password.
+     * @return Boolean value.
+     */
     public boolean wifi(String ssidValue, String passwordValue){
         //Should join a network
         return false;
@@ -454,14 +628,26 @@ public class CommandReader{
     
     // ------------------------- GET COMMANDS -------------------------
     
+    /**
+     * Getter method for the speed attribute.
+     * @return Actual speed value.
+     */
     public int getSpeed(){
         return speed;
     }
     
+    /**
+     * Getter method for the battery attribute.
+     * @return Actual battery percentage.
+     */
     public int getBattery(){
         return ((TELLO_BATTERY_FLIGHT_TIME * 60 - getTime())/(TELLO_BATTERY_FLIGHT_TIME * 60) * 100);
     }
     
+    /**
+     * Getter method for the time attribute.
+     * @return Actual time value.
+     */
     public int getTime(){
         if(takeoffTime == 0){
             return 0;
@@ -469,14 +655,26 @@ public class CommandReader{
         return (int)(System.currentTimeMillis() - takeoffTime)/1000;
     }
     
+    /**
+     * Getter method for the height attribute.
+     * @return Actual height value.
+     */
     public int getHeight(){
         return simulator.getX();
     }
     
+    /**
+     * Getter method for the temperature attribute.
+     * @return Actual temperature value.
+     */
     public int getTemperature(){
         return ACTUAL_TEMPERATURE;
     }
     
+    /**
+     * Getter method for the attitude attribute.
+     * @return Actual attitude values.
+     */
     public int[] getAttitude(){
         return new int[]{
             simulator.getPitch(),
@@ -485,11 +683,19 @@ public class CommandReader{
         };
     }
     
+    /**
+     * Getter method for the barometer attribute.
+     * @return Actual barometer value.
+     */
     public int getBarometer(){
         //Return number is in Atmospheres (1 Atmosphere = 101325 Pascal)
         return BAROMETER_PRESSURE;
     }
     
+    /**
+     * Getter method for the acceleration attribute.
+     * @return Actual acceleration values.
+     */
     public int[] getAcceleration(){
         return new int[]{
             simulator.getX(),
@@ -498,11 +704,19 @@ public class CommandReader{
         };
     }
     
+    /**
+     * Getter method for the tof attribute.
+     * @return Actual tof value.
+     */
     public int getTof(){   
         //Can't do it in the simulation, range imaging camera should be required.
         return Integer.MIN_VALUE;
     }
     
+    /**
+     * Getter method for the wifi attribute.
+     * @return Actual wifi value.
+     */
     public int getWifi(){   
         //Wifi not implemented yet.
         return Integer.MIN_VALUE;
@@ -510,10 +724,22 @@ public class CommandReader{
     
     // ------------------------- HELPER METHODS -------------------------
     
+    /**
+     * Method that unsigns the received parameter and returns it.
+     * @param value Value to unsign.
+     * @return Unsigned value.
+     */
     public int unsign(int value){
         return Math.abs(value);
     }
     
+    /**
+     * Method that checks if a value is between a certain range.
+     * @param value Value to check.
+     * @param min Minimum of the range.
+     * @param max Maximum of the range.
+     * @return Boolean value.
+     */
     public boolean isInsideRange(int value, int min, int max){
         return (value >= min && value <= max);
     }
