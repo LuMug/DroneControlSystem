@@ -23,12 +23,23 @@
  */
 
 /**
- *
- * @author jarinaser
+ * The class PacketRecievingCheckerThread checks the frequency of the packets 
+ * that the Simulator class receives.
+ * If for 15 seconds it doesn't get any packets the drone will automatically 
+ * land through CommandReader's emergency() method.
+ * 
+ * @author Jari Näser
+ * @version 12.04.2019
  */
 public class PacketReceivingCheckerThread extends Thread{
     
+    /**
+     * Time to wait before calling CommandReader's emergency() method.
+     */
     private final int SECONDS_TO_WAIT = 15;
+    /**
+     * CommandReader that contains all the methods to control the drone.
+     */
     private CommandReader cr;
 
     public PacketReceivingCheckerThread(CommandReader cr){
