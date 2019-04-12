@@ -5,7 +5,9 @@
 ## Lavori svolti
 
 Jari:
--
+Ho continuato a testare i vari metodi della classe CommandReader e a sistemare
+li dove necessario, inoltre ho anche fatto la JavaDoc per le seguenti classi:
+Simulator, CommandReader, BatteryThread e PacketReceivingCheckerThread.
 
 Fadil:
 Ho messo assieme la classe DroneController e DroneControllerMonitor, ho inserito dei listener per far comunicare le due classi, ho fatto del testing
