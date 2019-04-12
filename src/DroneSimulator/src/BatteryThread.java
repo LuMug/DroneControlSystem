@@ -23,15 +23,23 @@
  */
 
 /**
- * La classe BatteryThread si occupa di gestire il tempo di volo del drone e 
- * quando arriva ad una batteria che è del 0% richiama il metodo emergency().
+ * The class BatteryThread manages the drone's flight time and it's battery.
+ * When the battery will equal to 0% the drone will automatically land through
+ * CommandReader's emergency() method.
  * 
  * @author Jari Näser
  * @version 05.04.2019
  */
 public class BatteryThread extends Thread{
-
+    
+    /**
+     * CommandReader class that manages the drone's movements.
+     */
     private CommandReader cr;
+    
+    /**
+     * Boolean that specifies if the drone should keep flying.
+     */
     private boolean keepFlying;
     
     public BatteryThread(CommandReader cr){
