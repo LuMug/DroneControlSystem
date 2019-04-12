@@ -13,7 +13,7 @@ Fadil:
 Ho messo assieme la classe DroneController e DroneControllerMonitor, ho inserito dei listener per far comunicare le due classi, ho fatto del testing
 
 Luca:
--
+Oggi ho testato il controller dell'applicatione e mi sono accorto che a lungo andare inizia ad utilizzare troppe risorse (il computer scalda e rallenta)
 
 Andrea:
 -
