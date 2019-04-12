@@ -49,6 +49,7 @@ public class Simulator{
     private CommandReader commandReader;
     private DatagramSocket socket;
     private TelloChartFrame telloChartFrame;
+    private PacketReceivingCheckerThread prct;
     //Positioning points
     private int x = 0;
     private int y = 0;
@@ -189,8 +190,11 @@ public class Simulator{
             try{
                 //Set packet size
                 recivePacket.setData(new byte[buffer.length]);
+                prct = new PacketReceivingCheckerThread(commandReader);
+                prct.start();
                 //Waiting for a Packet and to receive a datagram
                 socket.receive(recivePacket);
+                prct.interrupt();
                 //Read Packet content
                 String message = new String(recivePacket.getData()).trim();
                 
@@ -202,8 +206,11 @@ public class Simulator{
                     while(droneIsConnected){
                         //Set packet size
                         recivePacket.setData(new byte[buffer.length]);
+                        prct = new PacketReceivingCheckerThread(commandReader);
+                        prct.start();
                         //Waiting for a Packet and to receive a datagram
                         socket.receive(recivePacket);
+                        prct.interrupt();
                         //Read Packet content
                         String command = new String(recivePacket.getData()).trim();
                         
@@ -249,7 +256,7 @@ public class Simulator{
                 }
 
             }catch(IOException ioe){
-                System.out.println("IOException in startListening(): " + ioe.getMessage());
+                System.err.println("IOException in startListening(): " + ioe.getMessage());
             }
         } 
     }
