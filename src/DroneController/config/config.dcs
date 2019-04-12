@@ -2,9 +2,9 @@
 
 #Sensibilità di lettura del leap motion
 sensibility=2
-height_points_number=30
-degrees_sensibility=1
-movementDelay=25
+heightPointsNumber=30
+degreesSensibility=1
+movementDelay=50
 deltaAverageMultiplier=1.5
 
 #Indirizzi ip per testing e non
