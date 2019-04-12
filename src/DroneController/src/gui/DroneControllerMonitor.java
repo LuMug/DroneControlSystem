@@ -1,33 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
+import controller.DroneController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import settings.SettingsManager;
 import javax.swing.JOptionPane;
 import settings.SettingsListener;
+
 /**
  *
  * @author Luca Di Bello
  */
-public class DroneControllerMonitor extends javax.swing.JFrame {
-   
-    private SettingsManager manager;
-    private List<SettingsListener> listeners = new ArrayList<>();
+public class DroneControllerMonitor extends javax.swing.JFrame implements CommandListener {
+
+    private SettingsManager manager = new SettingsManager();
+    private SettingsListener listener;
 
     /**
      * Creates new form DroneControllerMonitor
      */
     public DroneControllerMonitor() {
-        this.manager = new SettingsManager();
+
         initComponents();
         updateSettingsValues(manager);
+
     }
+
+    public void setListener(SettingsListener listener) {
+        this.listener = listener;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,9 +78,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
 
         jPanePageLog.setLayout(new java.awt.BorderLayout());
 
+        jScrollPane1.setAutoscrolls(true);
+
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Developed by DCS Team.\nDesigned by Luca Di Bello.\n---------------------------------------\n\n");
+        jTextArea1.setText("Developed by DCS Team.\nDesigned by Luca Di Bello.\nDeveloped by Fadil Smajilbasic\n---------------------------------------\n\n");
         jScrollPane1.setViewportView(jTextArea1);
 
         jPanePageLog.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -142,9 +147,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        int cake =  JOptionPane.showConfirmDialog(null,
-             "Do you wanna apply this settings?", "DCS Controller - Settings", JOptionPane.YES_NO_OPTION);
+
+        int cake = JOptionPane.showConfirmDialog(null,
+                "Do you wanna apply this settings?", "DCS Controller - Settings", JOptionPane.YES_NO_OPTION);
 
         if (cake == JOptionPane.YES_OPTION) {
             manager.setSetting("degrees_sensibility", this.DegreesSensibilityValueTextBox.getText());
@@ -152,13 +157,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
             manager.setSetting("movementDelay", this.MovementDelayValueTextBox.getText());
             manager.setSetting("sensibility", this.sensibilityValueTextBox.getText());
             manager.setSetting("height_points_number", this.heightPointsValueTextBox.getText());
-            
+
             System.out.println("[Success] Settings applied successfully");
-            
+
             notifyChangeSettings();
         } else if (cake == JOptionPane.NO_OPTION) {
             this.updateSettingsValues(manager);
-           System.err.println("Apply settings operation aborted.");
+            System.err.println("Apply settings operation aborted.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -166,13 +171,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
         this.updateSettingsValues(manager);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-        
-    public void notifyChangeSettings(){
-        for(SettingsListener listener : listeners){
-            listener.settingsChanged();
-        }
+    public void notifyChangeSettings() {
+        listener.settingsChanged();
+
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -200,31 +203,29 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        DroneControllerMonitor dcm = new DroneControllerMonitor();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DroneControllerMonitor().setVisible(true);
+                dcm.setVisible(true);
             }
         });
+        DroneController controller = new DroneController();
+        controller.setListener(dcm);
+        dcm.setListener(controller);
+        new Thread(controller).start();
     }
-    
-    private void updateSettingsValues(SettingsManager manager){
+
+    private void updateSettingsValues(SettingsManager manager) {
         Map<String, String> options = manager.getSettings();
-        
-        this.DegreesSensibilityValueTextBox.setText(options.get("degrees_sensibility"));
+
+        this.DegreesSensibilityValueTextBox.setText(options.get("degreesSensibility"));
         this.DeltaAverageMultiplierValueTextBox.setText(options.get("deltaAverageMultiplier"));
         this.MovementDelayValueTextBox.setText(options.get("movementDelay"));
         this.sensibilityValueTextBox.setText(options.get("sensibility"));
-        this.heightPointsValueTextBox.setText(options.get("height_points_number"));
+        this.heightPointsValueTextBox.setText(options.get("heightPointsNumber"));
     }
-    
-      public void addSettingsListener(SettingsListener listener){
-        this.listeners.add(listener);
-    }
-    
-    public void removeSettingsListener(SettingsListener listener){
-        this.listeners.remove(listener);
-    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField DegreesSensibilityValueTextBox;
@@ -248,4 +249,19 @@ public class DroneControllerMonitor extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField sensibilityValueTextBox;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void messageRecieved(String message) {
+        jTextArea1.append("Recieved: " + message);
+    }
+
+    @Override
+    public void controllerMessage(String message) {
+        jTextArea1.append("Controller message: " + message);
+    }
+
+    @Override
+    public void commandSent(String command) {
+        jTextArea1.append("Sent: " + command);
+    }
 }

@@ -14,7 +14,7 @@ import settings.SettingsManager;
  * This panel will dynamically filled up using the combos (settings=value) loaded from config file.
  * @author Luca Di Bello
  */
-public class SettingsPanelDynamic extends JPanel{
+public class SettingsPanelDynamic extends JPanel {
 
     private SettingsManager manager = new SettingsManager();
     

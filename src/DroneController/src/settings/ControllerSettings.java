@@ -31,9 +31,9 @@ public class ControllerSettings {
     }
     
     private void loadCommandManagerSettings() throws IllegalArgumentException{
-        controllerDegreesSensibility = getFloatSetting("degrees_sensibility");
+        controllerDegreesSensibility = getFloatSetting("degreesSensibility");
         controllerSensibility = getFloatSetting("sensibility");
-        controllerHeightPointsNumber = getIntSetting("height_points_number");
+        controllerHeightPointsNumber = getIntSetting("heightPointsNumber");
     }
     
     
