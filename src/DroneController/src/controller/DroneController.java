@@ -42,17 +42,20 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     @Override
     public void run() {
 
-        listener.controllerMessage("DroneController started\n");
+        if (listener != null) {
+            listener.controllerMessage("DroneController started\n");
+            listener.controllerMessage("Taking off");
+        }
 
-        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-        listener.controllerMessage("Taking off");
+
+//        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 
         COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
         }
-        listener.controllerMessage("In air");
+        //listener.controllerMessage("In air");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
