@@ -48,20 +48,8 @@ public class CommandManager {
         //Create a socket for sending the data
         try {
             //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
-
-            //Creo il pacchetto
-            byte[] commandData = command.getBytes();
-
-            DatagramPacket packet = new DatagramPacket(
-                    commandData,
-                    commandData.length,
-                    InetAddress.getByName(this.TELLO_ADDRESS),
-                    TELLO_COMMAND_SEND_PORT
-            );
-
+            DatagramPacket packet = this.sendString(command);
             
-            commandSocket.send(packet);
-
             //Wait for response
             System.out.println("Wait for response from drone");
             packet.setData(new byte[64]);
@@ -80,7 +68,37 @@ public class CommandManager {
             System.out.println("Cannot send packet: " + ioex.getMessage());
         }
     }
+    
+    public void sendCommandAsync(String command){
+        System.out.println("sending command async: " + command);
+        //Create a socket for sending the data
+        try {
+            //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
+            this.sendString(command);
+        } catch (UnknownHostException uhe) {
+            System.out.println("Cannot resolve hostname: " + uhe.getMessage());
+        } catch (IOException ioex) {
+            System.out.println("Cannot send packet: " + ioex.getMessage());
+        }
+    }
+    
+    private DatagramPacket sendString(String command) throws UnknownHostException, IOException{
+        //Creo il pacchetto
+        byte[] commandData = command.getBytes();
 
+        DatagramPacket packet = new DatagramPacket(
+                commandData,
+                commandData.length,
+                InetAddress.getByName(this.TELLO_ADDRESS),
+                TELLO_COMMAND_SEND_PORT
+        );
+
+
+        commandSocket.send(packet);
+        
+        return packet;
+    }
+    
     public void sendCommands(String[] commands) {
         for (String command : commands) {
             if (command != null) {
