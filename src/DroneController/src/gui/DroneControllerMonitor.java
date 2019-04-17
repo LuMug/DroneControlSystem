@@ -162,6 +162,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jLabel7.setText("Movement Step");
         jPanel2.add(jLabel7);
+
+        jSpinnerDroneMovementStep.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         jPanel2.add(jSpinnerDroneMovementStep);
 
         jPanelAbortPanel.add(jPanel2, java.awt.BorderLayout.PAGE_END);
