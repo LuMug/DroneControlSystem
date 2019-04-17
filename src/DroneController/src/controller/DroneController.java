@@ -50,12 +50,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 
         COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
-        listener.controllerMessage("Taking off");
+        //listener.controllerMessage("Taking off");
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
         }
-        listener.controllerMessage("In air");
+        //listener.controllerMessage("In air");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
