@@ -28,6 +28,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private float deltaAverageMultiplier;
     private long lastMessageTimestamp = System.currentTimeMillis();
     private CommandListener listener;
+    private float heightThreshold;
 
     public DroneController() {
         CONTROLLER.addListener(this);
@@ -45,20 +46,26 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             listener.controllerMessage("DroneController started\n");
         }
 
-//      disabled for testing
+
 //        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-//      sleep required for testing without the simulator
+        listener.controllerMessage("Taking off");
+
+//        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
         try {
-            Thread.sleep(200);
+            Thread.sleep(5000);
         } catch (InterruptedException ex) {
         }
+        listener.controllerMessage("In air");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
             FRAME_HELPER.setFrame(frame);
             if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
-                checkHeightControl();
-                checkMovementControl();
+                if ((System.currentTimeMillis() - lastMessageTimestamp) > movementDelay) {
+                    checkHeightControl();
+                    checkMovementControl();
+                    lastMessageTimestamp = System.currentTimeMillis();
+                }
             }
         }
         if (listener != null) {
@@ -66,6 +73,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         } else {
             System.out.println("controller not connected");
         }
+
+        COMMAND_MANAGER.sendCommand(Commands.LAND);
     }
 
     public void setListener(CommandListener listener) {
@@ -92,12 +101,14 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
         final float MOVEMENT_DELAY_DEFAULT_VALUE = 500;
         final float DELTA_AVERAGE_MULTIPLIER = 1.5f;
+        final float HEIGHT_THRESHOLD = 4;
 
         this.controllerSensibility = getFloatValueFromSetting("sensibility", CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
         this.controllerDeltaPoints = getFloatValueFromSetting("heightPointsNumber", CONTROLLER_HEIGHT_DELTA_POINTS);
         this.controllerDegreesSensibility = getFloatValueFromSetting("degreesSensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
         this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
         this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", DELTA_AVERAGE_MULTIPLIER);
+        this.heightThreshold = getFloatValueFromSetting("heightThreshold", HEIGHT_THRESHOLD);
 
         if (listener != null) {
             listener.controllerMessage("Settings updated\n");
@@ -106,6 +117,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
             listener.controllerMessage("movement delay: " + movementDelay + "\n");
             listener.controllerMessage("delta average multiplier: " + deltaAverageMultiplier + "\n");
+            listener.controllerMessage("height threshold: " + heightThreshold + "\n");
         }
 
         System.out.println("===========================");
@@ -149,36 +161,34 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
     private void checkHeightControl() {
 
+        float lastHeightReal = FRAME_HELPER.getHandY(FRAME_HELPER.getLeftHand(null));
+
         float lastY = FRAME_HELPER.getDeltaY();
-        float handSpeed = Math.abs(FRAME_HELPER.getHandSpeedY(FRAME_HELPER.getLeftHand(null)) / 36);
-
-        if ((handSpeed > this.controllerSensibility) && lastY != 0.0) {
-
+        lastY = (int) ((lastHeightReal - 300) / 2);
+        if (FRAME_HELPER.getLeftHand(null) != null) {
             float average = getAverageDeltas();
-            int yPos = (int) lastY;
 
-            if (Math.abs(yPos) < average) {
-                if (yPos != 0) {
-                    String message = yPos > 0 ? Commands.up(yPos) : Commands.down(Math.abs(yPos));
-//                COMMAND_MANAGER.sendCommand(message);
+            if (Math.abs(lastY) > heightThreshold && lastY != 0.0) {
+                if (lastY != 0.0) {
+                    System.out.println("handY: " + lastY);
+                    String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
+//                    COMMAND_MANAGER.sendCommand(message);
                     listener.commandSent(message + "\n");
 
                 }
             }
 
+            addDeltasValue(lastY);
         }
-
-        addDeltasValue(lastY);
 
     }
 
     private void checkMovementControl() {
         String[] commands = new String[3];
-
-        if ((System.currentTimeMillis() - lastMessageTimestamp) > movementDelay) {
-            float pitchValue = FRAME_HELPER.getPitch(FRAME_HELPER.getRightHand(null)) / 10;
-            float rollValue = FRAME_HELPER.getRoll(FRAME_HELPER.getRightHand(null)) / 10;
-            float yawValue = FRAME_HELPER.getYaw(FRAME_HELPER.getLeftHand(null)) / 10;
+        if (FRAME_HELPER.getRightHand(null) != null) {
+            float pitchValue = FRAME_HELPER.getPitch(FRAME_HELPER.getRightHand(null));
+            float rollValue = FRAME_HELPER.getRoll(FRAME_HELPER.getRightHand(null));
+            float yawValue = FRAME_HELPER.getYaw(FRAME_HELPER.getLeftHand(null));
 
             if (Math.abs(rollValue) > controllerDegreesSensibility) {
 
@@ -191,7 +201,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                         listener.commandSent(message + "\n");
                     }
                 }
-
             }
 
             if (Math.abs(pitchValue) > controllerDegreesSensibility) {
@@ -217,8 +226,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                     }
 
                 }
+
             }
-            lastMessageTimestamp = System.currentTimeMillis();
         }
 
 //        COMMAND_MANAGER.sendCommands(commands);

@@ -1,14 +1,15 @@
 # Config file per il controller del drone.
 
 #Sensibilità di lettura del leap motion
-sensibility=2
+sensibility=1.5
 heightPointsNumber=30
-degreesSensibility=1
-movementDelay=50
+degreesSensibility=20
+movementDelay=1000
 deltaAverageMultiplier=1.5
+heightThreshold=20
 
 #Indirizzi ip per testing e non
-tello_address=192.168.43.47
+tello_address=192.168.10.1
 jari_address=192.168.43.47
 
 #Porte utilizzate

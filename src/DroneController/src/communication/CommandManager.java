@@ -21,6 +21,7 @@ public class CommandManager {
     private ControllerSettings settings = new ControllerSettings();
 
     private final String JARI_ADDRESS = settings.getCommunicationJariAddress();
+    private final String TELLO_ADDRESS = settings.getCommunicationTelloAddress();
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
 
@@ -54,7 +55,7 @@ public class CommandManager {
             DatagramPacket packet = new DatagramPacket(
                     commandData,
                     commandData.length,
-                    InetAddress.getByName(this.JARI_ADDRESS),
+                    InetAddress.getByName(this.TELLO_ADDRESS),
                     TELLO_COMMAND_SEND_PORT
             );
 
@@ -71,7 +72,7 @@ public class CommandManager {
             if (response.equals("OK")) {
 //                System.out.println("--> " + new String(command) + " is ok");
             } else {
-                System.err.println("--> " + new String(command) + " ERROR");
+                System.err.println("--> " + command + " ERROR");
             }
         } catch (UnknownHostException uhe) {
             System.out.println("Cannot resolve hostname: " + uhe.getMessage());
