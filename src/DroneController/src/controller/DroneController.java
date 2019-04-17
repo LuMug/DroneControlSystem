@@ -42,15 +42,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     @Override
     public void run() {
 
-        if (listener != null) {
-            listener.controllerMessage("DroneController started\n");
-        }
+        listener.controllerMessage("DroneController started\n");
 
-
-//        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
+        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
         listener.controllerMessage("Taking off");
 
-//        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
+        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
@@ -172,7 +169,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 if (lastY != 0.0) {
                     System.out.println("handY: " + lastY);
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
-//                    COMMAND_MANAGER.sendCommand(message);
+                    COMMAND_MANAGER.sendCommand(message);
                     listener.commandSent(message + "\n");
 
                 }
