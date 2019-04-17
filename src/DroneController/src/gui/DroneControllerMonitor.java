@@ -240,7 +240,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private void jButtonAbortFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbortFlightActionPerformed
         //Send emergency command
-        this.controller.getCommandManager().sendCommand(communication.Commands.EMERGENCY);
+        this.controller.getCommandManager().sendCommandAsync(communication.Commands.EMERGENCY);
         System.err.println("[GUI] Sent emergency command to drone");
     }//GEN-LAST:event_jButtonAbortFlightActionPerformed
 
@@ -253,21 +253,19 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         final int BACK = 2;
         final int LEFT = 3;
         
-        FlipCommand option;
-        
         if(chosenFlipOption == FORWARD){
-            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.FORWARD));
+            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.FORWARD));
         }
         else if(chosenFlipOption == RIGHT){
-            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.RIGHT));
+            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.RIGHT));
 
         }
         else if(chosenFlipOption == BACK){
-            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.BACK));
+            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.BACK));
 
         }
         else if(chosenFlipOption == LEFT){
-            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.LEFT));
+            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.LEFT));
         }
         
         System.err.println("[GUI] Sent flip command to drone");
