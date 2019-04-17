@@ -3,8 +3,8 @@
 #Sensibilità di lettura del leap motion
 sensibility=1.5
 heightPointsNumber=30
-degreesSensibility=20
-movementDelay=500
+degreesSensibility=10
+movementDelay=2000
 deltaAverageMultiplier=1.5
 heightThreshold=20
 

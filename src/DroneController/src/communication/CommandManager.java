@@ -53,12 +53,12 @@ public class CommandManager {
             //Wait for response
             System.out.println("Wait for response from drone");
             packet.setData(new byte[64]);
-            commandSocket.receive(packet);
+//            commandSocket.receive(packet);
 
             String response = new String(packet.getData()).trim();
 
-            if (response.equals("OK")) {
-//                System.out.println("--> " + new String(command) + " is ok");
+            if (response.equalsIgnoreCase("OK")) {
+                System.out.println("--> " + new String(command) + " is ok");
             } else {
                 System.err.println("--> " + command + " ERROR");
             }
