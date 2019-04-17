@@ -1,9 +1,11 @@
 package gui;
 
+import communication.CommandManager;
 import controller.DroneController;
 import java.util.Map;
 import settings.SettingsManager;
 import javax.swing.JOptionPane;
+import settings.FlipCommand;
 import settings.SettingsListener;
 
 /**
@@ -14,13 +16,17 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private SettingsManager manager = new SettingsManager();
     private SettingsListener listener;
-
+    private DroneController controller = new DroneController();
     /**
      * Creates new form DroneControllerMonitor
      */
     public DroneControllerMonitor() {
         initComponents();
         updateSettingsValues(manager);
+    
+        controller.setListener(this);
+        this.setListener(controller);
+        new Thread(controller).start();
     }
 
     public void setListener(SettingsListener listener) {
@@ -135,6 +141,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jPanelExtraCommands.setLayout(new java.awt.BorderLayout());
 
         jButtonDroneFlip.setText("FLIP IT :0");
+        jButtonDroneFlip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDroneFlipActionPerformed(evt);
+            }
+        });
         jPanelExtraCommands.add(jButtonDroneFlip, java.awt.BorderLayout.CENTER);
 
         jComboBoxFlip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Forward", "Right", "Down", "Left" }));
@@ -228,8 +239,39 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButtonAbortFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbortFlightActionPerformed
-        // TODO add your handling code here:
+        //Send emergency command
+        this.controller.getCommandManager().sendCommand(communication.Commands.EMERGENCY);
+        System.err.println("[GUI] Sent emergency command to drone");
     }//GEN-LAST:event_jButtonAbortFlightActionPerformed
+
+    private void jButtonDroneFlipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneFlipActionPerformed
+        //Send flip commands
+        int chosenFlipOption = jComboBoxFlip.getSelectedIndex();
+        
+        final int FORWARD = 0;
+        final int RIGHT = 1;
+        final int BACK = 2;
+        final int LEFT = 3;
+        
+        FlipCommand option;
+        
+        if(chosenFlipOption == FORWARD){
+            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.FORWARD));
+        }
+        else if(chosenFlipOption == RIGHT){
+            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.RIGHT));
+
+        }
+        else if(chosenFlipOption == BACK){
+            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.BACK));
+
+        }
+        else if(chosenFlipOption == LEFT){
+            this.controller.getCommandManager().sendCommand(communication.Commands.flip(FlipCommand.LEFT));
+        }
+        
+        System.err.println("[GUI] Sent flip command to drone");
+    }//GEN-LAST:event_jButtonDroneFlipActionPerformed
 
     public void notifyChangeSettings() {
         listener.settingsChanged();
@@ -264,16 +306,12 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         DroneControllerMonitor dcm = new DroneControllerMonitor();
         /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 dcm.setVisible(true);
             }
-        });   
-        
-        DroneController controller = new DroneController();
-        controller.setListener(dcm);
-        dcm.setListener(controller);
-        new Thread(controller).start();
+        });
     }
 
     private void updateSettingsValues(SettingsManager manager) {
