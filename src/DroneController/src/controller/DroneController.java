@@ -5,8 +5,6 @@ import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
-import java.util.ArrayList;
-import java.util.List;
 import settings.SettingsListener;
 import settings.SettingsManager;
 
@@ -48,14 +46,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
 
         COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-
-        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
-        listener.controllerMessage("Taking off");
+//        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
         }
-        listener.controllerMessage("In air");
+        listener.controllerMessage("In air\n");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
@@ -68,13 +64,14 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 }
             }
         }
+        
         if (listener != null) {
             listener.controllerMessage("controller not connected\n");
         } else {
             System.out.println("controller not connected");
         }
 
-//        COMMAND_MANAGER.sendCommand(Commands.LAND);
+        COMMAND_MANAGER.sendCommand(Commands.LAND);
     }
 
     public void setListener(CommandListener listener) {
