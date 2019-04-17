@@ -252,6 +252,10 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             return defaultValue;
         }
     }
+    
+    public CommandManager getCommandManager(){
+        return this.COMMAND_MANAGER;
+    }
 
     /**
      * Method called when the user updates the settings from the GUI
