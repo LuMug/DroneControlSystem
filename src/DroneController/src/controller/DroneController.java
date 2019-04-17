@@ -20,7 +20,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private final SettingsManager SETTINGS_MANAGER = new SettingsManager();
     private final FrameHelper FRAME_HELPER = new FrameHelper();
     private final Controller CONTROLLER = new Controller();
-    private List<Float> deltas = new ArrayList<>();
+    
     private float controllerSensibility;
     private float controllerDeltaPoints;
     private float controllerDegreesSensibility;
@@ -120,43 +120,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             listener.controllerMessage("height threshold: " + heightThreshold + "\n");
         }
 
-//        System.out.println("===========================");
-//        System.out.println("Settings updated");
-//        System.out.println("controllerSensibility: " + controllerSensibility);
-//        System.out.println("controllerDeltaPoints: " + controllerDeltaPoints);
-//        System.out.println("degrees_sensibility: " + controllerDegreesSensibility);
-//        System.out.println("movementDelay: " + movementDelay);
-//        System.out.println("deltaAverageMultiplier: " + deltaAverageMultiplier);
-//        System.out.println("===========================");
-
-    }
-
-    /**
-     * returns the average of the delta values of the y axis. This method is
-     * used to determine whether the last Y value of the left hand is normal and
-     * can be used as a command or is it abnormal and to be refused
-     *
-     * @return the average delta of the last n values, where
-     */
-    private float getAverageDeltas() {
-        float tot = 0;
-        tot = deltas.stream().map((delta) -> Math.abs(delta)).reduce(tot, (accumulator, _item) -> accumulator + _item);
-        return (tot / (float) deltas.size()) * deltaAverageMultiplier;
-    }
-
-    private void shiftDeltas() {
-        for (int i = deltas.size() - 1; i > 0; i--) {
-            deltas.set(i, deltas.get(i - 1));
-        }
-    }
-
-    private void addDeltasValue(float value) {
-        if (deltas.size() < 20) {
-            deltas.add(value);
-        } else {
-            shiftDeltas();
-            deltas.set(0, value);
-        }
     }
 
     private void checkHeightControl() {
@@ -166,7 +129,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         float lastY = FRAME_HELPER.getDeltaY();
         lastY = (int) ((lastHeightReal - 300) / 2);
         if (FRAME_HELPER.getLeftHand(null) != null) {
-            float average = getAverageDeltas();
 
             if (Math.abs(lastY) > heightThreshold && lastY != 0.0) {
                 if (lastY != 0.0) {
@@ -176,7 +138,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
                 }
             }
-            addDeltasValue(lastY);
         }
 
     }
