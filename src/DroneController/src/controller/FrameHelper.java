@@ -76,6 +76,7 @@ public class FrameHelper {
         } else {
             lHand = getCurrentFrame().hands().rightmost();
         }
+                
         if (lHand.isLeft()) {
             return lHand;
         } else {

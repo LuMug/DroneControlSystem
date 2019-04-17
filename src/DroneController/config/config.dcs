@@ -4,7 +4,7 @@
 sensibility=1.5
 heightPointsNumber=30
 degreesSensibility=20
-movementDelay=1000
+movementDelay=500
 deltaAverageMultiplier=1.5
 heightThreshold=20
 
