@@ -295,8 +295,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private void jButtonAbortFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbortFlightActionPerformed
         //Send emergency command
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.EMERGENCY);
-        System.err.println("[GUI] Sent emergency command to drone");
+        this.controller.getCommandManager().sendCommandAsync(communication.Commands.LAND);
+        System.out.println("[GUI] Sent landing command to drone");
     }//GEN-LAST:event_jButtonAbortFlightActionPerformed
 
     private void jButtonDroneFlipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneFlipActionPerformed
@@ -323,7 +323,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.LEFT));
         }
         
-        System.err.println("[GUI] Sent flip command to drone");
+        System.out.println("[GUI] Sent flip command to drone");
     }//GEN-LAST:event_jButtonDroneFlipActionPerformed
 
     private void jButtonDroneUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneUpActionPerformed

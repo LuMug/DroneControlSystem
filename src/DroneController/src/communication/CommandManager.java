@@ -16,7 +16,6 @@ import settings.ControllerSettings;
 public class CommandManager {
 
     private DatagramSocket commandSocket;
-    
 
     private ControllerSettings settings = new ControllerSettings();
 
@@ -25,7 +24,6 @@ public class CommandManager {
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
 
-    
     public CommandManager() {
         try {
             commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
@@ -34,8 +32,7 @@ public class CommandManager {
         } catch (SocketException ex) {
             System.err.println("Can't create client socket: " + ex.getMessage());
         }
-        
-        
+
     }
 
     /**
@@ -49,14 +46,14 @@ public class CommandManager {
         try {
             //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
             DatagramPacket packet = this.sendString(command);
-            
+
             //Wait for response
             System.out.println("Wait for response from drone");
             packet.setData(new byte[64]);
 //            commandSocket.receive(packet);
 
             String response = new String(packet.getData()).trim();
-
+            
             if (response.equalsIgnoreCase("OK")) {
                 System.out.println("--> " + new String(command) + " is ok");
             } else {
@@ -68,8 +65,8 @@ public class CommandManager {
             System.out.println("Cannot send packet: " + ioex.getMessage());
         }
     }
-    
-    public void sendCommandAsync(String command){
+
+    public void sendCommandAsync(String command) {
         System.out.println("sending command async: " + command);
         //Create a socket for sending the data
         try {
@@ -81,8 +78,8 @@ public class CommandManager {
             System.out.println("Cannot send packet: " + ioex.getMessage());
         }
     }
-    
-    private DatagramPacket sendString(String command) throws UnknownHostException, IOException{
+
+    private DatagramPacket sendString(String command) throws UnknownHostException, IOException {
         //Creo il pacchetto
         byte[] commandData = command.getBytes();
 
@@ -93,12 +90,11 @@ public class CommandManager {
                 TELLO_COMMAND_SEND_PORT
         );
 
-
         commandSocket.send(packet);
-        
+
         return packet;
     }
-    
+
     public void sendCommands(String[] commands) {
         for (String command : commands) {
             if (command != null) {

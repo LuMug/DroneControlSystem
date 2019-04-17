@@ -213,7 +213,7 @@
                               </Border>
                             </Property>
                             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                              <Color id="Puntatore a croce"/>
+                              <Color id="Default Cursor"/>
                             </Property>
                             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                               <Insets value="[30, 30, 30, 30]"/>
