@@ -17,7 +17,7 @@ Ho commentato e terminato l'implementazione della classe 'SettingsManager' (la c
 in sola lettura.
 
 Andrea:
--
+Ho collegato la classe TelloChartFrame che mostra tutti i dati del drone al simulatore e ho risolto alcuni errori di visualizzazione dei dati per cui veniva fatto il refresh di diversi dati sullo stesso grafico
 
 ## Problemi riscontrati e soluzioni adottate
 Fadil:
