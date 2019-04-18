@@ -5,7 +5,7 @@
 ## Lavori svolti
 
 Andrea:
--
+Ho creato il mockup delle interfaccie che andremo ad utilizzare per mostrare i dati di posizione e rotazione del drone e ho cominciato lo sviluppo dei grafici in cui verranno visualizzati la posizione del drone dall'alto e di profilo
 
 Jari:
 Ho continuato con lo sviluppo della classe CommandReader nella quale sto finendo di simulare il movimento del drone al ricevimento dei vari comandi della SDK di Tello.

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="Consuntivo" company="" webLink="http://" view-date="2019-02-11" view-index="0" gantt-divider-location="512" resource-divider-location="300" version="2.8.10" locale="it">
+    <description/>
+    <view zooming-state="default:6" id="gantt-chart">
+        <field id="tpd3" name="Nome" width="293" order="0"/>
+        <field id="tpd4" name="Data d'inizio" width="117" order="1"/>
+        <field id="tpd5" name="Data di fine" width="98" order="2"/>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Nome" width="210" order="0"/>
+        <field id="1" name="Ruolo predefinito" width="86" order="1"/>
+    </view>
+    <!-- -->
+    <calendars base-id="nessuno">
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="1" mon="1" tue="1" wed="0" thu="1" fri="0" sat="1"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+        <date year="2019" month="4" date="24" type="HOLIDAY"/>
+        <date year="2019" month="4" date="26" type="HOLIDAY"/>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" name="DroneControlSystem" color="#8cb6ce" meeting="false" start="2019-02-13" duration="25" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+            <task id="2" name="Introduzione" color="#8cb6ce" meeting="false" start="2019-02-13" duration="1" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true"/>
+            <task id="4" name="Pianificazione" color="#8cb6ce" meeting="false" start="2019-02-15" duration="1" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+                <depend id="5" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="5" name="Analisi" color="#8cb6ce" meeting="false" start="2019-02-20" duration="4" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+                <depend id="6" type="2" difference="0" hardness="Strong"/>
+                <task id="31" name="Analisi Simulatore" color="#8cb6ce" meeting="false" start="2019-02-20" duration="3" complete="0" thirdDate="2019-02-20" thirdDate-constraint="0" expand="true"/>
+                <task id="34" name="Analisi controller" meeting="false" start="2019-02-20" duration="4" complete="0" expand="true"/>
+                <task id="37" name="Aquisire le conoscienze delle SDK" meeting="false" start="2019-02-20" duration="4" complete="0" expand="true"/>
+            </task>
+            <task id="6" name="Progettazione e implementazione" color="#8cb6ce" meeting="false" start="2019-03-06" duration="9" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+                <depend id="9" type="2" difference="0" hardness="Strong"/>
+                <task id="35" name="Progettazione controller" meeting="false" start="2019-03-06" duration="4" complete="0" expand="true"/>
+                <task id="36" name="Progettazione simulazione" meeting="false" start="2019-03-06" duration="3" complete="0" expand="true"/>
+                <task id="39" name="Implementazione controller" meeting="false" start="2019-03-20" duration="5" complete="0" expand="true"/>
+                <task id="38" name="Implementazione Simulatore" meeting="false" start="2019-03-15" duration="5" complete="0" expand="true"/>
+            </task>
+            <task id="9" name="Test" color="#8cb6ce" meeting="false" start="2019-04-05" duration="9" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+                <task id="46" name="Test Simulazione" color="#8cb6ce" meeting="false" start="2019-04-05" duration="7" complete="0" thirdDate="2019-03-01" thirdDate-constraint="0" expand="true"/>
+                <task id="47" name="Test Controller" color="#8cb6ce" meeting="false" start="2019-04-05" duration="9" complete="0" thirdDate="2019-03-01" thirdDate-constraint="0" expand="true"/>
+            </task>
+            <task id="10" name="Documentazione" color="#8cb6ce" meeting="false" start="2019-02-13" duration="25" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+                <depend id="26" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="26" name="Consegna Progetto" color="#8cb6ce" meeting="true" start="2019-05-17" duration="0" complete="0" thirdDate="2019-02-13" thirdDate-constraint="0" expand="true"/>
+        </task>
+    </tasks>
+    <resources/>
+    <allocations/>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+    <roles roleset-name="SoftwareDevelopment"/>
+</project>
