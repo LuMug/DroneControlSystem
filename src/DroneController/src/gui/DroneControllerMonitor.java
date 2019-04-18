@@ -345,7 +345,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     }//GEN-LAST:event_jButtonDroneLeftActionPerformed
 
     private void jButtonDroneTakeoffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneTakeoffActionPerformed
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.TAKEOFF);
+        this.controller.getCommandManager().sendCommand(communication.Commands.TAKEOFF);
     }//GEN-LAST:event_jButtonDroneTakeoffActionPerformed
 
     private void jButtonDroneLandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneLandActionPerformed
