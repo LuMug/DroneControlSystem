@@ -12,9 +12,9 @@ import settings.SettingsManager;
  *
  * @author Fadil Smajilbasic
  */
-public class DroneController extends Listener implements Runnable, SettingsListener {
+public class DroneController extends Listener implements Runnable, SettingsListener, CommandManagerListener {
 
-    private final CommandManager COMMAND_MANAGER = new CommandManager();
+    private final CommandManager COMMAND_MANAGER = new CommandManager(this);
     private final SettingsManager SETTINGS_MANAGER = new SettingsManager();
     private final FrameHelper FRAME_HELPER = new FrameHelper();
     private final Controller CONTROLLER = new Controller();
@@ -27,6 +27,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private long lastMessageTimestamp = System.currentTimeMillis();
     private CommandListener listener;
     private float heightThreshold;
+    private boolean executingCommand = false;
 
     public DroneController() {
         CONTROLLER.addListener(this);
@@ -35,6 +36,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public static void main(String[] args) {
         DroneController controller = new DroneController();
         new Thread(controller).start();
+    }
+    
+    public void doneExecuting(){
+        System.out.println("Done executing");
+        executingCommand = true;
     }
 
     @Override
@@ -45,22 +51,22 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
 
-        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
+//        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 //        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
         
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException ex) {
-//        }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+        }
         listener.controllerMessage("In air\n");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
             FRAME_HELPER.setFrame(frame);
             if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
-                if ((System.currentTimeMillis() - lastMessageTimestamp) > movementDelay) {
+                if ((System.currentTimeMillis() - lastMessageTimestamp) > movementDelay && !executingCommand) {
                     checkHeightControl();
-//                    checkMovementControl();
+                    checkMovementControl();
                     lastMessageTimestamp = System.currentTimeMillis();
                 }
             }
@@ -132,7 +138,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             if (Math.abs(lastY) > heightThreshold && lastY != 0.0) {
                 if (lastY != 0.0) {
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
-                    COMMAND_MANAGER.sendCommand(message);
+//                    COMMAND_MANAGER.sendCommand(message);
                     listener.commandSent(message + "\n");
 
                 }
@@ -188,7 +194,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             }
         }
 
-        COMMAND_MANAGER.sendCommands(commands);
+//        COMMAND_MANAGER.sendCommands(commands);
     }
 
     /**
