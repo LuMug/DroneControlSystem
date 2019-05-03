@@ -55,7 +55,9 @@ public class CommandManager {
             commandSocket.receive(packet);
 
             String response = new String(packet.getData()).trim();
+            
             listener.doneExecuting();
+            
             if (response.equalsIgnoreCase("OK")) {
                 System.out.println("--> " + command + " is ok");
             } else {
