@@ -150,7 +150,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonAbortFlight.setBackground(new java.awt.Color(255, 0, 0));
         jButtonAbortFlight.setText("ABORT MISSION!");
         jButtonAbortFlight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButtonAbortFlight.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+        jButtonAbortFlight.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButtonAbortFlight.setMargin(new java.awt.Insets(30, 30, 30, 30));
         jButtonAbortFlight.setPreferredSize(new java.awt.Dimension(120, 60));
         jButtonAbortFlight.addActionListener(new java.awt.event.ActionListener() {
