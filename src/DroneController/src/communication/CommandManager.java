@@ -23,8 +23,9 @@ public class CommandManager {
     private final String TELLO_ADDRESS = settings.getCommunicationTelloAddress();
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
+    private final CommandManagerListener listener;
 
-    public CommandManager() {
+    public CommandManager(CommandManagerListener listener) {
         try {
             commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
             System.out.println("[SUCCESS] Listening on port " + this.TELLO_COMMAND_LISTEN_PORT);
@@ -32,6 +33,7 @@ public class CommandManager {
         } catch (SocketException ex) {
             System.err.println("Can't create client socket: " + ex.getMessage());
         }
+        this.listener = listener;
 
     }
 
@@ -49,13 +51,13 @@ public class CommandManager {
 
             //Wait for response
             System.out.println("Wait for response from drone");
-            packet.setData(new byte[64]);
-//            commandSocket.receive(packet);
+            packet.setData(new byte[255]);
+            commandSocket.receive(packet);
 
             String response = new String(packet.getData()).trim();
-            
+            listener.doneExecuting();
             if (response.equalsIgnoreCase("OK")) {
-                System.out.println("--> " + new String(command) + " is ok");
+                System.out.println("--> " + command + " is ok");
             } else {
                 System.err.println("--> " + command + " ERROR");
             }
