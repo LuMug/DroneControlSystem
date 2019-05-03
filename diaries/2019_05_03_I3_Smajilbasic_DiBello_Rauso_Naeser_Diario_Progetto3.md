@@ -5,7 +5,8 @@
 ## Lavori svolti
 
 Jari:
-
+Ho creato il diagramma delle classi del progetto DroneSimulator e ho continuato
+con la documentazione.
 
 Fadil:
 Ho modificato il modo in quale il controller calcola l'intervallo di tempo tra un commando e l'altro, inoltre ho fatto altri test con il drone tutti con successo. L'integrazione tra il leapMotion e il drone è più che ottimale.
