@@ -1,6 +1,6 @@
-# PROGETTO Drone Control System | Diario di lavoro - 12.04.2019
+# PROGETTO Drone Control System | Diario di lavoro - 17.04.2019
 ##### Luca Di Bello, Fadil Smajilbasic, Andrea Rauso, Jari Näser
-### Canobbio, 12.04.2019
+### Canobbio, 17.04.2019
 
 ## Lavori svolti
 
@@ -15,7 +15,8 @@ Luca:
 -
 
 Andrea:
--
+Ho creato il gantt consuntivo del progetto e ho aggiornato la javadoc della
+classe TelloChartFrame per rispettare le convenzioni 
 
 ## Problemi riscontrati e soluzioni adottate
 -
