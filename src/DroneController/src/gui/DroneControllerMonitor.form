@@ -108,7 +108,7 @@
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
-                        <Property name="text" type="java.lang.String" value="Developed by DCS Team.&#xa;Designed by Luca Di Bello.&#xa;Developed by Fadil Smajilbasic&#xa;---------------------------------------&#xa;&#xa;"/>
+                        <Property name="text" type="java.lang.String" value="[Developed with &lt;3 by DCS Team]&#xa;&#xa;&#xa;&#xa;"/>
                       </Properties>
                     </Component>
                   </SubComponents>

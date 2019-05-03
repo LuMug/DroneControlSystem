@@ -109,7 +109,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         logTextArea.setColumns(20);
         logTextArea.setRows(5);
-        logTextArea.setText("Developed by DCS Team.\nDesigned by Luca Di Bello.\nDeveloped by Fadil Smajilbasic\n---------------------------------------\n\n");
+        logTextArea.setText("[Developed with <3 by DCS Team]\n\n\n\n");
         logScrollPane.setViewportView(logTextArea);
 
         jPaneLogPage.add(logScrollPane, java.awt.BorderLayout.CENTER);
