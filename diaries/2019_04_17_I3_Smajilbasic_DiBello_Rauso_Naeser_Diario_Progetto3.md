@@ -9,7 +9,7 @@ Assieme al resto del team ho testato per la prima volta il drone Tello e abbiamo
 raffinato e corretto in parte i comandi.
 
 Fadil:
--
+Avendo ricevuto il drone ho iniziato a lavorare sul fine-tuning dei commandi per una esperienza migliore durante l'uso del LeapMotion e ho fatto vari test per verificare il giusto funzionamento del drone.
 
 Luca:
 -
