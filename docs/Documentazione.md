@@ -101,7 +101,7 @@
 
 ## Analisi
 
-### Analisi del dominio
+### Analisi del dominio -> Da sbolognare a qualcuno, non so cosa scrivere T_T
 
   Questo capitolo dovrebbe descrivere il contesto in cui il prodotto verrà
   utilizzato, da questa analisi dovrebbero scaturire le risposte a quesiti
@@ -124,8 +124,6 @@
 
   -   Che conoscenze teoriche bisogna avere/acquisire per poter operare
       efficacemente nel dominio?
-
-  -   …
 
 ### Analisi e specifica dei requisiti
 
