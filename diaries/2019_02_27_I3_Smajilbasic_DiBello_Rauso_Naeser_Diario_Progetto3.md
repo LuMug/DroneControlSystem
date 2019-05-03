@@ -4,11 +4,18 @@
 
 ## Lavori svolti
 
-Andrea ha messo i file della libreria JFreeChart all'interno del progetto e ha creato una classe per mostrare i valori della rotazione del drone.
-Fadil è riuscito a far leggere al DroneController i dati dal LeapMotion, inoltre abbiamo migliorato l'integrazione tra la classe Dronecontroller e LeapMotionReader
+Andrea:
+Ho messo i file della libreria JFreeChart all'interno del progetto e ho creato una classe per mostrare i valori della rotazione del drone.
 
-Jari ha continuato con lo sviluppo della classe CommandReader nella quale ha ristrutturato la struttura di vari metodi e ha continuato ad implementare le simulazioni dei vari metodi di movimento del drone.
-Inoltre ha anche creato la struttura delle variabili assieme ad Andrea per poter lavorare su di esse e per semplificare la simulazione disegnata del drone attraverso il loro utilizzo.
+Fadil:
+Sono riuscito a far leggere al DroneController i dati dal LeapMotion, inoltre ho migliorato l'integrazione tra la classe Dronecontroller e LeapMotionReader
+
+Jari:
+Ho continuato con lo sviluppo della classe CommandReader nella quale ho ristrutturato la struttura di vari metodi e ho continuato ad implementare le simulazioni dei vari metodi di movimento del drone.
+Inoltre ho anche creato la struttura delle variabili assieme ad Andrea per poter lavorare su di esse e per semplificare la simulazione disegnata del drone attraverso il loro utilizzo.
+
+Luca: 
+-
 
 ##  Problemi riscontrati e soluzioni adottate
 

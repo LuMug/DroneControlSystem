@@ -47,10 +47,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 //        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ex) {
-        }
+        
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException ex) {
+//        }
         listener.controllerMessage("In air\n");
 
         while (CONTROLLER.isConnected()) {
@@ -93,6 +94,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     private void loadVariables() {
+        System.out.println("loading variables");
         final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
         final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
         final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
@@ -107,7 +109,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", DELTA_AVERAGE_MULTIPLIER);
         this.heightThreshold = getFloatValueFromSetting("heightThreshold", HEIGHT_THRESHOLD);
 
-        if (listener != null) {
+//        if (listener != null) {
             listener.controllerMessage("Settings updated\n");
             listener.controllerMessage("Controller sensibility: " + controllerSensibility + "\n");
             listener.controllerMessage("Controller delta points: " + controllerDeltaPoints + "\n");
@@ -115,7 +117,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             listener.controllerMessage("movement delay: " + movementDelay + "\n");
             listener.controllerMessage("delta average multiplier: " + deltaAverageMultiplier + "\n");
             listener.controllerMessage("height threshold: " + heightThreshold + "\n");
-        }
+//        }
 
     }
 
