@@ -12,7 +12,9 @@ Fadil:
 Ho modificato il modo in quale il controller calcola l'intervallo di tempo tra un commando e l'altro, inoltre ho fatto altri test con il drone tutti con successo. L'integrazione tra il leapMotion e il drone è più che ottimale.
 
 Luca:
-
+Ho continuato la documentazione terminando il capitolo 'analisi e 
+specifica dei requisiti'. Ho anche creato le classi 'FlightRecorder' e 
+'FlightBuffer'.
 
 Andrea:
 
