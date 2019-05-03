@@ -28,3 +28,4 @@ src/DroneSimulator/build/built-jar.properties
 src/DroneSimulator/nbproject/private/private.xml
 *.xml
 *.xml
+/src/DroneSimulator/build/

@@ -18,29 +18,18 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private final SettingsManager SETTINGS_MANAGER = new SettingsManager();
     private final FrameHelper FRAME_HELPER = new FrameHelper();
     private final Controller CONTROLLER = new Controller();
-    
+
     private float controllerSensibility;
     private float controllerDeltaPoints;
     private float controllerDegreesSensibility;
     private float movementDelay;
     private float deltaAverageMultiplier;
-    private long lastMessageTimestamp = System.currentTimeMillis();
     private CommandListener listener;
     private float heightThreshold;
     private boolean executingCommand = false;
 
     public DroneController() {
         CONTROLLER.addListener(this);
-    }
-
-    public static void main(String[] args) {
-        DroneController controller = new DroneController();
-        new Thread(controller).start();
-    }
-    
-    public void doneExecuting(){
-        System.out.println("Done executing");
-        executingCommand = true;
     }
 
     @Override
@@ -50,28 +39,32 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             listener.controllerMessage("DroneController started\n");
         }
 
-
-//        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
+        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 //        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
-        
+
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
         }
+
         listener.controllerMessage("In air\n");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
             FRAME_HELPER.setFrame(frame);
-            if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
-                if ((System.currentTimeMillis() - lastMessageTimestamp) > movementDelay && !executingCommand) {
+            if (!getExecutingCommand()) {
+                if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
+
+                    setExecutingCommand(true);
                     checkHeightControl();
                     checkMovementControl();
-                    lastMessageTimestamp = System.currentTimeMillis();
+
                 }
+            } else {
+//                System.err.println("not finished executing");
             }
         }
-        
+
         if (listener != null) {
             listener.controllerMessage("controller not connected\n");
         } else {
@@ -115,15 +108,13 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", DELTA_AVERAGE_MULTIPLIER);
         this.heightThreshold = getFloatValueFromSetting("heightThreshold", HEIGHT_THRESHOLD);
 
-//        if (listener != null) {
-            listener.controllerMessage("Settings updated\n");
-            listener.controllerMessage("Controller sensibility: " + controllerSensibility + "\n");
-            listener.controllerMessage("Controller delta points: " + controllerDeltaPoints + "\n");
-            listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
-            listener.controllerMessage("movement delay: " + movementDelay + "\n");
-            listener.controllerMessage("delta average multiplier: " + deltaAverageMultiplier + "\n");
-            listener.controllerMessage("height threshold: " + heightThreshold + "\n");
-//        }
+        listener.controllerMessage("Settings updated\n");
+        listener.controllerMessage("Controller sensibility: " + controllerSensibility + "\n");
+        listener.controllerMessage("Controller delta points: " + controllerDeltaPoints + "\n");
+        listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
+        listener.controllerMessage("movement delay: " + movementDelay + "\n");
+        listener.controllerMessage("delta average multiplier: " + deltaAverageMultiplier + "\n");
+        listener.controllerMessage("height threshold: " + heightThreshold + "\n");
 
     }
 
@@ -138,7 +129,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             if (Math.abs(lastY) > heightThreshold && lastY != 0.0) {
                 if (lastY != 0.0) {
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
-//                    COMMAND_MANAGER.sendCommand(message);
+                    COMMAND_MANAGER.sendCommand(message);
                     listener.commandSent(message + "\n");
 
                 }
@@ -156,7 +147,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
             if (Math.abs(rollValue) > controllerDegreesSensibility) {
 
-                if ((Math.abs((int)rollValue) - controllerDegreesSensibility) != 0) {
+                if ((Math.abs((int) rollValue) - controllerDegreesSensibility) != 0) {
                     String message = rollValue < 0
                             ? Commands.right((int) Math.abs(rollValue - controllerDegreesSensibility))
                             : Commands.left((int) (rollValue - controllerDegreesSensibility));
@@ -194,7 +185,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             }
         }
 
-//        COMMAND_MANAGER.sendCommands(commands);
+        COMMAND_MANAGER.sendCommands(commands);
     }
 
     /**
@@ -216,8 +207,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             return defaultValue;
         }
     }
-    
-    public CommandManager getCommandManager(){
+
+    public CommandManager getCommandManager() {
         return this.COMMAND_MANAGER;
     }
 
@@ -228,5 +219,18 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public void settingsChanged() {
         System.out.println("Settings updated");
         loadVariables();
+    }
+
+    public synchronized boolean getExecutingCommand() {
+        return executingCommand;
+    }
+
+    public synchronized void setExecutingCommand(boolean executingCommand) {
+        executingCommand = false;
+    }
+
+    @Override
+    public void doneExecuting() {
+        setExecutingCommand(false);
     }
 }
