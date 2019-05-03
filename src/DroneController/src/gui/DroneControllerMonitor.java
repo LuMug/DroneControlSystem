@@ -1,10 +1,12 @@
 package gui;
 
-import communication.CommandManager;
+
+import communication.Commands;
 import controller.DroneController;
 import java.util.Map;
 import settings.SettingsManager;
 import javax.swing.JOptionPane;
+import javax.swing.text.DefaultCaret;
 import settings.FlipCommand;
 import settings.SettingsListener;
 
@@ -22,6 +24,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
      */
     public DroneControllerMonitor() {
         initComponents();
+        
+        DefaultCaret caret = (DefaultCaret)logTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        System.out.println("caret " + caret.getUpdatePolicy());
+        
         updateSettingsValues(manager);
     
         controller.setListener(this);
@@ -43,12 +50,12 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void initComponents() {
 
         jPanelHeader = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        titleJLabel = new javax.swing.JLabel();
         jPanelBody = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanePageLog = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jPaneLogPage = new javax.swing.JPanel();
+        logScrollPane = new javax.swing.JScrollPane();
+        logTextArea = new javax.swing.JTextArea();
         jPanelFastCommands = new javax.swing.JPanel();
         jPanelMoveInSpace = new javax.swing.JPanel();
         jButtonDroneUp = new javax.swing.JButton();
@@ -58,14 +65,15 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jPanelAbortPanel = new javax.swing.JPanel();
         jButtonAbortFlight = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        movementSteopJLabel = new javax.swing.JLabel();
         jSpinnerDroneMovementStep = new javax.swing.JSpinner();
         jPanelExtraCommands = new javax.swing.JPanel();
         jButtonDroneTakeoff = new javax.swing.JButton();
         jButtonDroneLand = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        flipJPanel = new javax.swing.JPanel();
         jButtonDroneFlip = new javax.swing.JButton();
         jComboBoxFlip = new javax.swing.JComboBox<>();
+        batteryButton = new javax.swing.JButton();
         jPanelSettings = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         sensibilityValueTextBox = new javax.swing.JTextField();
@@ -84,10 +92,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jPanelHeader.setBackground(new java.awt.Color(0, 78, 112));
 
-        jLabel1.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Drone Controller");
-        jPanelHeader.add(jLabel1);
+        titleJLabel.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        titleJLabel.setForeground(new java.awt.Color(255, 255, 255));
+        titleJLabel.setText("Drone Controller");
+        jPanelHeader.add(titleJLabel);
 
         getContentPane().add(jPanelHeader, java.awt.BorderLayout.PAGE_START);
 
@@ -95,18 +103,18 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jPanelBody.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanelBody.setLayout(new java.awt.BorderLayout());
 
-        jPanePageLog.setLayout(new java.awt.BorderLayout());
+        jPaneLogPage.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setAutoscrolls(true);
+        logScrollPane.setAutoscrolls(true);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Developed by DCS Team.\nDesigned by Luca Di Bello.\nDeveloped by Fadil Smajilbasic\n---------------------------------------\n\n");
-        jScrollPane1.setViewportView(jTextArea1);
+        logTextArea.setColumns(20);
+        logTextArea.setRows(5);
+        logTextArea.setText("Developed by DCS Team.\nDesigned by Luca Di Bello.\nDeveloped by Fadil Smajilbasic\n---------------------------------------\n\n");
+        logScrollPane.setViewportView(logTextArea);
 
-        jPanePageLog.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPaneLogPage.add(logScrollPane, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Log", jPanePageLog);
+        jTabbedPane1.addTab("Log", jPaneLogPage);
 
         jPanelFastCommands.setLayout(new java.awt.GridLayout(2, 0));
 
@@ -150,7 +158,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonAbortFlight.setBackground(new java.awt.Color(255, 0, 0));
         jButtonAbortFlight.setText("ABORT MISSION!");
         jButtonAbortFlight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButtonAbortFlight.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+        jButtonAbortFlight.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButtonAbortFlight.setMargin(new java.awt.Insets(30, 30, 30, 30));
         jButtonAbortFlight.setPreferredSize(new java.awt.Dimension(120, 60));
         jButtonAbortFlight.addActionListener(new java.awt.event.ActionListener() {
@@ -160,10 +168,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         });
         jPanelAbortPanel.add(jButtonAbortFlight, java.awt.BorderLayout.CENTER);
 
-        jLabel7.setText("Movement Step");
-        jPanel2.add(jLabel7);
+        movementSteopJLabel.setText("Movement Step");
+        jPanel2.add(movementSteopJLabel);
 
         jSpinnerDroneMovementStep.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        jSpinnerDroneMovementStep.setPreferredSize(new java.awt.Dimension(100, 34));
         jPanel2.add(jSpinnerDroneMovementStep);
 
         jPanelAbortPanel.add(jPanel2, java.awt.BorderLayout.PAGE_END);
@@ -191,7 +200,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         });
         jPanelExtraCommands.add(jButtonDroneLand);
 
-        jPanel1.setLayout(new java.awt.GridLayout(2, 2));
+        flipJPanel.setLayout(new java.awt.GridLayout(2, 2));
 
         jButtonDroneFlip.setText("FLIP IT :0");
         jButtonDroneFlip.addActionListener(new java.awt.event.ActionListener() {
@@ -199,13 +208,21 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
                 jButtonDroneFlipActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonDroneFlip);
+        flipJPanel.add(jButtonDroneFlip);
 
         jComboBoxFlip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Forward", "Right", "Back", "Left" }));
         jComboBoxFlip.setSelectedIndex(0);
-        jPanel1.add(jComboBoxFlip);
+        flipJPanel.add(jComboBoxFlip);
 
-        jPanelExtraCommands.add(jPanel1);
+        jPanelExtraCommands.add(flipJPanel);
+
+        batteryButton.setText("Battery");
+        batteryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                batteryButtonActionPerformed(evt);
+            }
+        });
+        jPanelExtraCommands.add(batteryButton);
 
         jPanelFastCommands.add(jPanelExtraCommands);
 
@@ -295,7 +312,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private void jButtonAbortFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbortFlightActionPerformed
         //Send emergency command
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.LAND);
+        this.controller.getCommandManager().sendCommand(Commands.EMERGENCY);
         System.out.println("[GUI] Sent landing command to drone");
     }//GEN-LAST:event_jButtonAbortFlightActionPerformed
 
@@ -309,18 +326,18 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         final int LEFT = 3;
         
         if(chosenFlipOption == FORWARD){
-            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.FORWARD));
+            this.controller.getCommandManager().sendCommandAsync(Commands.flip(FlipCommand.FORWARD));
         }
         else if(chosenFlipOption == RIGHT){
-            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.RIGHT));
+            this.controller.getCommandManager().sendCommandAsync(Commands.flip(FlipCommand.RIGHT));
 
         }
         else if(chosenFlipOption == BACK){
-            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.BACK));
+            this.controller.getCommandManager().sendCommandAsync(Commands.flip(FlipCommand.BACK));
 
         }
         else if(chosenFlipOption == LEFT){
-            this.controller.getCommandManager().sendCommandAsync(communication.Commands.flip(FlipCommand.LEFT));
+            this.controller.getCommandManager().sendCommandAsync(Commands.flip(FlipCommand.LEFT));
         }
         
         System.out.println("[GUI] Sent flip command to drone");
@@ -328,31 +345,35 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private void jButtonDroneUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneUpActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.up(stepValue));
+        this.controller.getCommandManager().sendCommand(Commands.up(stepValue));
     }//GEN-LAST:event_jButtonDroneUpActionPerformed
 
     private void jButtonDroneRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneRightActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.right(stepValue));
+        this.controller.getCommandManager().sendCommand(Commands.right(stepValue));
     }//GEN-LAST:event_jButtonDroneRightActionPerformed
 
     private void jButtonDroneDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneDownActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.down(stepValue));
+        this.controller.getCommandManager().sendCommand(Commands.down(stepValue));
     }//GEN-LAST:event_jButtonDroneDownActionPerformed
 
     private void jButtonDroneLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneLeftActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.left(stepValue));
+        this.controller.getCommandManager().sendCommand(Commands.left(stepValue));
     }//GEN-LAST:event_jButtonDroneLeftActionPerformed
 
     private void jButtonDroneTakeoffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneTakeoffActionPerformed
-        this.controller.getCommandManager().sendCommand(communication.Commands.TAKEOFF);
+        this.controller.getCommandManager().sendCommand(Commands.TAKEOFF);
     }//GEN-LAST:event_jButtonDroneTakeoffActionPerformed
 
     private void jButtonDroneLandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneLandActionPerformed
-        this.controller.getCommandManager().sendCommandAsync(communication.Commands.LAND);
+        this.controller.getCommandManager().sendCommand(Commands.LAND);
     }//GEN-LAST:event_jButtonDroneLandActionPerformed
+
+    private void batteryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batteryButtonActionPerformed
+        this.controller.getCommandManager().sendCommand(Commands.getBattery());
+    }//GEN-LAST:event_batteryButtonActionPerformed
 
     public void notifyChangeSettings() {
         listener.settingsChanged();
@@ -410,6 +431,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JTextField DegreesSensibilityValueTextBox;
     private javax.swing.JTextField DeltaAverageMultiplierValueTextBox;
     private javax.swing.JTextField MovementDelayValueTextBox;
+    private javax.swing.JButton batteryButton;
+    private javax.swing.JPanel flipJPanel;
     private javax.swing.JTextField heightPointsValueTextBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -422,15 +445,12 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JButton jButtonDroneTakeoff;
     private javax.swing.JButton jButtonDroneUp;
     private javax.swing.JComboBox<String> jComboBoxFlip;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanePageLog;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPaneLogPage;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelAbortPanel;
     private javax.swing.JPanel jPanelBody;
@@ -439,25 +459,27 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JPanel jPanelHeader;
     private javax.swing.JPanel jPanelMoveInSpace;
     private javax.swing.JPanel jPanelSettings;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerDroneMovementStep;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane logScrollPane;
+    private javax.swing.JTextArea logTextArea;
+    private javax.swing.JLabel movementSteopJLabel;
     private javax.swing.JTextField sensibilityValueTextBox;
+    private javax.swing.JLabel titleJLabel;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void messageRecieved(String message) {
-        jTextArea1.append("Recieved: " + message);
+        logTextArea.append("Recieved: " + message);
     }
 
     @Override
     public void controllerMessage(String message) {
-        jTextArea1.append("Controller message: " + message);
+        logTextArea.append("Controller message: " + message);
     }
 
     @Override
     public void commandSent(String command) {
-        jTextArea1.append("Sent: " + command);
+        logTextArea.append("Sent: " + command);
     }
 }
