@@ -16,7 +16,7 @@ Luca:
 Oggi ho testato il controller dell'applicatione e mi sono accorto che a lungo andare inizia ad utilizzare troppe risorse (il computer scalda e rallenta)
 
 Andrea:
--
+Ho aggiornato l'UML della parte DroneSimulator e ho rimosso classi non più in uso
 
 ## Problemi riscontrati e soluzioni adottate
 -
