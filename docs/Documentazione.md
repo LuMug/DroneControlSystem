@@ -9,7 +9,7 @@
 1. [Analisi](#analisi)
 
   - [Analisi del dominio](#analisi-del-dominio)
-  
+
   - [Analisi dei mezzi](#analisi-dei-mezzi)
 
   - [Analisi e specifica dei requisiti](#analisi-e-specifica-dei-requisiti)
@@ -25,6 +25,8 @@
   - [Design dei dati e database](#design-dei-dati-e-database)
 
 1. [Implementazione](#implementazione)
+
+  - [DroneSimulator](#DroneSimulator)
 
 1. [Test](#test)
 
@@ -55,7 +57,7 @@
 
 ### Abstract
 
-  In this documentation we describe on 
+  In this documentation we describe on
 
   E’ una breve e accurata rappresentazione dei contenuti di un documento,
   senza notazioni critiche o valutazioni. Lo scopo di un abstract efficace
@@ -101,7 +103,7 @@
 
 ## Analisi
 
-### Analisi del dominio
+### Analisi del dominio -> Da sbolognare a qualcuno, non so cosa scrivere T_T
 
   Questo capitolo dovrebbe descrivere il contesto in cui il prodotto verrà
   utilizzato, da questa analisi dovrebbero scaturire le risposte a quesiti
@@ -125,12 +127,10 @@
   -   Che conoscenze teoriche bisogna avere/acquisire per poter operare
       efficacemente nel dominio?
 
-  -   …
-
 ### Analisi e specifica dei requisiti
 
   Il committente necessita di un sistema che comprende un simulatore di volo e di un controller. Il simulatore di volo simulerà il funzionamento
-  del drone *DJI Tello* mentre il controller si occuperà di controllare il drone all'interno della simulazione utilizzando il controller *Leap Motion*. Il drone verrà controllato con entrambe le mani: Una mano si occuperà di controllare l'altitudine del drone mentre l'altra mano si occuperà dei movimenti del drone, quindi imbardata, rollio e beccheggio. 
+  del drone *DJI Tello* mentre il controller si occuperà di controllare il drone all'interno della simulazione utilizzando il controller *Leap Motion*. Il drone verrà controllato con entrambe le mani: Una mano si occuperà di controllare l'altitudine del drone mentre l'altra mano si occuperà dei movimenti del drone, quindi imbardata, rollio e beccheggio.
   I comandi inviati dal controller verso il drone simulato verranno inviati rispettando il protocollo di comunicazione ufficiale fornito da *ryzerobotics.com*.
 
   |ID  |REQ-001                                         |
@@ -226,10 +226,12 @@ versione, mentre le vecchie saranno sui diari.
 
 ### Design delle interfacce
 
-Descrizione delle interfacce interne ed esterne del sistema e
-dell’interfaccia utente. La progettazione delle interfacce è basata
-sulle informazioni ricavate durante la fase di analisi e realizzata
-tramite mockups.
+Interfaccia della posizione del drone
+
+![alt Interfaccia posizione](..\media\mockup\MockPosizioneDallAlto.png)
+
+Interfaccia della rotazione del drone
+![alt Interfaccia rotazione](..\media\mockup\MockRotazioneAssi.png)
 
 ### Design procedurale
 
@@ -251,24 +253,100 @@ per la realizzazione del prodotto.
 
 ## Implementazione
 
-In questo capitolo dovrà essere mostrato come è stato realizzato il
-lavoro. Questa parte può differenziarsi dalla progettazione in quanto il
-risultato ottenuto non per forza può essere come era stato progettato.
+### Drone Simulator
 
-Sulla base di queste informazioni il lavoro svolto dovrà essere
-riproducibile.
+#### TelloChartFrame
 
-In questa parte è richiesto l’inserimento di codice sorgente/print
-screen di maschere solamente per quei passaggi particolarmente
-significativi e/o critici.
+Questa classe ha lo scopo di mostrare all'interno di un JFrame le informazioni sulla posizione del drone sui 3 assi con una vista di profilo e una vista dall'alto e la rotazione del drone sui 3 assi di rotazione (beccheggio, imbardata e rollio).
+La rappresentazione delle informazioni avvengono tramite grafici cartesiani per la posizione e tramite grafico a barre per la rotazione, i grafici sono stati costruiti grazie alla libreria gratuita JFreeChart.
 
-Inoltre dovranno essere descritte eventuali varianti di soluzione o
-scelte di prodotti con motivazione delle scelte.
 
-Non deve apparire nessuna forma di guida d’uso di librerie o di
-componenti utilizzati. Eventualmente questa va allegata.
 
-Per eventuali dettagli si possono inserire riferimenti ai diari.
+#### Simulator
+
+La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket 8889.
+La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltrare il contenuto verso la classe CommandReader.
+
+#### CommandReader
+
+La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone.
+
+#### BatteryThread
+
+La classe BatteryThread monitora e gestisce la durata del volo del drone e la sua batteria.
+Quando la batteria del drone equivale allo 0%, questo comincierà automaticamente ad atterare attraverso il metodo emergency() della classe CommandReader.
+
+```Java
+public class BatteryThread extends Thread{
+
+    /**
+     * CommandReader class that manages the drone's movements.
+     */
+    private CommandReader cr;
+
+    /**
+     * Boolean that specifies if the drone should keep flying.
+     */
+    private boolean keepFlying;
+
+    public BatteryThread(CommandReader cr){
+        this.cr = cr;
+        keepFlying = true;
+    }
+
+    @Override
+    public void run(){
+        while(keepFlying){
+            try{
+                if(cr.getBattery() == 0){
+                    cr.emergency();
+                    keepFlying = false;
+                }else{
+                    Thread.sleep(1000);
+                }
+            }catch(InterruptedException ie){
+                System.out.println("BatteryThread has been interrupted.");
+            }
+        }
+    }  
+}
+```
+
+#### PacketReceivingCheckerThread
+
+La classe PacketReceivingCkerThread controlla la frequenza di ricezione dei comandi della classe Simulator.
+Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader.
+
+```java
+public class PacketReceivingCheckerThread extends Thread{
+
+    /**
+     * Time to wait before calling CommandReader's emergency() method.
+     */
+    private final int SECONDS_TO_WAIT = 15;
+    /**
+     * CommandReader that contains all the methods to control the drone.
+     */
+    private CommandReader cr;
+
+    public PacketReceivingCheckerThread(CommandReader cr){
+        this.cr = cr;
+    }
+
+    @Override
+    public void run(){
+        try{
+            long startTime = System.currentTimeMillis();
+            while((System.currentTimeMillis() - startTime)/1000 < SECONDS_TO_WAIT){
+                Thread.sleep(500);
+            }
+            cr.emergency();
+        }catch(InterruptedException ie){
+            System.err.println("PacketReceivingCheckerThread has been interrupted.");
+        }
+    }  
+}
+```
 
 ## Test
 
