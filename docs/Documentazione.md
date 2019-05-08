@@ -425,8 +425,8 @@ facilmente generalizzabili o sono specifici di un caso particolare? ecc
 -   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*
 
 
-## Allegati -> DA CONTROLLARE
-
+## 8 Allegati -> DA CONTROLLARE
+---
 Elenco degli allegati, esempio:
 
 -   Diari di lavoro
