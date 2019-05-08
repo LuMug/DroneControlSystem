@@ -58,12 +58,14 @@ public class FlightRecorder {
      * @param generatedPath Path of the file.
      * @throws IOException Thrown when the file is unaccessible.
      */
-    private void saveFlightPattern(FlightBuffer buffer, Path generatedPath)throws IOException{
+    private FlightRecord saveFlightPattern(FlightBuffer buffer, Path generatedPath)throws IOException{
         try{
             while(buffer.existsNextCommand()){
                 String command = buffer.getNextCommand();
                 Files.write(generatedPath, (command+"\n").getBytes(), StandardOpenOption.APPEND);
             }
+            
+            return new FlightRecord(generatedPath);
         }
         catch(IOException ex){
             throw new IOException("Error while writing the recording pattern on file " + generatedPath);
@@ -79,11 +81,17 @@ public class FlightRecorder {
             FlightRecorder recorder = new FlightRecorder();
             FlightBuffer buffer = new FlightBuffer();
             
-            for(int i = 0; i < 100; i++) buffer.addMovement("pota");
+            for(int i = 0; i < 100; i++) buffer.addCommand("pota " + i);
             
             recorder.createBase();
             Path recordFile = recorder.generateRecordFile();
-            recorder.saveFlightPattern(buffer, recordFile);
+            FlightRecord record = recorder.saveFlightPattern(buffer, recordFile);
+            
+            System.out.println("File saved in path: " + record.getSaveLocation());
+            
+            for(String line : record.getFlightCommands()){
+                System.out.println("Command: " + line);
+            }
         }
         catch(IOException ex){
             System.err.println("ERROR:" + ex.getMessage());
