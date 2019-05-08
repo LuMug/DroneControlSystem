@@ -10,15 +10,25 @@ public class FlightBuffer{
     
     private LinkedList<String> buffer = new LinkedList<>();
     
-    public void addCommand(String command){
+    public synchronized void addCommand(String command){
         buffer.add(command);
     }
     
-    public String getNextCommand(){
+    public synchronized void addCommands(String[] commands){
+        for(String command : commands){
+            buffer.add(command);
+        }
+    }
+    
+    public synchronized String getNextCommand(){
         return buffer.poll();
     }
     
-    public boolean existsNextCommand(){
+    public void clear(){
+        buffer.clear();
+    }
+    
+    public synchronized boolean existsNextCommand(){
         return buffer.poll() != null;
     }
 }
