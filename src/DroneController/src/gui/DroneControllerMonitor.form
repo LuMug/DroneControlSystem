@@ -142,7 +142,7 @@
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="jButtonDroneUp">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="UP"/>
+                        <Property name="text" type="java.lang.String" value="FORWARD"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDroneUpActionPerformed"/>
@@ -155,7 +155,7 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="jButtonDroneDown">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="DOWN"/>
+                        <Property name="text" type="java.lang.String" value="BACK"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDroneDownActionPerformed"/>
@@ -199,12 +199,15 @@
                         </Constraint>
                       </Constraints>
 
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                        <Property name="columns" type="int" value="1"/>
+                        <Property name="rows" type="int" value="4"/>
+                      </Layout>
                       <SubComponents>
                         <Component class="javax.swing.JButton" name="jButtonAbortFlight">
                           <Properties>
                             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="0" green="0" red="ff" type="rgb"/>
+                              <Color blue="64" green="64" red="ff" type="rgb"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="ABORT MISSION!"/>
                             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -225,18 +228,24 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAbortFlightActionPerformed"/>
                           </Events>
-                          <Constraints>
-                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                              <BorderConstraints direction="Center"/>
-                            </Constraint>
-                          </Constraints>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="upButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="UP"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="upButtonActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="downButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="DOWN"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downButtonActionPerformed"/>
+                          </Events>
                         </Component>
                         <Container class="javax.swing.JPanel" name="jPanel2">
-                          <Constraints>
-                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                              <BorderConstraints direction="Last"/>
-                            </Constraint>
-                          </Constraints>
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
                           <SubComponents>
