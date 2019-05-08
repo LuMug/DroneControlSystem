@@ -35,7 +35,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private final Path recordFolderPath = Paths.get("records");
     private List<FlightRecord> flightRecords = new ArrayList<>();
     private CommandManager commandManager;
-    
+
     /**
      * Creates new form DroneControllerMonitor
      */
@@ -52,38 +52,37 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager = controller.getCommandManager();
 
         new Thread(controller).start();
-        
+
         insertRecordsInSelector();
     }
 
     public void setListener(SettingsListener listener) {
         this.listener = listener;
     }
-    
-    public void insertRecordsInSelector(){
+
+    public void insertRecordsInSelector() {
         // read all files in 'records'
         this.jComboBoxSelectRecord.removeAllItems();
-        
+
         File folder = new File(recordFolderPath.toString());
         File[] files = folder.listFiles();
-        
-        if(files != null && files.length != 0){
-            for(File file : files){
+
+        if (files != null && files.length != 0) {
+            for (File file : files) {
                 System.out.println("Found file: " + file.getAbsolutePath());
 
                 //Create FlightRecord object
                 FlightRecord record = new FlightRecord(Paths.get(file.getAbsolutePath()));
                 flightRecords.add(record);
-                
+
                 this.jComboBoxSelectRecord.addItem(file.getName());
             }
-        }
-        else{
+        } else {
             jComboBoxSelectRecord.setEnabled(false);
             jLabelRecordSelectorMessage.setText("Cannot find any record file");
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -541,7 +540,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void jButtonStopRecordingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopRecordingActionPerformed
         // Check if added another file
         insertRecordsInSelector();
-        
+
         //Stop recording and save file
         controller.stopRecording();
     }//GEN-LAST:event_jButtonStopRecordingActionPerformed
@@ -549,40 +548,38 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void jComboBoxSelectRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSelectRecordActionPerformed
         //Read filename and parse
         String filename = (String) jComboBoxSelectRecord.getSelectedItem();
-        
-        
-        if(filename != null && filename.length() == 32){
+
+        if (filename != null && filename.length() == 32) {
             jTextFieldRecordedOn.setText(getDateFromRecordFilename(filename));
 
             FlightRecord record = flightRecords.get(jComboBoxSelectRecord.getSelectedIndex());
 
-            try{
+            try {
                 List<String> commands = record.getFlightCommands();
                 jTextFieldTotalCommands.setText("" + commands.size());
                 jTextFieldEstimatedExecutionTime.setText("WIP");
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
                 jTextFieldTotalCommands.setText("Unknown");
                 jTextFieldEstimatedExecutionTime.setText("Unknown");
-                
+
                 System.err.println("Error: " + ex.getMessage());
             }
         }
     }//GEN-LAST:event_jComboBoxSelectRecordActionPerformed
-    
-    public String getDateFromRecordFilename(String filename){
+
+    public String getDateFromRecordFilename(String filename) {
         //Date [11 - 19]
         String date = filename.substring(11, 19);
-            
+
         //Time [20 - 16]
         String time = filename.substring(20, 26);
-        
-        String formatted_date = date.substring(0,4) + "-" + date.substring(4,6) + "-" + date.substring(6,8);
-        String formatted_time = time.substring(0,2) + ":" + time.substring(2,4) + ":" + time.substring(4,6);
-        
+
+        String formatted_date = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6, 8);
+        String formatted_time = time.substring(0, 2) + ":" + time.substring(2, 4) + ":" + time.substring(4, 6);
+
         return formatted_date + " " + formatted_time;
     }
-    
+
     public void notifyChangeSettings() {
         listener.settingsChanged();
     }

@@ -380,9 +380,10 @@ progetto.
 ## 5 Consuntivo
 ---
 
-Consuntivo del tempo di lavoro effettivo e considerazioni riguardo le
-differenze rispetto alla pianificazione (cap 1.7) (ad esempio Gannt
-consuntivo).
+Rispetto al diagramma iniziale abbiamo in parte unito le due fasi di progettazione ed
+implementazione visto che era un lavoro spesso asincrono per ogni membro del team, di conseguenza non conoscendo ancora la natura di svariati componenti utilizzati per realizzare questo prodotto abbiamo optato per questa soluzione potendo così informarci e lavorare sul progetto contemporaneamente.
+Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osservare i movimenti del drone e l'invio dei vari comandi via socket.
+![alt Gantt Consuntivo](..\media\img\Immagine_Gantt_Consuntivo.png)
 
 ## 6 Conclusioni
 ---

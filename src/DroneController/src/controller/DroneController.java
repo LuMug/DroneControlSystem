@@ -51,7 +51,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             listener.controllerMessage("DroneController started\n");
         }
 
-        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
+//        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
 
         try {
             Thread.sleep(2000);
@@ -68,10 +68,10 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
 //                    setExecutingCommand(true);
 //                    checkGesture();
-                    setExecutingCommand(true);
+//                    setExecutingCommand(true);
                     checkHeightControl();
-                    setExecutingCommand(true);
-                    checkMovementControl();
+//                    setExecutingCommand(true);
+//                    checkMovementControl();
 
                 }
             } else {
@@ -146,7 +146,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             if (Math.abs(lastY) > heightThreshold && lastY != 0.0) {
                 if (lastY != 0.0) {
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
-                    COMMAND_MANAGER.sendCommand(message);
+//                    COMMAND_MANAGER.sendCommand(message);
                     
                     //Add commands to recorder
                     if(isRecordingFlight){
