@@ -83,7 +83,6 @@ public class FlightRecorder {
             
             recorder.createBase();
             Path recordFile = recorder.generateRecordFile();
-            
             recorder.saveFlightPattern(buffer, recordFile);
         }
         catch(IOException ex){
