@@ -16,16 +16,6 @@ Andrea:
 
 ## Problemi riscontrati e soluzioni adottate
 
-Problema con l'aggiunta dell'autoscroll al panello che segna i comandi mandati:
-
-Codice usato per testare:
-
-`DefaultCaret caret = (DefaultCaret) logTextArea.getCaret();
-caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-`
-
-Non ha funzionato ma cercerò delle altre soluzioni
-
 ## Punto della situazione rispetto alla pianificazione
 Siamo al passo con il gantt preventivo.
 
