@@ -420,8 +420,13 @@ facilmente generalizzabili o sono specifici di un caso particolare? ecc
 -   http://standards.ieee.org/guides/style/section7.html, *IEEE
     Standards Style Manual*, 07-06-2008.
 
-## 8 Allegati -> DA CONTROLLARE
----
+-   http://www.jfree.org/jfreechart/, *JFreeChart*
+-   https://github.com/jfree/jfreechart, *A 2D chart library for Java applications (JavaFX, Swing or server-side).*
+-   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*
+
+
+## Allegati -> DA CONTROLLARE
+
 Elenco degli allegati, esempio:
 
 -   Diari di lavoro

@@ -17,7 +17,7 @@ specifica dei requisiti'. Ho anche creato le classi 'FlightRecorder' e
 'FlightBuffer'.
 
 Andrea:
-
+Ho continuato la documentazione aggiungendo l'implementazione delle classi di DroneSimulator e l'aggiunta dei mockup delle interfacce.
 
 
 ## Problemi riscontrati e soluzioni adottate
