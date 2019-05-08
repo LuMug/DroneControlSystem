@@ -1,3 +1,5 @@
+# ----EVENTUALMENTE TITOLO PROGETTO----
+
 1. [Introduzione](#introduzione)
 
   - [Informazioni sul progetto](#informazioni-sul-progetto)
@@ -48,14 +50,15 @@
 
 1. [Allegati](#allegati)
 
-## Introduzione
+## 1. Introduzione
+---
 
-### Informazioni sul progetto
+### 1.1 Informazioni sul progetto
 
-  Il progetto è gestito e realizzato dall’allievo Luca Di Bello, Fadil Smajlbasic, Jari Näser, Andrea Rauso (studenti di informatica all’Arti e Mestieri di Trevano) sotto la supervisione del professor Luca Muggiasca. Avremo a disposizione un dispositivo chiamato "Leap Motion", il quale permette il tracking di precisione delle mani e dei loro movimenti.
+  Il progetto è gestito e realizzato dagli allievi Luca Di Bello, Fadil Smajlbasic, Jari Näser, Andrea Rauso (studenti di informatica all’Arti e Mestieri di Trevano) sotto la supervisione del professor Luca Muggiasca. Avremo a disposizione un dispositivo chiamato "Leap Motion", il quale permette il tracking di precisione delle mani e dei loro movimenti.
   La realizzazione del progetto inizia il 13 febbraio 2018 (13/02/19) e dovrà essere consegnato entro il 17 maggio 2018 (17/05/19).
 
-### Abstract
+### 1.2 Abstract
 
   In this documentation we describe on
 
@@ -96,14 +99,14 @@
   > months of time. With the help of this compiler, a single person could
   > design such a large-scale microprocessor in just weeks.*
 
-### Scopo
+### 1.3 Scopo
 
   Lo scopo di questo progetto è di creare un sistema che permette di controllare il drone *DJI Tello* tramite un dispositivo chiamato [Leap Motion](https://www.leapmotion.com "Leap Motion official website") (un sensore che permette il tracking dei movimenti delle mani in modo preciso). Non disponendo di un drone *DJI Tello* verrà simulato il funzionamento tramite un'altra applicazione la quale mostrerà in 4 riquadri le quali rappresenteranno in 2d le seguenti informazioni: imbardata, beccheggio, rollio ed altitudine.
   Entrambe le applicazioni devono essere scritte nel linguaggio Java ed il drone deve venir controllato utilizzando entrambe le mani. Una mano si occupa dell'altitudine ed altre funzioni utili alla guida mentre l'altra si occupa dei movimenti del drone, ovvero imbardata, beccheggio e rollio.
 
 ## Analisi
 
-### Analisi del dominio -> Da sbolognare a qualcuno, non so cosa scrivere T_T
+### 1.4 Analisi del dominio -> Da sbolognare a qualcuno, non so cosa scrivere T_T
 
   Questo capitolo dovrebbe descrivere il contesto in cui il prodotto verrà
   utilizzato, da questa analisi dovrebbero scaturire le risposte a quesiti
@@ -127,7 +130,7 @@
   -   Che conoscenze teoriche bisogna avere/acquisire per poter operare
       efficacemente nel dominio?
 
-### Analisi e specifica dei requisiti
+### 1.5 Analisi e specifica dei requisiti
 
   Il committente necessita di un sistema che comprende un simulatore di volo e di un controller. Il simulatore di volo simulerà il funzionamento
   del drone *DJI Tello* mentre il controller si occuperà di controllare il drone all'interno della simulazione utilizzando il controller *Leap Motion*. Il drone verrà controllato con entrambe le mani: Una mano si occuperà di controllare l'altitudine del drone mentre l'altra mano si occuperà dei movimenti del drone, quindi imbardata, rollio e beccheggio.
@@ -165,7 +168,7 @@
   |**002**      | Possibilità di manipolare le impostazioni salvate all'interno del file anche tramite codice |
   |**002**      | Codice ben commentato (Inglese o Italiano)|
 
-### Pianificazione
+### 1.6 Pianificazione
 
 Prima di stabilire una pianificazione bisogna avere almeno una vaga idea
 del modello di sviluppo che si intende adottare. In questa sezione
@@ -180,7 +183,7 @@ Gantt.
 Se si usano altri metodi di pianificazione (es scrum), dovranno apparire
 in questo capitolo.
 
-### Analisi dei mezzi
+### 1.7 Analisi dei mezzi
 
 Elencare e *descrivere* i mezzi disponibili per la realizzazione del
 progetto. Ricordarsi di sempre descrivere nel dettaglio le versioni e il
@@ -193,14 +196,15 @@ Su quale piattaforma dovrà essere eseguito il prodotto? Che hardware
 particolare è coinvolto nel progetto? Che particolarità e limitazioni
 presenta? Che hw sarà disponibile durante lo sviluppo?
 
-## Progettazione
+## 2 Progettazione
+---
 
 Questo capitolo descrive esaustivamente come deve essere realizzato il
 prodotto fin nei suoi dettagli. Una buona progettazione permette
 all’esecutore di evitare fraintendimenti e imprecisioni
 nell’implementazione del prodotto.
 
-### Design dell’architettura del sistema
+### 2.1 Design dell’architettura del sistema
 
 Descrive:
 
@@ -214,17 +218,17 @@ Descrive:
 
 -   Eventuale sitemap
 
-### Design dei dati e database
+### 2.2 Design dei dati e database
 
 Descrizione delle strutture di dati utilizzate dal programma in base
 agli attributi e le relazioni degli oggetti in uso.
 
-### Schema E-R, schema logico e descrizione.
+### 2.3 Schema E-R, schema logico e descrizione.
 
 Se il diagramma E-R viene modificato, sulla doc dovrà apparire l’ultima
 versione, mentre le vecchie saranno sui diari.
 
-### Design delle interfacce
+### 2.4 Design delle interfacce
 
 Interfaccia della posizione del drone
 
@@ -233,7 +237,7 @@ Interfaccia della posizione del drone
 Interfaccia della rotazione del drone
 ![alt Interfaccia rotazione](..\media\mockup\MockRotazioneAssi.png)
 
-### Design procedurale
+### 2.5 Design procedurale
 
 Descrive i concetti dettagliati dell’architettura/sviluppo utilizzando
 ad esempio:
@@ -251,27 +255,30 @@ ad esempio:
 Questi documenti permetteranno di rappresentare i dettagli procedurali
 per la realizzazione del prodotto.
 
-## Implementazione
+## 3 Implementazione
+---
 
-### Drone Simulator
+### 3.1 Drone CommandsReader Simulator (o come si chiama poi)
 
-#### TelloChartFrame
+### 3.2 Drone Simulator
+
+#### 3.2.1 TelloChartFrame
 
 Questa classe ha lo scopo di mostrare all'interno di un JFrame le informazioni sulla posizione del drone sui 3 assi con una vista di profilo e una vista dall'alto e la rotazione del drone sui 3 assi di rotazione (beccheggio, imbardata e rollio).
 La rappresentazione delle informazioni avvengono tramite grafici cartesiani per la posizione e tramite grafico a barre per la rotazione, i grafici sono stati costruiti grazie alla libreria gratuita JFreeChart.
 
 
 
-#### Simulator
+#### 3.2.2 Simulator
 
 La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket 8889.
 La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltrare il contenuto verso la classe CommandReader.
 
-#### CommandReader
+#### 3.2.3 CommandReader
 
 La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone.
 
-#### BatteryThread
+#### 3.2.4 BatteryThread
 
 La classe BatteryThread monitora e gestisce la durata del volo del drone e la sua batteria.
 Quando la batteria del drone equivale allo 0%, questo comincierà automaticamente ad atterare attraverso il metodo emergency() della classe CommandReader.
@@ -312,7 +319,7 @@ public class BatteryThread extends Thread{
 }
 ```
 
-#### PacketReceivingCheckerThread
+#### 3.2.5 PacketReceivingCheckerThread
 
 La classe PacketReceivingCkerThread controlla la frequenza di ricezione dei comandi della classe Simulator.
 Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader.
@@ -348,9 +355,9 @@ public class PacketReceivingCheckerThread extends Thread{
 }
 ```
 
-## Test
-
-### Protocollo di test
+## 4 Test
+---
+### 4.1 Protocollo di test
 
 Definire in modo accurato tutti i test che devono essere realizzati per
 garantire l’adempimento delle richieste formulate nei requisiti. I test
@@ -367,7 +374,7 @@ ripetibile alle stesse condizioni.
 |**Procedura**     | - Go to “Cards manager” menu, in main page click “Import Profiles” link, Select the “1.2.001.xml” file, Import the Profile - Go to “Cards manager” menu, in main page click “Import Cards” link, Select the “1.2.001.txt” file, Delete the cards, Select the “1.2.001.txt” file, Import the cards |
 |**Risultati attesi** |Keys visible in the DB (OtaCardKey) but not visible in the GUI (Card details) |
 
-### Risultati test
+### 4.2 Risultati test
 
 Tabella riassuntiva in cui si inseriscono i test riusciti e non del
 prodotto finale. Se un test non riesce e viene corretto l’errore, questo
@@ -375,44 +382,46 @@ dovrà risultare nel documento finale come riuscito (la procedura della
 correzione apparirà nel diario), altrimenti dovrà essere descritto
 l’errore con eventuali ipotesi di correzione.
 
-### Mancanze/limitazioni conosciute
+### 4.3 Mancanze/limitazioni conosciute
 
 Descrizione con motivazione di eventuali elementi mancanti o non
 completamente implementati, al di fuori dei test case. Non devono essere
 riportati gli errori e i problemi riscontrati e poi risolti durante il
 progetto.
 
-## Consuntivo
+## 5 Consuntivo
+---
 
 Consuntivo del tempo di lavoro effettivo e considerazioni riguardo le
 differenze rispetto alla pianificazione (cap 1.7) (ad esempio Gannt
 consuntivo).
 
-## Conclusioni
-
+## 6 Conclusioni
+---
 Quali sono le implicazioni della mia soluzione? Che impatto avrà?
 Cambierà il mondo? È un successo importante? È solo un’aggiunta
 marginale o è semplicemente servita per scoprire che questo percorso è
 stato una perdita di tempo? I risultati ottenuti sono generali,
 facilmente generalizzabili o sono specifici di un caso particolare? ecc
 
-### Sviluppi futuri
+### 6.1 Sviluppi futuri
   Migliorie o estensioni che possono essere sviluppate sul prodotto.
 
-### Considerazioni personali
+### 6.2 Considerazioni personali
   Cosa ho imparato in questo progetto? ecc
 
-## Bibliografia
+## 7 Bibliografia
+---
 
-### Sitografia
+### 7.1 Sitografia
 
 **INSERIRE SITOGRAFIA:**
 
 -   http://standards.ieee.org/guides/style/section7.html, *IEEE
     Standards Style Manual*, 07-06-2008.
 
-## Allegati -> DA CONTROLLARE
-
+## 8 Allegati -> DA CONTROLLARE
+---
 Elenco degli allegati, esempio:
 
 -   Diari di lavoro
