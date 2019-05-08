@@ -1,7 +1,10 @@
 package controller;
 
+import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Gesture;
+import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
@@ -40,14 +43,13 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
         COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-//        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
 
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
         }
 
-        listener.controllerMessage("In air\n");
+        listener.controllerMessage("Sending commands\n");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
@@ -55,14 +57,18 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             if (!getExecutingCommand()) {
                 if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
 
+//                    setExecutingCommand(true);
+//                    checkGesture();
                     setExecutingCommand(true);
                     checkHeightControl();
+                    setExecutingCommand(true);
                     checkMovementControl();
 
                 }
             } else {
-//                System.err.println("not finished executing");
+                System.out.println("not finished executing");
             }
+
         }
 
         if (listener != null) {
@@ -90,6 +96,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             System.out.println("Controller connected");
         }
         loadVariables();
+        System.out.println("enabled gestures");
+        controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
     }
 
     private void loadVariables() {
@@ -135,6 +143,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 }
             }
         }
+        doneExecuting();
 
     }
 
@@ -186,6 +195,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
         COMMAND_MANAGER.sendCommands(commands);
+        doneExecuting();
     }
 
     /**
@@ -226,11 +236,37 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     public synchronized void setExecutingCommand(boolean executingCommand) {
-        executingCommand = false;
+        this.executingCommand = executingCommand;
     }
 
     @Override
-    public void doneExecuting() {
+    public synchronized void doneExecuting() {
         setExecutingCommand(false);
+    }
+
+    private void checkGesture() {
+        Frame f = FRAME_HELPER.getCurrentFrame();
+        GestureList gestures = f.gestures();
+
+        for (Gesture gesture : gestures) {
+            System.out.println("gestures: " + gestures.count());
+            if (gesture.type() == Gesture.Type.TYPE_CIRCLE) {
+                CircleGesture circleGesture = new CircleGesture(gesture);
+                float turns = circleGesture.progress();
+
+                System.out.println("CircleGesture progress: " + turns);
+
+                String clockwiseness;
+                if (circleGesture.pointable().direction().angleTo(circleGesture.normal()) <= Math.PI / 2) {
+                    clockwiseness = "clockwise";
+                } else {
+                    clockwiseness = "counterclockwise";
+                }
+                System.out.println(clockwiseness);
+                break;
+            }
+        }
+
+//        doneExecuting();
     }
 }
