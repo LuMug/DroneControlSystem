@@ -8,8 +8,12 @@ import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
+import java.io.IOException;
 import settings.SettingsListener;
 import settings.SettingsManager;
+import recorder.FlightBuffer;
+import recorder.FlightRecord;
+import recorder.FlightRecorder;
 
 /**
  *
@@ -30,7 +34,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private CommandListener listener;
     private float heightThreshold;
     private boolean executingCommand = false;
-
+    
+    //Recording variables
+    private boolean isRecordingFlight = false;
+    private FlightRecorder recorder = new FlightRecorder();
+    private FlightBuffer recordBuffer = new FlightBuffer();
+    
     public DroneController() {
         CONTROLLER.addListener(this);
     }
@@ -138,6 +147,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 if (lastY != 0.0) {
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                     COMMAND_MANAGER.sendCommand(message);
+                    
+                    //Add commands to recorder
+                    if(isRecordingFlight){
+                        recordBuffer.addCommand(message);
+                    }
+                    
                     listener.commandSent(message + "\n");
 
                 }
@@ -196,6 +211,10 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
+        
+        if(isRecordingFlight){
+            recordBuffer.addCommands(commands);
+        }
     }
 
     /**
@@ -237,6 +256,25 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
     public synchronized void setExecutingCommand(boolean executingCommand) {
         this.executingCommand = executingCommand;
+    }
+    
+    public void startRecording(){
+        this.recordBuffer.clear();
+        this.isRecordingFlight = true;
+    }
+    
+    public void stopRecording(){
+        this.recordBuffer.clear();
+        this.isRecordingFlight = false;
+        
+        try{
+            recorder.createBase();
+            FlightRecord record = recorder.generateRecordFile();
+            recorder.saveFlightPattern(this.recordBuffer, record);
+        }
+        catch(IOException ex){
+            System.out.println("[Info] Can't save the flight. *SAD SMILE*");
+        }
     }
 
     @Override
