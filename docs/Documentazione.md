@@ -1,54 +1,62 @@
-# ----EVENTUALMENTE TITOLO PROGETTO----
+# ----Drone Control System----
 
 1. [Introduzione](#introduzione)
 
-  - [Informazioni sul progetto](#informazioni-sul-progetto)
+    1.1 [Informazioni sul progetto](#informazioni-sul-progetto)
 
-  - [Abstract](#abstract)
+    1.2 [Abstract](#abstract)
 
-  - [Scopo](#scopo)
+    1.3[Scopo](#scopo)
 
-1. [Analisi](#analisi)
+  - [Analisi](#analisi)
 
-  - [Analisi del dominio](#analisi-del-dominio)
+    1.4 [Analisi del dominio](#analisi-del-dominio)
 
-  - [Analisi dei mezzi](#analisi-dei-mezzi)
+    1.5 [Analisi dei mezzi](#analisi-dei-mezzi)
 
-  - [Analisi e specifica dei requisiti](#analisi-e-specifica-dei-requisiti)
+    1.6 [Analisi e specifica dei requisiti](#analisi-e-specifica-dei-requisiti)
 
-  - [Use case](#use-case)
+    1.7 [Pianificazione](#pianificazione)
 
-  - [Pianificazione](#pianificazione)
+2. [Progettazione](#progettazione)
 
-1. [Progettazione](#progettazione)
+    2.1 [Design dell’architettura del sistema](#design-dell’architettura-del-sistema)
 
-  - [Design dell’architettura del sistema](#design-dell’architettura-del-sistema)
+    2.2 [Design dei dati e database](#design-dei-dati-e-database)
 
-  - [Design dei dati e database](#design-dei-dati-e-database)
+    2.3 [Schema E-R, schema logico e descrizione](#Schema-E-R,-schema-logico-e-descrizione)
 
-1. [Implementazione](#implementazione)
+    2.4 [Design delle interfacce](#design-delle-interfacce)
 
-  - [DroneSimulator](#DroneSimulator)
+    2.5 [Design procedurale](#design-procedurale)
 
-1. [Test](#test)
+3. [Implementazione](#implementazione)
+    
+    3.1 [Drone Controller](#drone-controller)
 
-  - [Protocollo di test](#protocollo-di-test)
+    3.2 [Drone Simulator](#drone-simulator)
 
-  - [Risultati test](#risultati-test)
+4. [Test](#test)
 
-  - [Mancanze/limitazioni conosciute](#mancanze/limitazioni-conosciute)
+    4.1 [Protocollo di test](#protocollo-di-test)
 
-1. [Consuntivo](#consuntivo)
+    4.2 [Risultati test](#risultati-test)
 
-1. [Conclusioni](#conclusioni)
+    4.3 [Mancanze/limitazioni conosciute](#mancanze/limitazioni-conosciute)
 
-  - [Sviluppi futuri](#sviluppi-futuri)
+5. [Consuntivo](#consuntivo)
 
-  - [Considerazioni personali](#considerazioni-personali)
+6. [Conclusioni](#conclusioni)
 
-1. [Sitografia](#sitografia)
+    6.1 [Sviluppi futuri](#sviluppi-futuri)
 
-1. [Allegati](#allegati)
+    6.2 [Considerazioni personali](#considerazioni-personali)
+
+7. [Bibliografia](#bibliografia)
+
+    7.1 [Sitografia](#sitografia)
+
+8. [Allegati](#allegati)
 
 ## 1. Introduzione
 ---
@@ -155,7 +163,7 @@
 
 Questa è la pianificazione e struttura che abbiamo cercato di rispettare per
 tutto il percorso di questo progetto.
-![alt Interfaccia rotazione](..\media\img\Immagine_Gantt_Preventivo.png)
+![alt Gantt Preventivo](..\media\img\Immagine_Gantt_Preventivo.png)
 
 ### 1.7 Analisi dei mezzi
 
@@ -180,17 +188,13 @@ nell’implementazione del prodotto.
 
 ### 2.1 Design dell’architettura del sistema
 
-Descrive:
+Nell'immagine sottostante viene rappresentata la struttura delle classi del Controller del drone
 
--   La struttura del programma/sistema lo schema di rete...
+![alt DroneController UML](Class%20Diagrams\DroneController.png)
 
--   Gli oggetti/moduli/componenti che lo compongono.
+Nell'immagine sottostante viene rappresentata la struttura delle classi del Simulatore del drone
 
--   I flussi di informazione in ingresso ed in uscita e le
-    relative elaborazioni. Può utilizzare *diagrammi di flusso dei
-    dati* (DFD).
-
--   Eventuale sitemap
+![alt DroneSimulator UML](Class%20Diagrams\DroneSimulator.png)
 
 ### 2.2 Design dei dati e database
 
@@ -232,7 +236,7 @@ per la realizzazione del prodotto.
 ## 3 Implementazione
 ---
 
-### 3.1 Drone CommandsReader Simulator (o come si chiama poi)
+### 3.1 Drone Controller
 
 ### 3.2 Drone Simulator
 
