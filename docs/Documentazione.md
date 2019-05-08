@@ -106,29 +106,12 @@
 
 ## Analisi
 
-### 1.4 Analisi del dominio -> Da sbolognare a qualcuno, non so cosa scrivere T_T
+### 1.4 Analisi del dominio
 
-  Questo capitolo dovrebbe descrivere il contesto in cui il prodotto verrà
-  utilizzato, da questa analisi dovrebbero scaturire le risposte a quesiti
-  quali ad esempio:
-
-  -   Background/Situazione iniziale
-
-  -   Quale è e come è organizzato il contesto in cui il prodotto dovrà
-      funzionare?
-
-  -   Come viene risolto attualmente il problema? Esiste già un prodotto
-      simile?
-
-  -   Chi sono gli utenti? Che bisogni hanno? Come e dove lavorano?
-
-  -   Che competenze/conoscenze/cultura posseggono gli utenti in relazione
-      con il problema?
-
-  -   Esistono convenzioni/standard applicati nel dominio?
-
-  -   Che conoscenze teoriche bisogna avere/acquisire per poter operare
-      efficacemente nel dominio?
+  Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica
+  attualmente esiste solamente progettato e scritto privatamente in vari linguaggi come
+  Ruby, Python e PHP ma non ancora in Java.
+  ***EVENTUALMENTE AGGIUNGERE TESTO SE NECESSARIO***
 
 ### 1.5 Analisi e specifica dei requisiti
 
@@ -170,18 +153,9 @@
 
 ### 1.6 Pianificazione
 
-Prima di stabilire una pianificazione bisogna avere almeno una vaga idea
-del modello di sviluppo che si intende adottare. In questa sezione
-bisognerà inserire il modello concettuale di sviluppo che si seguirà
-durante il progetto. Gli elementi di riferimento per una buona
-pianificazione derivano da una scomposizione top-down della problematica
-del progetto.
-
-La pianificazione può essere rappresentata mediante un diagramma di
-Gantt.
-
-Se si usano altri metodi di pianificazione (es scrum), dovranno apparire
-in questo capitolo.
+Questa è la pianificazione e struttura che abbiamo cercato di rispettare per
+tutto il percorso di questo progetto.
+![alt Interfaccia rotazione](..\media\img\Immagine_Gantt_Preventivo.png)
 
 ### 1.7 Analisi dei mezzi
 
