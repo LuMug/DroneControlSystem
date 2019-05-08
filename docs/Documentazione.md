@@ -31,7 +31,7 @@
     2.5 [Design procedurale](#design-procedurale)
 
 3. [Implementazione](#implementazione)
-    
+
     3.1 [Drone Controller](#drone-controller)
 
     3.2 [Drone Simulator](#drone-simulator)
@@ -189,7 +189,7 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 - 1x Apple MacBook Pro 2015 con OSX Mojave.
 - 1x Asus VivoBook 2015 con Windows 10.
 - 1x Asus ROG GL702VM con Windows 10.
-- 1x HP Pavilion CS-0800 con Linux Ubuntu 19.04
+- 1x HP Pavilion CS-0800 con Linux Ubuntu 19.04.
 
 
 ## 2 Progettazione
@@ -210,17 +210,13 @@ Nell'immagine sottostante viene rappresentata la struttura delle classi del Simu
 
 ![alt DroneSimulator UML](Class%20Diagrams\DroneSimulator.png)
 
-### 2.2 Design dei dati e database
+### 2.2 Schema logico.
+Nell'immagine sottostante viene rappresentato lo schema logico di questo progetto.<br>
+Sul lato sinistro si può vedere il sensore ed il controller che fanno da client, successivamente i dati rilevati verranno mandati attraverso un socket UDP in Java al Simulatore oppure al Drone stesso.
 
-Descrizione delle strutture di dati utilizzate dal programma in base
-agli attributi e le relazioni degli oggetti in uso.
+![alt SchemaLogico Progetto](..\media\img\SchemaLogico.png)
 
-### 2.3 Schema E-R, schema logico e descrizione.
-
-Se il diagramma E-R viene modificato, sulla doc dovrà apparire l’ultima
-versione, mentre le vecchie saranno sui diari.
-
-### 2.4 Design delle interfacce
+### 2.3 Design delle interfacce
 
 Interfaccia della posizione del drone
 
@@ -229,7 +225,7 @@ Interfaccia della posizione del drone
 Interfaccia della rotazione del drone
 ![alt Interfaccia rotazione](..\media\mockup\MockRotazioneAssi.png)
 
-### 2.5 Design procedurale
+### 2.4 Design procedurale [DA FARE!!!!!]
 
 Descrive i concetti dettagliati dell’architettura/sviluppo utilizzando
 ad esempio:
