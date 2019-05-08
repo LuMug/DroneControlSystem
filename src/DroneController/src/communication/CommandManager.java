@@ -4,6 +4,7 @@ package communication;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -23,6 +24,7 @@ public class CommandManager {
     private final String TELLO_ADDRESS = settings.getCommunicationTelloAddress();
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
+    private final int TELLO_STATE_SEND_PORT = settings.getTelloStatePort();
     private final CommandManagerListener listener;
 
     public CommandManager(CommandManagerListener listener) {
@@ -44,25 +46,35 @@ public class CommandManager {
      */
     public void sendCommand(String command) {
         System.out.println("sending command: " + command);
+
         //Create a socket for sending the data
         try {
+            DatagramPacket packet;
             //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
-            DatagramPacket packet = this.sendString(command);
-
+            if (command.contains("?")) {
+                System.out.println("Contains state command");
+                packet = this.sendStateString(command);
+            } else {
+                packet = this.sendString(command);
+            }
             //Wait for response
             System.out.println("Wait for response from drone");
             packet.setData(new byte[255]);
             commandSocket.receive(packet);
 
             String response = new String(packet.getData()).trim();
-            
+
             listener.doneExecuting();
-            
-            if (response.equalsIgnoreCase("OK")) {
-                System.out.println("--> " + command + " is ok");
+            if (command.contains("?")) {
+                System.out.println("Response: " + response);
             } else {
-                System.err.println("--> " + command + " ERROR");
+                if (response.equalsIgnoreCase("OK")) {
+                    System.out.println("--> " + command + " is ok");
+                } else {
+                    System.err.println("--> " + command + " ERROR");
+                }
             }
+
         } catch (UnknownHostException uhe) {
             System.out.println("Cannot resolve hostname: " + uhe.getMessage());
         } catch (IOException ioex) {
@@ -92,6 +104,22 @@ public class CommandManager {
                 commandData.length,
                 InetAddress.getByName(this.TELLO_ADDRESS),
                 TELLO_COMMAND_SEND_PORT
+        );
+
+        commandSocket.send(packet);
+
+        return packet;
+    }
+
+    private DatagramPacket sendStateString(String command) throws UnknownHostException, IOException {
+        //Creo il pacchetto
+        byte[] commandData = command.getBytes();
+
+        DatagramPacket packet = new DatagramPacket(
+                commandData,
+                commandData.length,
+                InetAddress.getByName(this.TELLO_ADDRESS),
+                this.TELLO_STATE_SEND_PORT
         );
 
         commandSocket.send(packet);
