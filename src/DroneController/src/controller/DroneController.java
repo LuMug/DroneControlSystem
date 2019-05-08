@@ -261,20 +261,28 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public void startRecording(){
         this.recordBuffer.clear();
         this.isRecordingFlight = true;
+        
+        System.out.println("[Info] Start recording");
     }
     
     public void stopRecording(){
-        this.recordBuffer.clear();
         this.isRecordingFlight = false;
         
         try{
-            recorder.createBase();
-            FlightRecord record = recorder.generateRecordFile();
-            recorder.saveFlightPattern(this.recordBuffer, record);
+            if(recordBuffer.length() > 0){
+                recorder.createBase();
+                FlightRecord record = recorder.generateRecordFile();
+                recorder.saveFlightPattern(this.recordBuffer, record);
+                System.out.println("[Info] File saved to path: " + record.getSaveLocation());
+            }
         }
         catch(IOException ex){
             System.out.println("[Info] Can't save the flight. *SAD SMILE*");
         }
+        
+        this.recordBuffer.clear();
+        
+        System.out.println("[Info] Stopped recording");
     }
 
     @Override

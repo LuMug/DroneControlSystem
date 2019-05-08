@@ -28,6 +28,10 @@ public class FlightBuffer{
         buffer.clear();
     }
     
+    public int length(){
+        return buffer.size();
+    }
+    
     public synchronized boolean existsNextCommand(){
         return buffer.poll() != null;
     }
