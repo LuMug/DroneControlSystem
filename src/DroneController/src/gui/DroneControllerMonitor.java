@@ -137,8 +137,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jLabel9 = new javax.swing.JLabel();
         jTextFieldEstimatedExecutionTime = new javax.swing.JTextField();
         jPanelRecordButtons = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jButtonStartRecording = new javax.swing.JButton();
+        jButtonStopRecording = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -378,27 +378,27 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jPanelRecordButtons.setLayout(new java.awt.GridBagLayout());
 
-        jButton3.setBackground(new java.awt.Color(0, 0, 0));
-        jButton3.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(51, 255, 51));
-        jButton3.setText("Start recording");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButtonStartRecording.setBackground(new java.awt.Color(0, 0, 0));
+        jButtonStartRecording.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
+        jButtonStartRecording.setForeground(new java.awt.Color(51, 255, 51));
+        jButtonStartRecording.setText("Start recording");
+        jButtonStartRecording.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonStartRecordingActionPerformed(evt);
             }
         });
-        jPanelRecordButtons.add(jButton3, new java.awt.GridBagConstraints());
+        jPanelRecordButtons.add(jButtonStartRecording, new java.awt.GridBagConstraints());
 
-        jButton4.setBackground(new java.awt.Color(0, 0, 0));
-        jButton4.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(204, 0, 0));
-        jButton4.setText("Stop recording");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButtonStopRecording.setBackground(new java.awt.Color(0, 0, 0));
+        jButtonStopRecording.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
+        jButtonStopRecording.setForeground(new java.awt.Color(204, 0, 0));
+        jButtonStopRecording.setText("Stop recording");
+        jButtonStopRecording.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButtonStopRecordingActionPerformed(evt);
             }
         });
-        jPanelRecordButtons.add(jButton4, new java.awt.GridBagConstraints());
+        jPanelRecordButtons.add(jButtonStopRecording, new java.awt.GridBagConstraints());
 
         jPanelRecording.add(jPanelRecordButtons, java.awt.BorderLayout.CENTER);
 
@@ -503,15 +503,18 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager.sendCommand(Commands.getBattery());
     }//GEN-LAST:event_batteryButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void jButtonStartRecordingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartRecordingActionPerformed
+        //Start recording
+        controller.startRecording();
+    }//GEN-LAST:event_jButtonStartRecordingActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+    private void jButtonStopRecordingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopRecordingActionPerformed
         // Check if added another file
         insertRecordsInSelector();
-    }//GEN-LAST:event_jButton4ActionPerformed
+        
+        //Stop recording and save file
+        controller.stopRecording();
+    }//GEN-LAST:event_jButtonStopRecordingActionPerformed
 
     private void jComboBoxSelectRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSelectRecordActionPerformed
         //Read filename and parse
@@ -611,8 +614,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JTextField heightPointsValueTextBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButtonAbortFlight;
     private javax.swing.JButton jButtonDroneDown;
     private javax.swing.JButton jButtonDroneFlip;
@@ -621,6 +622,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JButton jButtonDroneRight;
     private javax.swing.JButton jButtonDroneTakeoff;
     private javax.swing.JButton jButtonDroneUp;
+    private javax.swing.JButton jButtonStartRecording;
+    private javax.swing.JButton jButtonStopRecording;
     private javax.swing.JComboBox<String> jComboBoxFlip;
     private javax.swing.JComboBox<String> jComboBoxSelectRecord;
     private javax.swing.JLabel jLabel1;

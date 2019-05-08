@@ -263,7 +263,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             recorder.saveFlightPattern(this.recordBuffer, record);
         }
         catch(IOException ex){
-            System.out.println("Pota");
+            System.out.println("[Info] Can't save the flight. *SAD SMILE*");
         }
     }
 
