@@ -4,10 +4,20 @@ import communication.CommandManager;
 import communication.CommandManagerListener;
 import communication.Commands;
 import controller.DroneController;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import settings.SettingsManager;
 import javax.swing.JOptionPane;
 import javax.swing.text.DefaultCaret;
+import recorder.FlightRecord;
 import settings.FlipCommand;
 import settings.SettingsListener;
 
@@ -20,8 +30,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private SettingsManager manager = new SettingsManager();
     private SettingsListener listener;
     private DroneController controller = new DroneController();
+    private final Path recordFolderPath = Paths.get("records");
+    private List<FlightRecord> flightRecords = new ArrayList<>();
     private CommandManager commandManager ;
-
+    
     /**
      * Creates new form DroneControllerMonitor
      */
@@ -38,12 +50,38 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager = controller.getCommandManager();
         
         new Thread(controller).start();
+        
+        insertRecordsInSelector();
     }
 
     public void setListener(SettingsListener listener) {
         this.listener = listener;
     }
+    
+    public void insertRecordsInSelector(){
+        // read all files in 'records'
+        this.jComboBoxSelectRecord.removeAllItems();
+        
+        File folder = new File(recordFolderPath.toString());
+        File[] files = folder.listFiles();
+        
+        if(files != null && files.length != 0){
+            for(File file : files){
+                System.out.println("Found file: " + file.getAbsolutePath());
 
+                //Create FlightRecord object
+                FlightRecord record = new FlightRecord(Paths.get(file.getAbsolutePath()));
+                flightRecords.add(record);
+                
+                this.jComboBoxSelectRecord.addItem(file.getName());
+            }
+        }
+        else{
+            jComboBoxSelectRecord.setEnabled(false);
+            jLabelRecordSelectorMessage.setText("Cannot find any record file");
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,6 +129,21 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         DeltaAverageMultiplierValueTextBox = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jPanelRecording = new javax.swing.JPanel();
+        jPanelRecordFiles = new javax.swing.JPanel();
+        jPanelRecordSelector = new javax.swing.JPanel();
+        jComboBoxSelectRecord = new javax.swing.JComboBox<>();
+        jLabelRecordSelectorMessage = new javax.swing.JLabel();
+        jPanelInfos = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextFieldRecordedOn = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTextFieldTotalCommands = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTextFieldEstimatedExecutionTime = new javax.swing.JTextField();
+        jPanelRecordButtons = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -283,6 +336,79 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jTabbedPane1.addTab("Settings", jPanelSettings);
 
+        jPanelRecording.setLayout(new java.awt.BorderLayout());
+
+        jPanelRecordFiles.setLayout(new java.awt.GridLayout(2, 1));
+
+        jPanelRecordSelector.setLayout(new java.awt.GridBagLayout());
+
+        jComboBoxSelectRecord.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxSelectRecord.setPreferredSize(new java.awt.Dimension(180, 20));
+        jComboBoxSelectRecord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxSelectRecordActionPerformed(evt);
+            }
+        });
+        jPanelRecordSelector.add(jComboBoxSelectRecord, new java.awt.GridBagConstraints());
+
+        jLabelRecordSelectorMessage.setForeground(new java.awt.Color(255, 0, 0));
+        jPanelRecordSelector.add(jLabelRecordSelectorMessage, new java.awt.GridBagConstraints());
+
+        jPanelRecordFiles.add(jPanelRecordSelector);
+
+        jPanelInfos.setBorder(javax.swing.BorderFactory.createTitledBorder("Recording info"));
+        jPanelInfos.setLayout(new java.awt.GridLayout(3, 2));
+
+        jLabel1.setText("Recorded on");
+        jPanelInfos.add(jLabel1);
+
+        jTextFieldRecordedOn.setEditable(false);
+        jPanelInfos.add(jTextFieldRecordedOn);
+
+        jLabel7.setText("Total commands");
+        jPanelInfos.add(jLabel7);
+
+        jTextFieldTotalCommands.setEditable(false);
+        jPanelInfos.add(jTextFieldTotalCommands);
+
+        jLabel9.setText("Estimated execution time");
+        jPanelInfos.add(jLabel9);
+
+        jTextFieldEstimatedExecutionTime.setEditable(false);
+        jPanelInfos.add(jTextFieldEstimatedExecutionTime);
+
+        jPanelRecordFiles.add(jPanelInfos);
+
+        jPanelRecording.add(jPanelRecordFiles, java.awt.BorderLayout.PAGE_START);
+
+        jPanelRecordButtons.setLayout(new java.awt.GridBagLayout());
+
+        jButton3.setBackground(new java.awt.Color(0, 0, 0));
+        jButton3.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(51, 255, 51));
+        jButton3.setText("Start recording");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanelRecordButtons.add(jButton3, new java.awt.GridBagConstraints());
+
+        jButton4.setBackground(new java.awt.Color(0, 0, 0));
+        jButton4.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(204, 0, 0));
+        jButton4.setText("Stop recording");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanelRecordButtons.add(jButton4, new java.awt.GridBagConstraints());
+
+        jPanelRecording.add(jPanelRecordButtons, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane1.addTab("Recording", jPanelRecording);
+
         jPanelBody.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanelBody, java.awt.BorderLayout.CENTER);
@@ -382,6 +508,53 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager.sendCommand(Commands.getBattery());
     }//GEN-LAST:event_batteryButtonActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+        // Check if added another file
+        insertRecordsInSelector();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jComboBoxSelectRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSelectRecordActionPerformed
+        //Read filename and parse
+        String filename = (String) jComboBoxSelectRecord.getSelectedItem();
+        
+        
+        if(filename != null && filename.length() == 32){
+            jTextFieldRecordedOn.setText(getDateFromRecordFilename(filename));
+
+            FlightRecord record = flightRecords.get(jComboBoxSelectRecord.getSelectedIndex());
+
+            try{
+                List<String> commands = record.getFlightCommands();
+                jTextFieldTotalCommands.setText("" + commands.size());
+                jTextFieldEstimatedExecutionTime.setText("WIP");
+            }
+            catch(IOException ex){
+                jTextFieldTotalCommands.setText("Unknown");
+                jTextFieldEstimatedExecutionTime.setText("Unknown");
+                
+                System.err.println("Error: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jComboBoxSelectRecordActionPerformed
+    
+    public String getDateFromRecordFilename(String filename){
+        //Date [11 - 19]
+        String date = filename.substring(11, 19);
+            
+        //Time [20 - 16]
+        String time = filename.substring(20, 26);
+        
+        String formatted_date = date.substring(0,4) + "-" + date.substring(4,6) + "-" + date.substring(6,8);
+        String formatted_time = time.substring(0,2) + ":" + time.substring(2,4) + ":" + time.substring(4,6);
+        
+        return formatted_date + " " + formatted_time;
+    }
+    
     public void notifyChangeSettings() {
         listener.settingsChanged();
     }
@@ -443,6 +616,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JTextField heightPointsValueTextBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButtonAbortFlight;
     private javax.swing.JButton jButtonDroneDown;
     private javax.swing.JButton jButtonDroneFlip;
@@ -452,11 +627,16 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JButton jButtonDroneTakeoff;
     private javax.swing.JButton jButtonDroneUp;
     private javax.swing.JComboBox<String> jComboBoxFlip;
+    private javax.swing.JComboBox<String> jComboBoxSelectRecord;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelRecordSelectorMessage;
     private javax.swing.JPanel jPaneLogPage;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelAbortPanel;
@@ -464,10 +644,18 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JPanel jPanelExtraCommands;
     private javax.swing.JPanel jPanelFastCommands;
     private javax.swing.JPanel jPanelHeader;
+    private javax.swing.JPanel jPanelInfos;
     private javax.swing.JPanel jPanelMoveInSpace;
+    private javax.swing.JPanel jPanelRecordButtons;
+    private javax.swing.JPanel jPanelRecordFiles;
+    private javax.swing.JPanel jPanelRecordSelector;
+    private javax.swing.JPanel jPanelRecording;
     private javax.swing.JPanel jPanelSettings;
     private javax.swing.JSpinner jSpinnerDroneMovementStep;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextFieldEstimatedExecutionTime;
+    private javax.swing.JTextField jTextFieldRecordedOn;
+    private javax.swing.JTextField jTextFieldTotalCommands;
     private javax.swing.JScrollPane logScrollPane;
     private javax.swing.JTextArea logTextArea;
     private javax.swing.JLabel movementSteopJLabel;
