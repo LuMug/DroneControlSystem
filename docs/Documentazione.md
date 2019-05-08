@@ -159,16 +159,30 @@ tutto il percorso di questo progetto.
 
 ### 1.7 Analisi dei mezzi
 
-Elencare e *descrivere* i mezzi disponibili per la realizzazione del
-progetto. Ricordarsi di sempre descrivere nel dettaglio le versioni e il
-modello di riferimento.
+### 1.7.1 Software
+Per la realizzazione di questo progetto abbiamo usato come software:
+- GitHub 2.20.1: Punto di riferimento per tutto il team sul quale si carica
+continuamente il lavoro fatto attraverso commit in un sistema di versioning.
+- GitHub Desktop 1.6.5: Programma per effettuare il push e pull di commit
+attraverso un'interfaccia grafica.
+- Atom 1.36.1: Editore di testo per scrivere principalmente la documentazione e
+risolvere conflitti.
+- NetBeans 8.2:  IDE per sviluppare tutto il codice scritto in Java.
+- VisualStudio Code 1.33.1: Editore di testo usato in tutti i contesti.
+- SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere
+i vari movimenti delle mani dal sensore LeapMotion.
+- GanttProject 2.8.9: Software per creare una progettazione delle tempistiche
+ per il progetto.
 
-SDK, librerie, tools utilizzati per la realizzazione del progetto e
-eventuali dipendenze.
+### 1.7.2 Hardware
+Per poter realizzare questo progetto abbiamo usato il seguente materiale:
+- 1x Sensore LeapMotion.
+- 1x Drone DJI Tello.
+- 1x Apple MacBook Pro 2015 con OSX Mojave.
+- 1x Asus VivoBook 2015 con Windows 10.
+- 1x Asus ROG GL702VM con Windows 10.
+- 1x HP Pavilion CS-0800 con Linux Ubuntu 19.04
 
-Su quale piattaforma dovrà essere eseguito il prodotto? Che hardware
-particolare è coinvolto nel progetto? Che particolarità e limitazioni
-presenta? Che hw sarà disponibile durante lo sviluppo?
 
 ## 2 Progettazione
 ---
