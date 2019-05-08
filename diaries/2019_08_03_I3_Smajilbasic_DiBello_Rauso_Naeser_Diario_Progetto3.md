@@ -27,3 +27,5 @@ Per mettere apposto la questione del autoscroll nel panello di log, bastava aggi
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
+Chiedere se nei componenti dell'Hardware bisogna anche mettere i componenti
+specifici dei vari PC.

@@ -29,3 +29,4 @@ src/DroneSimulator/nbproject/private/private.xml
 *.xml
 *.xml
 /src/DroneSimulator/build/
+/src/DroneController/records/

@@ -10,7 +10,7 @@ public class FlightBuffer{
     
     private LinkedList<String> buffer = new LinkedList<>();
     
-    public void addMovement(String command){
+    public void addCommand(String command){
         buffer.add(command);
     }
     
@@ -19,6 +19,6 @@ public class FlightBuffer{
     }
     
     public boolean existsNextCommand(){
-        return buffer.poll() != null ? true : false;
+        return buffer.poll() != null;
     }
 }

@@ -8,7 +8,8 @@ import org.jfree.data.category.*;
 import org.jfree.data.xy.*;
 
 /**
- * Classe TelloChartFrame
+ * The class TelloChartFrame allows you to display information about the position and rotation 
+ * of the drone
  *
  * @author Andrea Rauso
  */
