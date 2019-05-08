@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="DroneControllSystem" company="SAMT" webLink="https://github.com/LuMug/DroneControlSystem" view-date="2019-02-11" view-index="0" gantt-divider-location="508" resource-divider-location="300" version="2.8.9" locale="en_GB">
+<?xml version="1.0" encoding="UTF-8"?><project name="DroneControllSystem" company="SAMT" webLink="https://github.com/LuMug/DroneControlSystem" view-date="2019-01-27" view-index="0" gantt-divider-location="518" resource-divider-location="300" version="2.8.9" locale="en_CH">
     <description/>
-    <view zooming-state="default:6" id="gantt-chart">
-        <field id="tpd3" name="Name" width="251" order="0"/>
-        <field id="tpd4" name="Begin date" width="127" order="1"/>
-        <field id="tpd5" name="End date" width="126" order="2"/>
+    <view zooming-state="default:7" id="gantt-chart">
+        <field id="tpd3" name="Name" width="254" order="0"/>
+        <field id="tpd4" name="Begin date" width="129" order="1"/>
+        <field id="tpd5" name="End date" width="129" order="2"/>
+        <option id="taskLabelUp" value="taskDates"/>
+        <option id="taskLabelLeft" value="name"/>
         <option id="color.recent"><![CDATA[#00ff00 #ff0000 #ff00ff #3333ff #00ffff #ffff33]]></option>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="210" order="0"/>
-        <field id="1" name="Default role" width="86" order="1"/>
+        <field id="0" name="Name" width="209" order="0"/>
+        <field id="1" name="Default role" width="85" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -48,6 +50,7 @@
                 <depend id="87" type="2" difference="0" hardness="Strong"/>
                 <task id="35" name="Progettazione controller" color="#8cb6ce" meeting="false" start="2019-03-13" duration="4" complete="0" thirdDate="2019-02-22" thirdDate-constraint="0" expand="true"/>
                 <task id="37" name="Progettazione simulazione" color="#8cb6ce" meeting="false" start="2019-03-13" duration="4" complete="0" thirdDate="2019-02-22" thirdDate-constraint="0" expand="true"/>
+                <task id="88" name="Comunicazione via Socket" color="#8cb6ce" meeting="true" start="2019-03-27" duration="0" complete="0" thirdDate="2019-03-13" thirdDate-constraint="0" expand="true"/>
             </task>
             <task id="87" name="Aquisire le conoscienze delle SDK" color="#8cb6ce" meeting="false" start="2019-03-27" duration="3" complete="0" thirdDate="2019-02-13" thirdDate-constraint="0" expand="true">
                 <depend id="47" type="2" difference="0" hardness="Strong"/>
