@@ -18,6 +18,7 @@ public class ControllerSettings {
     private String communicationTelloAddress;
     private int communicationSendPortCommand;
     private int communicationListenPortCommand;
+    private int telloStatePort;
 
     public ControllerSettings() {
         updateSettings();
@@ -28,6 +29,7 @@ public class ControllerSettings {
         communicationTelloAddress = manager.getSetting("tello_address");
         communicationSendPortCommand = getIntSetting("tello_command_send_port");
         communicationListenPortCommand = getIntSetting("tello_command_listen_port");
+        telloStatePort = getIntSetting("tello_state_listen_port");
     }
     
     private void loadCommandManagerSettings() throws IllegalArgumentException{
@@ -69,6 +71,10 @@ public class ControllerSettings {
         loadCommandManagerSettings();
     }
     
+    public int getTelloStatePort() {
+        return telloStatePort;
+    }
+    
     public float getControllerSensibility() {
         return controllerSensibility;
     }
@@ -96,4 +102,5 @@ public class ControllerSettings {
     public int getCommunicationListenPortCommand() {
         return communicationListenPortCommand;
     }
+
 }

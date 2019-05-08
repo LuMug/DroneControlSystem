@@ -16,8 +16,7 @@ import java.nio.file.StandardOpenOption;
  */
 public class FlightRecorder {
     
-    
-    private void createBase() throws IOException{
+    public void createBase() throws IOException{
         final Path recordDir = Paths.get("records");
         
         if(!Files.exists(recordDir) || !Files.isDirectory(recordDir)){
@@ -30,7 +29,7 @@ public class FlightRecorder {
      * @return Path of the generated file.
      * @throws IOException Thrown when the file cannot be created.
      */
-    private Path generateRecordFile() throws IOException{
+    public FlightRecord generateRecordFile() throws IOException{
         final String fileHead = "dcs-flight-";
         final String fileTail = ".dcsfp"; // Drone Control System Flight Pattern
         
@@ -49,7 +48,7 @@ public class FlightRecorder {
             throw new IOException("Can't create record file: " + recordFile);
         }
         
-        return recordFile;
+        return new FlightRecord(recordFile);
     }
     
     /**
@@ -58,17 +57,15 @@ public class FlightRecorder {
      * @param generatedPath Path of the file.
      * @throws IOException Thrown when the file is unaccessible.
      */
-    private FlightRecord saveFlightPattern(FlightBuffer buffer, Path generatedPath)throws IOException{
+    public void saveFlightPattern(FlightBuffer buffer, FlightRecord flightSaveLocation)throws IOException{
         try{
             while(buffer.existsNextCommand()){
                 String command = buffer.getNextCommand();
-                Files.write(generatedPath, (command+"\n").getBytes(), StandardOpenOption.APPEND);
+                Files.write(flightSaveLocation.getSaveLocation(), (command+"\n").getBytes(), StandardOpenOption.APPEND);
             }
-            
-            return new FlightRecord(generatedPath);
         }
         catch(IOException ex){
-            throw new IOException("Error while writing the recording pattern on file " + generatedPath);
+            throw new IOException("Error while writing the recording pattern on file " + flightSaveLocation.getSaveLocation());
         }
     }
     
@@ -84,8 +81,8 @@ public class FlightRecorder {
             for(int i = 0; i < 100; i++) buffer.addCommand("pota " + i);
             
             recorder.createBase();
-            Path recordFile = recorder.generateRecordFile();
-            FlightRecord record = recorder.saveFlightPattern(buffer, recordFile);
+            FlightRecord record = recorder.generateRecordFile();
+            recorder.saveFlightPattern(buffer, record);
             
             System.out.println("File saved in path: " + record.getSaveLocation());
             

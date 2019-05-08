@@ -1,12 +1,19 @@
 package controller;
 
+import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Gesture;
+import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
+import java.io.IOException;
 import settings.SettingsListener;
 import settings.SettingsManager;
+import recorder.FlightBuffer;
+import recorder.FlightRecord;
+import recorder.FlightRecorder;
 
 /**
  *
@@ -27,7 +34,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private CommandListener listener;
     private float heightThreshold;
     private boolean executingCommand = false;
-
+    
+    //Recording variables
+    private boolean isRecordingFlight = false;
+    private FlightRecorder recorder = new FlightRecorder();
+    private FlightBuffer recordBuffer = new FlightBuffer();
+    
     public DroneController() {
         CONTROLLER.addListener(this);
     }
@@ -40,14 +52,13 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
         COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-//        COMMAND_MANAGER.sendCommand(Commands.TAKEOFF);
 
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
         }
 
-        listener.controllerMessage("In air\n");
+        listener.controllerMessage("Sending commands\n");
 
         while (CONTROLLER.isConnected()) {
             Frame frame = CONTROLLER.frame();
@@ -55,14 +66,18 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             if (!getExecutingCommand()) {
                 if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
 
+//                    setExecutingCommand(true);
+//                    checkGesture();
                     setExecutingCommand(true);
                     checkHeightControl();
+                    setExecutingCommand(true);
                     checkMovementControl();
 
                 }
             } else {
-//                System.err.println("not finished executing");
+                System.out.println("not finished executing");
             }
+
         }
 
         if (listener != null) {
@@ -90,6 +105,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             System.out.println("Controller connected");
         }
         loadVariables();
+        System.out.println("enabled gestures");
+        controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
     }
 
     private void loadVariables() {
@@ -130,11 +147,18 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 if (lastY != 0.0) {
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                     COMMAND_MANAGER.sendCommand(message);
+                    
+                    //Add commands to recorder
+                    if(isRecordingFlight){
+                        recordBuffer.addCommand(message);
+                    }
+                    
                     listener.commandSent(message + "\n");
 
                 }
             }
         }
+        doneExecuting();
 
     }
 
@@ -186,6 +210,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
         COMMAND_MANAGER.sendCommands(commands);
+        doneExecuting();
+        
+        if(isRecordingFlight){
+            recordBuffer.addCommands(commands);
+        }
     }
 
     /**
@@ -226,11 +255,56 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     public synchronized void setExecutingCommand(boolean executingCommand) {
-        executingCommand = false;
+        this.executingCommand = executingCommand;
+    }
+    
+    public void startRecording(){
+        this.recordBuffer.clear();
+        this.isRecordingFlight = true;
+    }
+    
+    public void stopRecording(){
+        this.recordBuffer.clear();
+        this.isRecordingFlight = false;
+        
+        try{
+            recorder.createBase();
+            FlightRecord record = recorder.generateRecordFile();
+            recorder.saveFlightPattern(this.recordBuffer, record);
+        }
+        catch(IOException ex){
+            System.out.println("[Info] Can't save the flight. *SAD SMILE*");
+        }
     }
 
     @Override
-    public void doneExecuting() {
+    public synchronized void doneExecuting() {
         setExecutingCommand(false);
+    }
+
+    private void checkGesture() {
+        Frame f = FRAME_HELPER.getCurrentFrame();
+        GestureList gestures = f.gestures();
+
+        for (Gesture gesture : gestures) {
+            System.out.println("gestures: " + gestures.count());
+            if (gesture.type() == Gesture.Type.TYPE_CIRCLE) {
+                CircleGesture circleGesture = new CircleGesture(gesture);
+                float turns = circleGesture.progress();
+
+                System.out.println("CircleGesture progress: " + turns);
+
+                String clockwiseness;
+                if (circleGesture.pointable().direction().angleTo(circleGesture.normal()) <= Math.PI / 2) {
+                    clockwiseness = "clockwise";
+                } else {
+                    clockwiseness = "counterclockwise";
+                }
+                System.out.println(clockwiseness);
+                break;
+            }
+        }
+
+//        doneExecuting();
     }
 }
