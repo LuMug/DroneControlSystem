@@ -4,7 +4,6 @@
 - 1.5: Aggiungere eventuali requisiti
 - 2.4: Da fare
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
-- 4.1: Cambiare header (ancora default)
 - 4.1: Fare test-case
 - 4.3: Da fare
 - 6.0: Da fare
@@ -318,12 +317,6 @@ public class PacketReceivingCheckerThread extends Thread{
 ## 4 Test
 ---
 ### 4.1 Protocollo di test
-
-Definire in modo accurato tutti i test che devono essere realizzati per
-garantire l’adempimento delle richieste formulate nei requisiti. I test
-fungono da garanzia di qualità del prodotto. Ogni test deve essere
-ripetibile alle stesse condizioni.
-
 
 |Test Case      | TC-001                               |
 |---------------|--------------------------------------|
