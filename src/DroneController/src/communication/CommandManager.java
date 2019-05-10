@@ -81,7 +81,9 @@ public class CommandManager {
             DatagramPacket packet;
 
             // Identifies the command in order to use the right method
-            packet = this.createPackage(command);
+            packet = this.createPacket(command);
+
+            commandSocket.send(packet);
 
             System.out.println("Wait for response from drone");
             packet.setData(new byte[255]);
@@ -118,7 +120,7 @@ public class CommandManager {
         System.out.println("sending command async: " + command);
 
         try {
-            this.createPackage(command);
+            this.createPacket(command);
         } catch (UnknownHostException uhe) {
             System.out.println("Cannot resolve hostname: " + uhe.getMessage());
         } catch (IOException ioex) {
@@ -127,50 +129,47 @@ public class CommandManager {
     }
 
     /**
-     * This method sends
+     * This method creates a DatagramPacket based on the command that comes as
+     * the parameter.
      *
-     * @param command
-     * @return
-     * @throws UnknownHostException
-     * @throws IOException
+     * @param command the command to include in the packet.
+     * @return the DataGramPacket that cam be sent as is.
+     * @throws UnknownHostException exception thrown if the packet address is
+     * invalid.
+     * @throws IOException exception thrown when an IO exception occurs during
+     * the creation of the packet.
      */
-    private DatagramPacket createPackage(String command) throws UnknownHostException, IOException {
+    private DatagramPacket createPacket(String command) throws UnknownHostException, IOException {
 
+        byte[] commandData = command.getBytes();
+        DatagramPacket packet;
         if (command.contains("?")) {
             System.out.println("Contains state command");
+            packet = new DatagramPacket(
+                    commandData,
+                    commandData.length,
+                    InetAddress.getByName(this.TELLO_ADDRESS),
+                    this.TELLO_STATE_SEND_PORT
+            );
         } else {
+            packet = new DatagramPacket(
+                    commandData,
+                    commandData.length,
+                    InetAddress.getByName(this.TELLO_ADDRESS),
+                    TELLO_COMMAND_SEND_PORT
+            );
+
         }
 
-        byte[] commandData = command.getBytes();
-
-        DatagramPacket packet = new DatagramPacket(
-                commandData,
-                commandData.length,
-                InetAddress.getByName(this.TELLO_ADDRESS),
-                TELLO_COMMAND_SEND_PORT
-        );
-
-        commandSocket.send(packet);
-
         return packet;
     }
 
-    private DatagramPacket sendStateString(String command) throws UnknownHostException, IOException {
-
-        byte[] commandData = command.getBytes();
-
-        DatagramPacket packet = new DatagramPacket(
-                commandData,
-                commandData.length,
-                InetAddress.getByName(this.TELLO_ADDRESS),
-                this.TELLO_STATE_SEND_PORT
-        );
-
-        commandSocket.send(packet);
-
-        return packet;
-    }
-
+    /**
+     * This method is used to send multiple commands received as an array of
+     * Commands. This method uses the sendCommand(String command) method
+     *
+     * @param commands the array of commands to send.
+     */
     public void sendCommands(String[] commands) {
         for (String command : commands) {
             if (command != null) {
