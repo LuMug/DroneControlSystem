@@ -65,14 +65,14 @@
 ### 1.1 Informazioni sul progetto
 
   Il progetto è gestito e realizzato dagli allievi Luca Di Bello, Fadil Smajlbasic, Jari Näser, Andrea Rauso (studenti di informatica all’Arti e Mestieri di Trevano) sotto la supervisione del professor Luca Muggiasca. Abbiamo a disposizione un dispositivo chiamato "Leap Motion", il quale permette il tracking di precisione delle mani e dei loro movimenti e il drone DJI Tello sul quale effettueremo tutti i test della nostra libreria.
-  La realizzazione del progetto inizia il 13 febbraio 2019 (13/02/19) e dovrà essere consegnato entro il 17 maggio 2019 (17/05/19).
+  La realizzazione del progetto inizia il 13 febbraio 2019 (13/02/19) e dovrà essere consegnato entro il 15 maggio 2019 (15/05/19).
 
 ### 1.2 Abstract
 
   Nowadays drones are really popular in various areas such as personal use and professional environment.
   To make this awesome quadcopters accessible to all ages in a really fun way as a team we decided to create a library that connects a sensor that reads the user's hands motions, transforms them in commands and sends them to the drone.
   With our product it's really easy to fly a drone with your own hand's motions.
-  
+
 ### 1.3 Scopo
 
   Lo scopo di questo progetto è di creare un sistema che permette di controllare il drone *DJI Tello* tramite un dispositivo chiamato [Leap Motion](https://www.leapmotion.com "Leap Motion official website") (un sensore che permette il tracking dei movimenti delle mani in modo preciso). Non disponendo di un drone *DJI Tello* verrà simulato il funzionamento tramite un'altra applicazione la quale mostrerà in 4 riquadri le quali rappresenteranno in 2d le seguenti informazioni: imbardata, beccheggio, rollio ed altitudine.
@@ -150,12 +150,12 @@ i vari movimenti delle mani dal sensore LeapMotion.
 
 ### 1.7.2 Hardware
 Per poter realizzare questo progetto abbiamo usato il seguente materiale:
-- 1x Sensore LeapMotion.
-- 1x Drone DJI Tello.
-- 1x Apple MacBook Pro 2015 con OSX Mojave.
-- 1x Asus VivoBook 2015 con Windows 10.
-- 1x Asus ROG GL702VM con Windows 10.
-- 1x HP Pavilion CS-0800 con Linux Ubuntu 19.04.
+- Sensore LeapMotion.
+- Drone DJI Tello.
+- Apple MacBook Pro 2015 con OSX Mojave.
+- Asus VivoBook 2015 con Windows 10.
+- Asus ROG GL702VM con Windows 10.
+- HP Pavilion CS-0800 con Linux Ubuntu 19.04.
 
 
 ## 2 Progettazione
@@ -237,7 +237,7 @@ La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare 
 La classe BatteryThread monitora e gestisce la durata del volo del drone e la sua batteria.
 Quando la batteria del drone equivale allo 0%, questo comincierà automaticamente ad atterare attraverso il metodo emergency() della classe CommandReader.
 
-```Java
+```java
 public class BatteryThread extends Thread{
 
     /**
@@ -370,14 +370,14 @@ facilmente generalizzabili o sono specifici di un caso particolare? ecc
 
 ### 7.1 Sitografia
 
-**INSERIRE SITOGRAFIA:**
-
 -   http://standards.ieee.org/guides/style/section7.html, *IEEE
-    Standards Style Manual*, 07-06-2008.
-
--   http://www.jfree.org/jfreechart/, *JFreeChart*
--   https://github.com/jfree/jfreechart, *A 2D chart library for Java applications (JavaFX, Swing or server-side).*
--   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*
+    Standards Style Manual*, 13.02.2019 - 10.05.2019.
+-   http://www.jfree.org/jfreechart/, *JFreeChart*, 13.02.2019 - 10.05.2019
+-   https://github.com/jfree/jfreechart, *A 2D chart library for Java applications (JavaFX, Swing or server-side)*, 13.02.2019 - 10.05.2019
+-   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*, 13.02.2019 - 10.05.2019
+-   https://stackoverflow.com/, *StackOverflow*, 13.02.2019 - 10.05.2019
+- https://www.leapmotion.com/, *Leap Motion*, 13.02.2019 - 10.05.2019.
+-   https://www.ryzerobotics.com/tello, *Tello SDK*, 13.02.2019 - 10.05.2019
 
 
 ## 8 Allegati -> DA CONTROLLARE
