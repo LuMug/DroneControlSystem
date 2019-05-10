@@ -86,9 +86,11 @@ public class FlightRecorder {
             
             System.out.println("File saved in path: " + record.getSaveLocation());
             
+            /*
             for(String line : record.getFlightCommands()){
                 System.out.println("Command: " + line);
             }
+            */
         }
         catch(IOException ex){
             System.err.println("ERROR:" + ex.getMessage());
