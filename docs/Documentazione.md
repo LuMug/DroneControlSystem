@@ -1,14 +1,9 @@
 # Drone Control System [METTERE TITOLO?]
-### [Aggiornare sommario]
 
 #### Da Fare:
-- 1.4: Riguardare
 - 1.5: Aggiungere eventuali requisiti
-- 2.0: Da fare (Attualmente header di default)
 - 2.4: Da fare
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
-- 3.2: Guardare se c'è tutto
-- 4.1: Cambiare header (ancora default)
 - 4.1: Fare test-case
 - 4.3: Da fare
 - 6.0: Da fare
@@ -20,67 +15,61 @@
 
 ---
 
+1. [Introduzione](#1.-introduzione)
 
+    1.1 [Informazioni sul progetto](#1.1-informazioni-sul-progetto)
 
+    1.2 [Abstract](#1.2-abstract)
 
-
-1. [Introduzione](#introduzione)
-
-    1.1 [Informazioni sul progetto](#informazioni-sul-progetto)
-
-    1.2 [Abstract](#abstract)
-
-    1.3[Scopo](#scopo)
+    1.3[Scopo](#1.3-scopo)
 
   - [Analisi](#analisi)
 
-    1.4 [Analisi del dominio](#analisi-del-dominio)
+    1.4 [Analisi del dominio](#1.4-analisi-del-dominio)
 
-    1.5 [Analisi dei mezzi](#analisi-dei-mezzi)
+    1.5 [Analisi dei mezzi](#1.5-analisi-dei-mezzi)
 
-    1.6 [Analisi e specifica dei requisiti](#analisi-e-specifica-dei-requisiti)
+    1.6 [Analisi e specifica dei requisiti](#1.6-analisi-e-specifica-dei-requisiti)
 
-    1.7 [Pianificazione](#pianificazione)
+    1.7 [Pianificazione](#1.7-pianificazione)
 
-2. [Progettazione](#progettazione)
+2. [Progettazione](#2.-progettazione)
 
-    2.1 [Design dell’architettura del sistema](#design-dell’architettura-del-sistema)
+    2.1 [Design dell’architettura del sistema](#2.1-design-dell’architettura-del-sistema)
 
-    2.2 [Design dei dati e database](#design-dei-dati-e-database)
+    2.2 [Schema logico](#2.2-schema-logico)
 
-    2.3 [Schema E-R, schema logico e descrizione](#Schema-E-R,-schema-logico-e-descrizione)
+    2.3 [Design delle interfacce](#2.3-design-delle-interfacce)
 
-    2.4 [Design delle interfacce](#design-delle-interfacce)
+    2.4 [Design procedurale](#2.4-design-procedurale)
 
-    2.5 [Design procedurale](#design-procedurale)
+3. [Implementazione](#3.-implementazione)
 
-3. [Implementazione](#implementazione)
+    3.1 [Drone Controller](#3.1-drone-controller)
 
-    3.1 [Drone Controller](#drone-controller)
+    3.2 [Drone Simulator](#3.2-drone-simulator)
 
-    3.2 [Drone Simulator](#drone-simulator)
+4. [Test](#4.-test)
 
-4. [Test](#test)
+    4.1 [Protocollo di test](#4.1-protocollo-di-test)
 
-    4.1 [Protocollo di test](#protocollo-di-test)
+    4.2 [Risultati test](#4.2-risultati-test)
 
-    4.2 [Risultati test](#risultati-test)
+    4.3 [Mancanze/limitazioni conosciute](#4.3-mancanze/limitazioni-conosciute)
 
-    4.3 [Mancanze/limitazioni conosciute](#mancanze/limitazioni-conosciute)
+5. [Consuntivo](#5.-consuntivo)
 
-5. [Consuntivo](#consuntivo)
+6. [Conclusioni](#6.-conclusioni)
 
-6. [Conclusioni](#conclusioni)
+    6.1 [Sviluppi futuri](#6.1-sviluppi-futuri)
 
-    6.1 [Sviluppi futuri](#sviluppi-futuri)
+    6.2 [Considerazioni personali](#6.2-considerazioni-personali)
 
-    6.2 [Considerazioni personali](#considerazioni-personali)
+7. [Bibliografia](#7.-bibliografia)
 
-7. [Bibliografia](#bibliografia)
+    7.1 [Sitografia](#7.1-sitografia)
 
-    7.1 [Sitografia](#sitografia)
-
-8. [Allegati](#allegati)
+8. [Allegati](#8.-allegati)
 
 ## 1. Introduzione
 ---
@@ -108,7 +97,6 @@
   Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica
   attualmente esiste solamente progettato e scritto privatamente in vari linguaggi come
   Ruby, Python e PHP ma non ancora in Java.
-  ***EVENTUALMENTE AGGIUNGERE TESTO SE NECESSARIO***
 
 ### 1.5 Analisi e specifica dei requisiti
 
@@ -183,12 +171,6 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 
 ## 2 Progettazione
 ---
-
-Questo capitolo descrive esaustivamente come deve essere realizzato il
-prodotto fin nei suoi dettagli. Una buona progettazione permette
-all’esecutore di evitare fraintendimenti e imprecisioni
-nell’implementazione del prodotto.
-
 ### 2.1 Design dell’architettura del sistema
 
 Nell'immagine sottostante viene rappresentata la struttura delle classi del Controller del drone
@@ -248,12 +230,12 @@ La rappresentazione delle informazioni avvengono tramite grafici cartesiani per 
 
 #### 3.2.2 Simulator
 
-La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket 8889.
+La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket ```8889```.
 La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltrare il contenuto verso la classe CommandReader.
 
 #### 3.2.3 CommandReader
 
-La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone.
+La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone modificando le tre variabili che rappresentano le tre assi X, Y e Z.
 
 #### 3.2.4 BatteryThread
 
@@ -299,7 +281,7 @@ public class BatteryThread extends Thread{
 #### 3.2.5 PacketReceivingCheckerThread
 
 La classe PacketReceivingCkerThread controlla la frequenza di ricezione dei comandi della classe Simulator.
-Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader.
+Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader come descritto dalla SDK.
 
 ```java
 public class PacketReceivingCheckerThread extends Thread{
@@ -335,12 +317,6 @@ public class PacketReceivingCheckerThread extends Thread{
 ## 4 Test
 ---
 ### 4.1 Protocollo di test
-
-Definire in modo accurato tutti i test che devono essere realizzati per
-garantire l’adempimento delle richieste formulate nei requisiti. I test
-fungono da garanzia di qualità del prodotto. Ogni test deve essere
-ripetibile alle stesse condizioni.
-
 
 |Test Case      | TC-001                               |
 |---------------|--------------------------------------|
