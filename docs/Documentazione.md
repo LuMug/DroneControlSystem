@@ -1,5 +1,4 @@
 # Drone Control System [METTERE TITOLO?]
-### [Aggiornare sommario]
 
 #### Da Fare:
 - 1.4: Riguardare
@@ -20,67 +19,61 @@
 
 ---
 
+1. [Introduzione](#1.-introduzione)
 
+    1.1 [Informazioni sul progetto](#1.1-informazioni-sul-progetto)
 
+    1.2 [Abstract](#1.2-abstract)
 
-
-1. [Introduzione](#introduzione)
-
-    1.1 [Informazioni sul progetto](#informazioni-sul-progetto)
-
-    1.2 [Abstract](#abstract)
-
-    1.3[Scopo](#scopo)
+    1.3[Scopo](#1.3-scopo)
 
   - [Analisi](#analisi)
 
-    1.4 [Analisi del dominio](#analisi-del-dominio)
+    1.4 [Analisi del dominio](#1.4-analisi-del-dominio)
 
-    1.5 [Analisi dei mezzi](#analisi-dei-mezzi)
+    1.5 [Analisi dei mezzi](#1.5-analisi-dei-mezzi)
 
-    1.6 [Analisi e specifica dei requisiti](#analisi-e-specifica-dei-requisiti)
+    1.6 [Analisi e specifica dei requisiti](#1.6-analisi-e-specifica-dei-requisiti)
 
-    1.7 [Pianificazione](#pianificazione)
+    1.7 [Pianificazione](#1.7-pianificazione)
 
-2. [Progettazione](#progettazione)
+2. [Progettazione](#2.-progettazione)
 
-    2.1 [Design dell’architettura del sistema](#design-dell’architettura-del-sistema)
+    2.1 [Design dell’architettura del sistema](#2.1-design-dell’architettura-del-sistema)
 
-    2.2 [Design dei dati e database](#design-dei-dati-e-database)
+    2.2 [Schema logico](#2.2-schema-logico)
 
-    2.3 [Schema E-R, schema logico e descrizione](#Schema-E-R,-schema-logico-e-descrizione)
+    2.3 [Design delle interfacce](#2.3-design-delle-interfacce)
 
-    2.4 [Design delle interfacce](#design-delle-interfacce)
+    2.4 [Design procedurale](#2.4-design-procedurale)
 
-    2.5 [Design procedurale](#design-procedurale)
+3. [Implementazione](#3.-implementazione)
 
-3. [Implementazione](#implementazione)
+    3.1 [Drone Controller](#3.1-drone-controller)
 
-    3.1 [Drone Controller](#drone-controller)
+    3.2 [Drone Simulator](#3.2-drone-simulator)
 
-    3.2 [Drone Simulator](#drone-simulator)
+4. [Test](#4.-test)
 
-4. [Test](#test)
+    4.1 [Protocollo di test](#4.1-protocollo-di-test)
 
-    4.1 [Protocollo di test](#protocollo-di-test)
+    4.2 [Risultati test](#4.2-risultati-test)
 
-    4.2 [Risultati test](#risultati-test)
+    4.3 [Mancanze/limitazioni conosciute](#4.3-mancanze/limitazioni-conosciute)
 
-    4.3 [Mancanze/limitazioni conosciute](#mancanze/limitazioni-conosciute)
+5. [Consuntivo](#5.-consuntivo)
 
-5. [Consuntivo](#consuntivo)
+6. [Conclusioni](#6.-conclusioni)
 
-6. [Conclusioni](#conclusioni)
+    6.1 [Sviluppi futuri](#6.1-sviluppi-futuri)
 
-    6.1 [Sviluppi futuri](#sviluppi-futuri)
+    6.2 [Considerazioni personali](#6.2-considerazioni-personali)
 
-    6.2 [Considerazioni personali](#considerazioni-personali)
+7. [Bibliografia](#7.-bibliografia)
 
-7. [Bibliografia](#bibliografia)
+    7.1 [Sitografia](#7.1-sitografia)
 
-    7.1 [Sitografia](#sitografia)
-
-8. [Allegati](#allegati)
+8. [Allegati](#8.-allegati)
 
 ## 1. Introduzione
 ---
