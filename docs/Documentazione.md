@@ -2,12 +2,9 @@
 ### [Aggiornare sommario]
 
 #### Da Fare:
-- 1.4: Riguardare
 - 1.5: Aggiungere eventuali requisiti
-- 2.0: Da fare (Attualmente header di default)
 - 2.4: Da fare
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
-- 3.2: Guardare se c'è tutto
 - 4.1: Cambiare header (ancora default)
 - 4.1: Fare test-case
 - 4.3: Da fare
@@ -108,7 +105,6 @@
   Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica
   attualmente esiste solamente progettato e scritto privatamente in vari linguaggi come
   Ruby, Python e PHP ma non ancora in Java.
-  ***EVENTUALMENTE AGGIUNGERE TESTO SE NECESSARIO***
 
 ### 1.5 Analisi e specifica dei requisiti
 
@@ -183,12 +179,6 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 
 ## 2 Progettazione
 ---
-
-Questo capitolo descrive esaustivamente come deve essere realizzato il
-prodotto fin nei suoi dettagli. Una buona progettazione permette
-all’esecutore di evitare fraintendimenti e imprecisioni
-nell’implementazione del prodotto.
-
 ### 2.1 Design dell’architettura del sistema
 
 Nell'immagine sottostante viene rappresentata la struttura delle classi del Controller del drone
@@ -248,12 +238,12 @@ La rappresentazione delle informazioni avvengono tramite grafici cartesiani per 
 
 #### 3.2.2 Simulator
 
-La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket 8889.
+La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket ```8889```.
 La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltrare il contenuto verso la classe CommandReader.
 
 #### 3.2.3 CommandReader
 
-La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone.
+La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone modificando le tre variabili che rappresentano le tre assi X, Y e Z.
 
 #### 3.2.4 BatteryThread
 
@@ -299,7 +289,7 @@ public class BatteryThread extends Thread{
 #### 3.2.5 PacketReceivingCheckerThread
 
 La classe PacketReceivingCkerThread controlla la frequenza di ricezione dei comandi della classe Simulator.
-Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader.
+Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader come descritto dalla SDK.
 
 ```java
 public class PacketReceivingCheckerThread extends Thread{
