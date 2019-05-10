@@ -4,6 +4,7 @@ import settings.FlipCommand;
 
 /**
  * This class describes a command that a DJI Tello can read and execute.
+ * All of the commands are made and formatted as described in the tello sdk.
  * @author Luca Di Bello
  */
 public abstract class Commands {
