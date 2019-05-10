@@ -1,6 +1,29 @@
 # Drone Control System [METTERE TITOLO?]
 ### [Aggiornare sommario]
 
+#### Da Fare:
+- 1.4: Riguardare
+- 1.5: Aggiungere eventuali requisiti
+- 2.0: Da fare (Attualmente header di default)
+- 2.4: Da fare
+- 3.1: Fare tutta la parte di implementazione Luca e Fadil
+- 3.2: Guardare se c'è tutto
+- 4.1: Cambiare header (ancora default)
+- 4.1: Fare test-case
+- 4.3: Da fare
+- 6.0: Da fare
+- 6.1: da fare
+- 6.2: da fare
+- 8.1: da fare
+- Sommario: aggiornarlo
+- Discutere per titolo doc
+
+---
+
+
+
+
+
 1. [Introduzione](#introduzione)
 
     1.1 [Informazioni sul progetto](#informazioni-sul-progetto)
