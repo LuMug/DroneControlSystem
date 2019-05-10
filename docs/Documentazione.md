@@ -1,63 +1,75 @@
 # Drone Control System [METTERE TITOLO?]
-### [Aggiornare sommario]
 
-1. [Introduzione](#introduzione)
+#### Da Fare:
+- 1.5: Aggiungere eventuali requisiti
+- 2.4: Da fare
+- 3.1: Fare tutta la parte di implementazione Luca e Fadil
+- 4.1: Fare test-case
+- 4.3: Da fare
+- 6.0: Da fare
+- 6.1: da fare
+- 6.2: da fare
+- 8.1: da fare
+- Sommario: aggiornarlo
+- Discutere per titolo doc
 
-    1.1 [Informazioni sul progetto](#informazioni-sul-progetto)
+---
 
-    1.2 [Abstract](#abstract)
+1. [Introduzione](#1.-introduzione)
 
-    1.3[Scopo](#scopo)
+    1.1 [Informazioni sul progetto](#1.1-informazioni-sul-progetto)
+
+    1.2 [Abstract](#1.2-abstract)
+
+    1.3[Scopo](#1.3-scopo)
 
   - [Analisi](#analisi)
 
-    1.4 [Analisi del dominio](#analisi-del-dominio)
+    1.4 [Analisi del dominio](#1.4-analisi-del-dominio)
 
-    1.5 [Analisi dei mezzi](#analisi-dei-mezzi)
+    1.5 [Analisi dei mezzi](#1.5-analisi-dei-mezzi)
 
-    1.6 [Analisi e specifica dei requisiti](#analisi-e-specifica-dei-requisiti)
+    1.6 [Analisi e specifica dei requisiti](#1.6-analisi-e-specifica-dei-requisiti)
 
-    1.7 [Pianificazione](#pianificazione)
+    1.7 [Pianificazione](#1.7-pianificazione)
 
-2. [Progettazione](#progettazione)
+2. [Progettazione](#2.-progettazione)
 
-    2.1 [Design dell’architettura del sistema](#design-dell’architettura-del-sistema)
+    2.1 [Design dell’architettura del sistema](#2.1-design-dell’architettura-del-sistema)
 
-    2.2 [Design dei dati e database](#design-dei-dati-e-database)
+    2.2 [Schema logico](#2.2-schema-logico)
 
-    2.3 [Schema E-R, schema logico e descrizione](#Schema-E-R,-schema-logico-e-descrizione)
+    2.3 [Design delle interfacce](#2.3-design-delle-interfacce)
 
-    2.4 [Design delle interfacce](#design-delle-interfacce)
+    2.4 [Design procedurale](#2.4-design-procedurale)
 
-    2.5 [Design procedurale](#design-procedurale)
+3. [Implementazione](#3.-implementazione)
 
-3. [Implementazione](#implementazione)
+    3.1 [Drone Controller](#3.1-drone-controller)
 
-    3.1 [Drone Controller](#drone-controller)
+    3.2 [Drone Simulator](#3.2-drone-simulator)
 
-    3.2 [Drone Simulator](#drone-simulator)
+4. [Test](#4.-test)
 
-4. [Test](#test)
+    4.1 [Protocollo di test](#4.1-protocollo-di-test)
 
-    4.1 [Protocollo di test](#protocollo-di-test)
+    4.2 [Risultati test](#4.2-risultati-test)
 
-    4.2 [Risultati test](#risultati-test)
+    4.3 [Mancanze/limitazioni conosciute](#4.3-mancanze/limitazioni-conosciute)
 
-    4.3 [Mancanze/limitazioni conosciute](#mancanze/limitazioni-conosciute)
+5. [Consuntivo](#5.-consuntivo)
 
-5. [Consuntivo](#consuntivo)
+6. [Conclusioni](#6.-conclusioni)
 
-6. [Conclusioni](#conclusioni)
+    6.1 [Sviluppi futuri](#6.1-sviluppi-futuri)
 
-    6.1 [Sviluppi futuri](#sviluppi-futuri)
+    6.2 [Considerazioni personali](#6.2-considerazioni-personali)
 
-    6.2 [Considerazioni personali](#considerazioni-personali)
+7. [Bibliografia](#7.-bibliografia)
 
-7. [Bibliografia](#bibliografia)
+    7.1 [Sitografia](#7.1-sitografia)
 
-    7.1 [Sitografia](#sitografia)
-
-8. [Allegati](#allegati)
+8. [Allegati](#8.-allegati)
 
 ## 1. Introduzione
 ---
@@ -65,14 +77,14 @@
 ### 1.1 Informazioni sul progetto
 
   Il progetto è gestito e realizzato dagli allievi Luca Di Bello, Fadil Smajlbasic, Jari Näser, Andrea Rauso (studenti di informatica all’Arti e Mestieri di Trevano) sotto la supervisione del professor Luca Muggiasca. Abbiamo a disposizione un dispositivo chiamato "Leap Motion", il quale permette il tracking di precisione delle mani e dei loro movimenti e il drone DJI Tello sul quale effettueremo tutti i test della nostra libreria.
-  La realizzazione del progetto inizia il 13 febbraio 2019 (13/02/19) e dovrà essere consegnato entro il 17 maggio 2019 (17/05/19).
+  La realizzazione del progetto inizia il 13 febbraio 2019 (13/02/19) e dovrà essere consegnato entro il 22 maggio 2019 (22/05/19).
 
 ### 1.2 Abstract
 
   Nowadays drones are really popular in various areas such as personal use and professional environment.
   To make this awesome quadcopters accessible to all ages in a really fun way as a team we decided to create a library that connects a sensor that reads the user's hands motions, transforms them in commands and sends them to the drone.
   With our product it's really easy to fly a drone with your own hand's motions.
-  
+
 ### 1.3 Scopo
 
   Lo scopo di questo progetto è di creare un sistema che permette di controllare il drone *DJI Tello* tramite un dispositivo chiamato [Leap Motion](https://www.leapmotion.com "Leap Motion official website") (un sensore che permette il tracking dei movimenti delle mani in modo preciso). Non disponendo di un drone *DJI Tello* verrà simulato il funzionamento tramite un'altra applicazione la quale mostrerà in 4 riquadri le quali rappresenteranno in 2d le seguenti informazioni: imbardata, beccheggio, rollio ed altitudine.
@@ -85,7 +97,6 @@
   Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica
   attualmente esiste solamente progettato e scritto privatamente in vari linguaggi come
   Ruby, Python e PHP ma non ancora in Java.
-  ***EVENTUALMENTE AGGIUNGERE TESTO SE NECESSARIO***
 
 ### 1.5 Analisi e specifica dei requisiti
 
@@ -150,22 +161,16 @@ i vari movimenti delle mani dal sensore LeapMotion.
 
 ### 1.7.2 Hardware
 Per poter realizzare questo progetto abbiamo usato il seguente materiale:
-- 1x Sensore LeapMotion.
-- 1x Drone DJI Tello.
-- 1x Apple MacBook Pro 2015 con OSX Mojave.
-- 1x Asus VivoBook 2015 con Windows 10.
-- 1x Asus ROG GL702VM con Windows 10.
-- 1x HP Pavilion CS-0800 con Linux Ubuntu 19.04.
+- Sensore LeapMotion.
+- Drone DJI Tello.
+- Apple MacBook Pro 2015 con OSX Mojave.
+- Asus VivoBook 2015 con Windows 10.
+- Asus ROG GL702VM con Windows 10.
+- HP Pavilion CS-0800 con Linux Ubuntu 19.04.
 
 
 ## 2 Progettazione
 ---
-
-Questo capitolo descrive esaustivamente come deve essere realizzato il
-prodotto fin nei suoi dettagli. Una buona progettazione permette
-all’esecutore di evitare fraintendimenti e imprecisioni
-nell’implementazione del prodotto.
-
 ### 2.1 Design dell’architettura del sistema
 
 Nell'immagine sottostante viene rappresentata la struttura delle classi del Controller del drone
@@ -184,11 +189,14 @@ Sul lato sinistro si può vedere il sensore ed il controller che fanno da client
 
 ### 2.3 Design delle interfacce
 
-Interfaccia della posizione del drone
+Interfaccia della posizione del drone:
+Per la visualizzazione della posizione del drone nel simulatore é stato scelto un diagramma cartesiano in cui verra mostrato lo spostamento del drone su 2 assi.
+Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una con visuale di profilo (Assi X e Y)
 
 ![alt Interfaccia posizione](..\media\mockup\MockPosizioneDallAlto.png)
 
-Interfaccia della rotazione del drone
+Interfaccia della rotazione del drone:
+Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 ![alt Interfaccia rotazione](..\media\mockup\MockRotazioneAssi.png)
 
 ### 2.4 Design procedurale [DA FARE!!!!!]
@@ -225,19 +233,19 @@ La rappresentazione delle informazioni avvengono tramite grafici cartesiani per 
 
 #### 3.2.2 Simulator
 
-La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket 8889.
+La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket ```8889```.
 La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltrare il contenuto verso la classe CommandReader.
 
 #### 3.2.3 CommandReader
 
-La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone.
+La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone modificando le tre variabili che rappresentano le tre assi X, Y e Z.
 
 #### 3.2.4 BatteryThread
 
 La classe BatteryThread monitora e gestisce la durata del volo del drone e la sua batteria.
 Quando la batteria del drone equivale allo 0%, questo comincierà automaticamente ad atterare attraverso il metodo emergency() della classe CommandReader.
 
-```Java
+```java
 public class BatteryThread extends Thread{
 
     /**
@@ -276,7 +284,7 @@ public class BatteryThread extends Thread{
 #### 3.2.5 PacketReceivingCheckerThread
 
 La classe PacketReceivingCkerThread controlla la frequenza di ricezione dei comandi della classe Simulator.
-Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader.
+Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader come descritto dalla SDK.
 
 ```java
 public class PacketReceivingCheckerThread extends Thread{
@@ -312,12 +320,6 @@ public class PacketReceivingCheckerThread extends Thread{
 ## 4 Test
 ---
 ### 4.1 Protocollo di test
-
-Definire in modo accurato tutti i test che devono essere realizzati per
-garantire l’adempimento delle richieste formulate nei requisiti. I test
-fungono da garanzia di qualità del prodotto. Ogni test deve essere
-ripetibile alle stesse condizioni.
-
 
 |Test Case      | TC-001                               |
 |---------------|--------------------------------------|
@@ -370,14 +372,14 @@ facilmente generalizzabili o sono specifici di un caso particolare? ecc
 
 ### 7.1 Sitografia
 
-**INSERIRE SITOGRAFIA:**
-
 -   http://standards.ieee.org/guides/style/section7.html, *IEEE
-    Standards Style Manual*, 07-06-2008.
-
--   http://www.jfree.org/jfreechart/, *JFreeChart*
--   https://github.com/jfree/jfreechart, *A 2D chart library for Java applications (JavaFX, Swing or server-side).*
--   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*
+    Standards Style Manual*, 13.02.2019 - 10.05.2019.
+-   http://www.jfree.org/jfreechart/, *JFreeChart*, 13.02.2019 - 10.05.2019
+-   https://github.com/jfree/jfreechart, *A 2D chart library for Java applications (JavaFX, Swing or server-side)*, 13.02.2019 - 10.05.2019
+-   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*, 13.02.2019 - 10.05.2019
+-   https://stackoverflow.com/, *StackOverflow*, 13.02.2019 - 10.05.2019
+- https://www.leapmotion.com/, *Leap Motion*, 13.02.2019 - 10.05.2019.
+-   https://www.ryzerobotics.com/tello, *Tello SDK*, 13.02.2019 - 10.05.2019
 
 
 ## 8 Allegati -> DA CONTROLLARE
