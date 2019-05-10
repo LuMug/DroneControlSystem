@@ -1,13 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Consuntivo" company="" webLink="http://" view-date="2019-02-11" view-index="0" gantt-divider-location="512" resource-divider-location="300" version="2.8.10" locale="it">
+<?xml version="1.0" encoding="UTF-8"?><project name="Consuntivo" company="" webLink="http://" view-date="2019-02-09" view-index="0" gantt-divider-location="610" resource-divider-location="300" version="2.8.10" locale="en_US">
     <description/>
-    <view zooming-state="default:6" id="gantt-chart">
-        <field id="tpd3" name="Nome" width="293" order="0"/>
-        <field id="tpd4" name="Data d'inizio" width="117" order="1"/>
-        <field id="tpd5" name="Data di fine" width="98" order="2"/>
+    <view zooming-state="default:2" id="gantt-chart">
+        <field id="tpd3" name="Name" width="326" order="0"/>
+        <field id="tpd4" name="Begin date" width="150" order="1"/>
+        <field id="tpd5" name="End date" width="132" order="2"/>
+        <option id="color.recent">
+            <![CDATA[#ff3333 #0033cc #66ff00]]>
+        </option>
     </view>
     <view id="resource-table">
-        <field id="0" name="Nome" width="210" order="0"/>
-        <field id="1" name="Ruolo predefinito" width="86" order="1"/>
+        <field id="0" name="Name" width="211" order="0"/>
+        <field id="1" name="Default role" width="87" order="1"/>
     </view>
     <!-- -->
     <calendars base-id="nessuno">
@@ -35,32 +38,35 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="DroneControlSystem" color="#8cb6ce" meeting="false" start="2019-02-13" duration="25" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+        <task id="0" name="DroneControlSystem" color="#8cb6ce" meeting="false" start="2019-02-13" duration="27" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
             <task id="2" name="Introduzione" color="#8cb6ce" meeting="false" start="2019-02-13" duration="1" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true"/>
             <task id="4" name="Pianificazione" color="#8cb6ce" meeting="false" start="2019-02-15" duration="1" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
                 <depend id="5" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="5" name="Analisi" color="#8cb6ce" meeting="false" start="2019-02-20" duration="4" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+            <task id="5" name="Analisi" color="#66ff00" meeting="false" start="2019-02-20" duration="4" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
                 <depend id="6" type="2" difference="0" hardness="Strong"/>
-                <task id="31" name="Analisi Simulatore" color="#8cb6ce" meeting="false" start="2019-02-20" duration="3" complete="0" thirdDate="2019-02-20" thirdDate-constraint="0" expand="true"/>
+                <task id="59" name="Aquisire le conoscienze delle SDK" meeting="false" start="2019-02-20" duration="4" complete="0" expand="true"/>
+                <task id="31" name="Analisi Simulatore" color="#8cb6ce" meeting="false" start="2019-02-20" duration="4" complete="0" thirdDate="2019-02-20" thirdDate-constraint="0" expand="true"/>
                 <task id="34" name="Analisi controller" meeting="false" start="2019-02-20" duration="4" complete="0" expand="true"/>
-                <task id="37" name="Aquisire le conoscienze delle SDK" meeting="false" start="2019-02-20" duration="4" complete="0" expand="true"/>
             </task>
-            <task id="6" name="Progettazione e implementazione" color="#8cb6ce" meeting="false" start="2019-03-06" duration="9" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
-                <depend id="9" type="2" difference="0" hardness="Strong"/>
+            <task id="6" name="Progettazione" color="#0033cc" meeting="false" start="2019-03-06" duration="4" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+                <depend id="61" type="2" difference="0" hardness="Strong"/>
                 <task id="35" name="Progettazione controller" meeting="false" start="2019-03-06" duration="4" complete="0" expand="true"/>
                 <task id="36" name="Progettazione simulazione" meeting="false" start="2019-03-06" duration="3" complete="0" expand="true"/>
-                <task id="39" name="Implementazione controller" meeting="false" start="2019-03-20" duration="5" complete="0" expand="true"/>
-                <task id="38" name="Implementazione Simulatore" meeting="false" start="2019-03-15" duration="5" complete="0" expand="true"/>
             </task>
-            <task id="9" name="Test" color="#8cb6ce" meeting="false" start="2019-04-05" duration="9" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
-                <task id="46" name="Test Simulazione" color="#8cb6ce" meeting="false" start="2019-04-05" duration="7" complete="0" thirdDate="2019-03-01" thirdDate-constraint="0" expand="true"/>
+            <task id="61" name="Implementazione" color="#000000" meeting="false" start="2019-03-20" duration="5" complete="0" thirdDate="2019-03-15" thirdDate-constraint="0" expand="true">
+                <depend id="9" type="2" difference="0" hardness="Strong"/>
+                <task id="38" name="Implementazione Simulatore" meeting="false" start="2019-03-20" duration="5" complete="0" expand="true"/>
+                <task id="39" name="Implementazione controller" meeting="false" start="2019-03-20" duration="5" complete="0" expand="true"/>
+            </task>
+            <task id="9" name="Test" color="#ff3333" meeting="false" start="2019-04-05" duration="9" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+                <task id="46" name="Test Simulazione" color="#8cb6ce" meeting="false" start="2019-04-05" duration="4" complete="0" thirdDate="2019-03-01" thirdDate-constraint="0" expand="true"/>
                 <task id="47" name="Test Controller" color="#8cb6ce" meeting="false" start="2019-04-05" duration="9" complete="0" thirdDate="2019-03-01" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="10" name="Documentazione" color="#8cb6ce" meeting="false" start="2019-02-13" duration="25" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
+            <task id="10" name="Documentazione" color="#8cb6ce" meeting="false" start="2019-04-03" duration="13" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
                 <depend id="26" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="26" name="Consegna Progetto" color="#8cb6ce" meeting="true" start="2019-05-17" duration="0" complete="0" thirdDate="2019-02-13" thirdDate-constraint="0" expand="true"/>
+            <task id="26" name="Consegna Progetto" color="#8cb6ce" meeting="true" start="2019-05-24" duration="0" complete="0" thirdDate="2019-02-13" thirdDate-constraint="0" expand="true"/>
         </task>
     </tasks>
     <resources/>
