@@ -17,13 +17,20 @@ public class FlightRecord {
         this.file_record_path = filePath;
     }
     
-    public List<String> getFlightCommands() throws IOException{
+    public FlightBuffer getFlightCommands() throws IOException{
+        FlightBuffer buffer = new FlightBuffer();
+
         try{
-            return Files.readAllLines(file_record_path);
+            List<String> lines = Files.readAllLines(file_record_path);
+            buffer.addCommands(lines.toArray(new String[lines.size()]));
+            
+            return buffer;
         }
         catch(IOException ex){
             throw new IOException("Can't find any type of file in the path: " + file_record_path);
         }
+        
+        
     }
     
     public Path getSaveLocation() {
