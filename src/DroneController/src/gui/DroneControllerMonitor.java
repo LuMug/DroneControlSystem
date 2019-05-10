@@ -139,6 +139,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jTextFieldTotalCommands = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jTextFieldEstimatedExecutionTime = new javax.swing.JTextField();
+        jPanelRecordedFlightButtons = new javax.swing.JPanel();
+        jButtonStartSelectedFlight = new javax.swing.JButton();
+        jButtonStopSelectedFlight = new javax.swing.JButton();
         jPanelRecordButtons = new javax.swing.JPanel();
         jButtonStartRecording = new javax.swing.JButton();
         jButtonStopRecording = new javax.swing.JButton();
@@ -352,7 +355,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jPanelRecording.setLayout(new java.awt.BorderLayout());
 
-        jPanelRecordFiles.setLayout(new java.awt.GridLayout(2, 1));
+        jPanelRecordFiles.setLayout(new java.awt.GridLayout(3, 1));
 
         jPanelRecordSelector.setLayout(new java.awt.GridBagLayout());
 
@@ -392,6 +395,26 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jPanelInfos.add(jTextFieldEstimatedExecutionTime);
 
         jPanelRecordFiles.add(jPanelInfos);
+
+        jPanelRecordedFlightButtons.setLayout(new java.awt.GridBagLayout());
+
+        jButtonStartSelectedFlight.setText("Start flight");
+        jButtonStartSelectedFlight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartSelectedFlightActionPerformed(evt);
+            }
+        });
+        jPanelRecordedFlightButtons.add(jButtonStartSelectedFlight, new java.awt.GridBagConstraints());
+
+        jButtonStopSelectedFlight.setText("Stop flight");
+        jButtonStopSelectedFlight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStopSelectedFlightActionPerformed(evt);
+            }
+        });
+        jPanelRecordedFlightButtons.add(jButtonStopSelectedFlight, new java.awt.GridBagConstraints());
+
+        jPanelRecordFiles.add(jPanelRecordedFlightButtons);
 
         jPanelRecording.add(jPanelRecordFiles, java.awt.BorderLayout.PAGE_START);
 
@@ -567,6 +590,18 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         }
     }//GEN-LAST:event_jComboBoxSelectRecordActionPerformed
 
+    private void jButtonStartSelectedFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartSelectedFlightActionPerformed
+        //Cut out the leapmotion controller
+        System.err.println("[Info] Trying to disable the leapmotion...");
+        controller.DisableLeapMotionController();
+    }//GEN-LAST:event_jButtonStartSelectedFlightActionPerformed
+
+    private void jButtonStopSelectedFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopSelectedFlightActionPerformed
+        //Cut out the leapmotion controller
+        System.err.println("[Info] Trying to re-enable the leapmotion...");
+        controller.EnableLeapMotionController();
+    }//GEN-LAST:event_jButtonStopSelectedFlightActionPerformed
+
     public String getDateFromRecordFilename(String filename) {
         //Date [11 - 19]
         String date = filename.substring(11, 19);
@@ -651,7 +686,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JButton jButtonDroneTakeoff;
     private javax.swing.JButton jButtonDroneUp;
     private javax.swing.JButton jButtonStartRecording;
+    private javax.swing.JButton jButtonStartSelectedFlight;
     private javax.swing.JButton jButtonStopRecording;
+    private javax.swing.JButton jButtonStopSelectedFlight;
     private javax.swing.JComboBox<String> jComboBoxFlip;
     private javax.swing.JComboBox<String> jComboBoxSelectRecord;
     private javax.swing.JLabel jLabel1;
@@ -675,6 +712,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JPanel jPanelRecordButtons;
     private javax.swing.JPanel jPanelRecordFiles;
     private javax.swing.JPanel jPanelRecordSelector;
+    private javax.swing.JPanel jPanelRecordedFlightButtons;
     private javax.swing.JPanel jPanelRecording;
     private javax.swing.JPanel jPanelSettings;
     private javax.swing.JSpinner jSpinnerDroneMovementStep;
