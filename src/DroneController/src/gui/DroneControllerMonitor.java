@@ -19,6 +19,7 @@ import java.util.Map;
 import settings.SettingsManager;
 import javax.swing.JOptionPane;
 import javax.swing.text.DefaultCaret;
+import recorder.FlightBuffer;
 import recorder.FlightRecord;
 import settings.FlipCommand;
 import settings.SettingsListener;
@@ -36,6 +37,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private List<FlightRecord> flightRecords = new ArrayList<>();
     private CommandManager commandManager;
 
+    
+    private final String RECORDING_STATUS_DISABLED = "LeapMotion-Controlled";
+    private final String RECORDING_STATUS_ENABLED = "Running a recorded flight";
+    
     /**
      * Creates new form DroneControllerMonitor
      */
@@ -114,19 +119,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonDroneFlip = new javax.swing.JButton();
         jComboBoxFlip = new javax.swing.JComboBox<>();
         batteryButton = new javax.swing.JButton();
-        jPanelSettings = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        sensibilityValueTextBox = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        heightPointsValueTextBox = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        DegreesSensibilityValueTextBox = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        MovementDelayValueTextBox = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        DeltaAverageMultiplierValueTextBox = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jPanelRecording = new javax.swing.JPanel();
         jPanelRecordFiles = new javax.swing.JPanel();
         jPanelRecordSelector = new javax.swing.JPanel();
@@ -140,11 +132,27 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jLabel9 = new javax.swing.JLabel();
         jTextFieldEstimatedExecutionTime = new javax.swing.JTextField();
         jPanelRecordedFlightButtons = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jButtonStartSelectedFlight = new javax.swing.JButton();
         jButtonStopSelectedFlight = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabelRecordingStatusMessage = new javax.swing.JLabel();
         jPanelRecordButtons = new javax.swing.JPanel();
         jButtonStartRecording = new javax.swing.JButton();
         jButtonStopRecording = new javax.swing.JButton();
+        jPanelSettings = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        sensibilityValueTextBox = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        heightPointsValueTextBox = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        DegreesSensibilityValueTextBox = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        MovementDelayValueTextBox = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        DeltaAverageMultiplierValueTextBox = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -303,6 +311,109 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jTabbedPane1.addTab("Fast Commands", jPanelFastCommands);
 
+        jPanelRecording.setLayout(new java.awt.BorderLayout());
+
+        jPanelRecordFiles.setLayout(new java.awt.GridLayout(3, 1));
+
+        jPanelRecordSelector.setLayout(new java.awt.GridBagLayout());
+
+        jComboBoxSelectRecord.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxSelectRecord.setPreferredSize(new java.awt.Dimension(180, 20));
+        jComboBoxSelectRecord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxSelectRecordActionPerformed(evt);
+            }
+        });
+        jPanelRecordSelector.add(jComboBoxSelectRecord, new java.awt.GridBagConstraints());
+
+        jLabelRecordSelectorMessage.setForeground(new java.awt.Color(255, 0, 0));
+        jPanelRecordSelector.add(jLabelRecordSelectorMessage, new java.awt.GridBagConstraints());
+
+        jPanelRecordFiles.add(jPanelRecordSelector);
+
+        jPanelInfos.setBorder(javax.swing.BorderFactory.createTitledBorder("Recording info"));
+        jPanelInfos.setLayout(new java.awt.GridLayout(3, 2));
+
+        jLabel1.setText("Recorded on");
+        jPanelInfos.add(jLabel1);
+
+        jTextFieldRecordedOn.setEditable(false);
+        jPanelInfos.add(jTextFieldRecordedOn);
+
+        jLabel7.setText("Total commands");
+        jPanelInfos.add(jLabel7);
+
+        jTextFieldTotalCommands.setEditable(false);
+        jPanelInfos.add(jTextFieldTotalCommands);
+
+        jLabel9.setText("Estimated execution time");
+        jPanelInfos.add(jLabel9);
+
+        jTextFieldEstimatedExecutionTime.setEditable(false);
+        jPanelInfos.add(jTextFieldEstimatedExecutionTime);
+
+        jPanelRecordFiles.add(jPanelInfos);
+
+        jPanelRecordedFlightButtons.setBorder(javax.swing.BorderFactory.createTitledBorder("Controls"));
+        jPanelRecordedFlightButtons.setLayout(new java.awt.GridLayout(2, 1));
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jButtonStartSelectedFlight.setText("Start flight");
+        jButtonStartSelectedFlight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartSelectedFlightActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonStartSelectedFlight, new java.awt.GridBagConstraints());
+
+        jButtonStopSelectedFlight.setText("Stop flight");
+        jButtonStopSelectedFlight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStopSelectedFlightActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonStopSelectedFlight, new java.awt.GridBagConstraints());
+
+        jPanelRecordedFlightButtons.add(jPanel1);
+
+        jLabelRecordingStatusMessage.setText("Current Status: LeapMotion-Controlled");
+        jPanel3.add(jLabelRecordingStatusMessage);
+
+        jPanelRecordedFlightButtons.add(jPanel3);
+
+        jPanelRecordFiles.add(jPanelRecordedFlightButtons);
+
+        jPanelRecording.add(jPanelRecordFiles, java.awt.BorderLayout.PAGE_START);
+
+        jPanelRecordButtons.setLayout(new java.awt.GridBagLayout());
+
+        jButtonStartRecording.setBackground(new java.awt.Color(0, 0, 0));
+        jButtonStartRecording.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
+        jButtonStartRecording.setForeground(new java.awt.Color(51, 255, 51));
+        jButtonStartRecording.setText("Start recording");
+        jButtonStartRecording.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartRecordingActionPerformed(evt);
+            }
+        });
+        jPanelRecordButtons.add(jButtonStartRecording, new java.awt.GridBagConstraints());
+
+        jButtonStopRecording.setBackground(new java.awt.Color(0, 0, 0));
+        jButtonStopRecording.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
+        jButtonStopRecording.setForeground(new java.awt.Color(204, 0, 0));
+        jButtonStopRecording.setText("Stop recording");
+        jButtonStopRecording.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStopRecordingActionPerformed(evt);
+            }
+        });
+        jPanelRecordButtons.add(jButtonStopRecording, new java.awt.GridBagConstraints());
+
+        jPanelRecording.add(jPanelRecordButtons, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane1.addTab("Recording", jPanelRecording);
+
         jPanelSettings.setLayout(new java.awt.GridLayout(6, 2));
 
         jLabel2.setText("Sensibility");
@@ -353,100 +464,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jTabbedPane1.addTab("Settings", jPanelSettings);
 
-        jPanelRecording.setLayout(new java.awt.BorderLayout());
-
-        jPanelRecordFiles.setLayout(new java.awt.GridLayout(3, 1));
-
-        jPanelRecordSelector.setLayout(new java.awt.GridBagLayout());
-
-        jComboBoxSelectRecord.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBoxSelectRecord.setPreferredSize(new java.awt.Dimension(180, 20));
-        jComboBoxSelectRecord.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxSelectRecordActionPerformed(evt);
-            }
-        });
-        jPanelRecordSelector.add(jComboBoxSelectRecord, new java.awt.GridBagConstraints());
-
-        jLabelRecordSelectorMessage.setForeground(new java.awt.Color(255, 0, 0));
-        jPanelRecordSelector.add(jLabelRecordSelectorMessage, new java.awt.GridBagConstraints());
-
-        jPanelRecordFiles.add(jPanelRecordSelector);
-
-        jPanelInfos.setBorder(javax.swing.BorderFactory.createTitledBorder("Recording info"));
-        jPanelInfos.setLayout(new java.awt.GridLayout(3, 2));
-
-        jLabel1.setText("Recorded on");
-        jPanelInfos.add(jLabel1);
-
-        jTextFieldRecordedOn.setEditable(false);
-        jPanelInfos.add(jTextFieldRecordedOn);
-
-        jLabel7.setText("Total commands");
-        jPanelInfos.add(jLabel7);
-
-        jTextFieldTotalCommands.setEditable(false);
-        jPanelInfos.add(jTextFieldTotalCommands);
-
-        jLabel9.setText("Estimated execution time");
-        jPanelInfos.add(jLabel9);
-
-        jTextFieldEstimatedExecutionTime.setEditable(false);
-        jPanelInfos.add(jTextFieldEstimatedExecutionTime);
-
-        jPanelRecordFiles.add(jPanelInfos);
-
-        jPanelRecordedFlightButtons.setLayout(new java.awt.GridBagLayout());
-
-        jButtonStartSelectedFlight.setText("Start flight");
-        jButtonStartSelectedFlight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonStartSelectedFlightActionPerformed(evt);
-            }
-        });
-        jPanelRecordedFlightButtons.add(jButtonStartSelectedFlight, new java.awt.GridBagConstraints());
-
-        jButtonStopSelectedFlight.setText("Stop flight");
-        jButtonStopSelectedFlight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonStopSelectedFlightActionPerformed(evt);
-            }
-        });
-        jPanelRecordedFlightButtons.add(jButtonStopSelectedFlight, new java.awt.GridBagConstraints());
-
-        jPanelRecordFiles.add(jPanelRecordedFlightButtons);
-
-        jPanelRecording.add(jPanelRecordFiles, java.awt.BorderLayout.PAGE_START);
-
-        jPanelRecordButtons.setLayout(new java.awt.GridBagLayout());
-
-        jButtonStartRecording.setBackground(new java.awt.Color(0, 0, 0));
-        jButtonStartRecording.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
-        jButtonStartRecording.setForeground(new java.awt.Color(51, 255, 51));
-        jButtonStartRecording.setText("Start recording");
-        jButtonStartRecording.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonStartRecordingActionPerformed(evt);
-            }
-        });
-        jPanelRecordButtons.add(jButtonStartRecording, new java.awt.GridBagConstraints());
-
-        jButtonStopRecording.setBackground(new java.awt.Color(0, 0, 0));
-        jButtonStopRecording.setFont(new java.awt.Font("Comic Sans MS", 3, 14)); // NOI18N
-        jButtonStopRecording.setForeground(new java.awt.Color(204, 0, 0));
-        jButtonStopRecording.setText("Stop recording");
-        jButtonStopRecording.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonStopRecordingActionPerformed(evt);
-            }
-        });
-        jPanelRecordButtons.add(jButtonStopRecording, new java.awt.GridBagConstraints());
-
-        jPanelRecording.add(jPanelRecordButtons, java.awt.BorderLayout.CENTER);
-
-        jTabbedPane1.addTab("Recording", jPanelRecording);
-
-        jPanelBody.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        jPanelBody.add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         getContentPane().add(jPanelBody, java.awt.BorderLayout.CENTER);
 
@@ -578,8 +596,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             FlightRecord record = flightRecords.get(jComboBoxSelectRecord.getSelectedIndex());
 
             try {
-                List<String> commands = record.getFlightCommands();
-                jTextFieldTotalCommands.setText("" + commands.size());
+                FlightBuffer commands = record.getFlightCommands();
+                jTextFieldTotalCommands.setText("" + commands.length());
                 jTextFieldEstimatedExecutionTime.setText("WIP");
             } catch (IOException ex) {
                 jTextFieldTotalCommands.setText("Unknown");
@@ -594,12 +612,50 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         //Cut out the leapmotion controller
         System.err.println("[Info] Trying to disable the leapmotion...");
         controller.DisableLeapMotionController();
+             
+        jLabelRecordingStatusMessage.setText(this.RECORDING_STATUS_ENABLED);
+        
+        //Get the commands of the selected flight
+        try{
+            FlightBuffer commands = flightRecords.get(jComboBoxSelectRecord.getSelectedIndex()).getFlightCommands();
+            
+            new Thread("Recording thread") {
+                public void run(){
+                    //Sleep a 5 seconds
+                    fancyCountdown(5);
+
+                    String command;
+                    while((command = commands.getNextCommand()) != null){
+                        System.out.println("Executing command: " + command);
+                        commandManager.sendCommand(command);
+                    }
+                }
+                
+                private void fancyCountdown(int seconds){
+                    for(int i = 0; i < seconds; i++){
+                        try{
+                            System.out.println(String.format("Starting in %d seconds...",seconds-i));
+                            Thread.sleep(1000);
+                        }
+                        catch(InterruptedException ex){}
+                    }
+                }
+            }.start();
+        }
+        catch(IOException ex){
+            System.err.println("[Info] Error while getting the recording commands. Stop pre-configured flight and re-enable the leapmotion controller.");
+        }
+
+        controller.EnableLeapMotionController();
+        jLabelRecordingStatusMessage.setText(this.RECORDING_STATUS_DISABLED);
     }//GEN-LAST:event_jButtonStartSelectedFlightActionPerformed
 
+    
     private void jButtonStopSelectedFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopSelectedFlightActionPerformed
         //Cut out the leapmotion controller
         System.err.println("[Info] Trying to re-enable the leapmotion...");
         controller.EnableLeapMotionController();
+        jLabelRecordingStatusMessage.setText(this.RECORDING_STATUS_DISABLED);
     }//GEN-LAST:event_jButtonStopSelectedFlightActionPerformed
 
     public String getDateFromRecordFilename(String filename) {
@@ -700,8 +756,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelRecordSelectorMessage;
+    private javax.swing.JLabel jLabelRecordingStatusMessage;
     private javax.swing.JPanel jPaneLogPage;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelAbortPanel;
     private javax.swing.JPanel jPanelBody;
     private javax.swing.JPanel jPanelExtraCommands;

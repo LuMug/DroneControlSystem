@@ -76,7 +76,7 @@
 ### 1.1 Informazioni sul progetto
 
   Il progetto è gestito e realizzato dagli allievi Luca Di Bello, Fadil Smajlbasic, Jari Näser, Andrea Rauso (studenti di informatica all’Arti e Mestieri di Trevano) sotto la supervisione del professor Luca Muggiasca. Abbiamo a disposizione un dispositivo chiamato "Leap Motion", il quale permette il tracking di precisione delle mani e dei loro movimenti e il drone DJI Tello sul quale effettueremo tutti i test della nostra libreria.
-  La realizzazione del progetto inizia il 13 febbraio 2019 (13/02/19) e dovrà essere consegnato entro il 15 maggio 2019 (15/05/19).
+  La realizzazione del progetto inizia il 13 febbraio 2019 (13/02/19) e dovrà essere consegnato entro il 22 maggio 2019 (22/05/19).
 
 ### 1.2 Abstract
 
@@ -188,11 +188,14 @@ Sul lato sinistro si può vedere il sensore ed il controller che fanno da client
 
 ### 2.3 Design delle interfacce
 
-Interfaccia della posizione del drone
+Interfaccia della posizione del drone:
+Per la visualizzazione della posizione del drone nel simulatore é stato scelto un diagramma cartesiano in cui verra mostrato lo spostamento del drone su 2 assi.
+Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una con visuale di profilo (Assi X e Y)
 
 ![alt Interfaccia posizione](..\media\mockup\MockPosizioneDallAlto.png)
 
-Interfaccia della rotazione del drone
+Interfaccia della rotazione del drone:
+Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 ![alt Interfaccia rotazione](..\media\mockup\MockRotazioneAssi.png)
 
 ### 2.4 Design procedurale [DA FARE!!!!!]
