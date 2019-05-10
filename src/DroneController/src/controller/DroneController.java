@@ -16,7 +16,7 @@ import recorder.FlightRecord;
 import recorder.FlightRecorder;
 
 /**
- *
+ * This class describes the drone controller
  * @author Fadil Smajilbasic
  */
 public class DroneController extends Listener implements Runnable, SettingsListener, CommandManagerListener {
@@ -34,6 +34,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private CommandListener listener;
     private float heightThreshold;
     private boolean executingCommand = false;
+    
+    private boolean isLeapMotionEnabled = true;
     
     //Recording variables
     private boolean isRecordingFlight = false;
@@ -59,25 +61,40 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
         listener.controllerMessage("Sending commands\n");
-
+         
+        
         while (CONTROLLER.isConnected()) {
-            Frame frame = CONTROLLER.frame();
-            FRAME_HELPER.setFrame(frame);
-            if (!getExecutingCommand()) {
-                if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
+            try {
+                if (isLeapMotionEnabled) {
+                    Frame frame = CONTROLLER.frame();
+                    FRAME_HELPER.setFrame(frame);
+                    if (!getExecutingCommand()) {
+                        if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
 
-//                    setExecutingCommand(true);
-//                    checkGesture();
-//                    setExecutingCommand(true);
-                    checkHeightControl();
-//                    setExecutingCommand(true);
-//                    checkMovementControl();
+                            //                    setExecutingCommand(true);
+                            //                    checkGesture();
+                            //                    setExecutingCommand(true);
+                            checkHeightControl();
+                            //                    setExecutingCommand(true);
+                            //                    checkMovementControl();
 
+                        }
+                    } else {
+                        System.out.println("not finished executing");
+                    }
+                } else {
+                    System.err.println("[Info] Leap Motion controller is disabled. Wait until notify");
+                    
+                    synchronized(this){
+                        this.wait();
+                    }
+                    
+                    System.out.println("[Info] LeapMotion controller re-enabled successfully");
                 }
-            } else {
-                System.out.println("not finished executing");
             }
-
+            catch(InterruptedException ex){
+                System.err.println("[Error] Detected an error: " + ex.getMessage());
+            }
         }
 
         if (listener != null) {
@@ -314,5 +331,28 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
 //        doneExecuting();
+    }
+    
+    /**
+     * This method enables the LeapMotion controller.
+     */
+    public void EnableLeapMotionController() {
+        if (isLeapMotionEnabled) 
+            return;
+        this.isLeapMotionEnabled = true;
+        
+        synchronized(this){
+            System.out.println("[Info] Re-Enabled the LeapMotion controller");
+            this.notifyAll();
+        }
+    }
+    
+    /**
+     * This method disables the LeapMotion controller.
+     */
+    public void DisableLeapMotionController(){
+        if(!isLeapMotionEnabled)
+            return;
+        this.isLeapMotionEnabled = false;
     }
 }
