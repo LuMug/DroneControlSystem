@@ -6,9 +6,6 @@
 
 Jari:
 Ho continuato con lo sviluppo e correzione della documentazione.
-Inoltre come dovuto ho richiesto il parere del docente Luca Muggiasca sulle
-specifiche dell'hardware il quale ha detto che non si necessita dell'elenco dei
-componenti presenti nei vari PC.
 
 Fadil:
 Ho lavorato con luca sull'implementazione del flight recording e ho aggiunto il riconoscimento delle gesture per il controllo del yaw del drone.

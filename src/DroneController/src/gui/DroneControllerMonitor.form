@@ -584,8 +584,8 @@
               </Constraints>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                <Property name="columns" type="int" value="2"/>
-                <Property name="rows" type="int" value="3"/>
+                <Property name="columns" type="int" value="1"/>
+                <Property name="rows" type="int" value="4"/>
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="sensibilityJPanel">
@@ -609,21 +609,26 @@
                 </Container>
                 <Container class="javax.swing.JPanel" name="degreesJPanel">
 
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                    <Property name="columns" type="int" value="0"/>
+                    <Property name="rows" type="int" value="1"/>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="degreesLabel">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Degrees Sensibility"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="DeltaAverageMultiplierValueTextBox">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="VALUE"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DeltaAverageMultiplierValueTextBoxActionPerformed"/>
+                      </Events>
+                    </Component>
+                  </SubComponents>
                 </Container>
-                <Component class="javax.swing.JLabel" name="degreesLabel">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Degrees Sensibility"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="DeltaAverageMultiplierValueTextBox">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="VALUE"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DeltaAverageMultiplierValueTextBoxActionPerformed"/>
-                  </Events>
-                </Component>
                 <Component class="javax.swing.JButton" name="jButtonApplySettings">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Apply settings"/>

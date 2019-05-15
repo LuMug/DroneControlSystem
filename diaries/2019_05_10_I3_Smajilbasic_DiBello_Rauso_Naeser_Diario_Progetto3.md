@@ -5,6 +5,10 @@
 ## Lavori svolti
 
 Jari:
+Ho continuato con lo sviluppo e correzione della documentazione.
+Inoltre come dovuto ho richiesto il parere del docente Luca Muggiasca sulle
+specifiche dell'hardware il quale ha detto che non si necessita dell'elenco dei
+componenti presenti nei vari PC.
 
 Fadil:
 Ho aggiunto commenti alla classe DroneController e ho messo apposto il gantt consuntivo.
