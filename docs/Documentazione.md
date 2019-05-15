@@ -1,8 +1,7 @@
-# Drone Control System [METTERE TITOLO?]
+# Drone Control System
 
 #### Da Fare:
 - 1.5: Aggiungere eventuali requisiti
-- 2.4: Da fare
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
 - 4.3: Da fare
@@ -10,7 +9,6 @@
 - 6.2: da fare
 - 8.1: da fare
 - Sommario: aggiornarlo
-- Discutere per titolo doc
 
 ---
 
@@ -196,25 +194,14 @@ Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una 
 
 Interfaccia della rotazione del drone:
 Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
+
 ![alt Interfaccia rotazione](..\media\mockup\MockRotazioneAssi.png)
 
-### 2.4 Design procedurale [DA FARE!!!!!]
+### 2.4 Design procedurale
 
-Descrive i concetti dettagliati dell’architettura/sviluppo utilizzando
-ad esempio:
+Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone oppure a DroneSimulator.
 
--   Diagrammi di flusso e Nassi.
-
--   Tabelle.
-
--   Classi e metodi.
-
--   Tabelle di routing
-
--   Diritti di accesso a condivisioni …
-
-Questi documenti permetteranno di rappresentare i dettagli procedurali
-per la realizzazione del prodotto.
+![Diagramma di flusso](..\media\img\DiagrammaFlusso.png)
 
 ## 3 Implementazione
 ---
@@ -376,6 +363,7 @@ Usando le proprie mani è possibile guidare il drone per l'aria avendo la possib
 -   https://stackoverflow.com/, *StackOverflow*, 13.02.2019 - 10.05.2019
 - https://www.leapmotion.com/, *Leap Motion*, 13.02.2019 - 10.05.2019.
 -   https://www.ryzerobotics.com/tello, *Tello SDK*, 13.02.2019 - 10.05.2019
+-   https://www.draw.io/, *Draw io*, 15.05.2019
 
 
 ## 8 Allegati -> DA CONTROLLARE
