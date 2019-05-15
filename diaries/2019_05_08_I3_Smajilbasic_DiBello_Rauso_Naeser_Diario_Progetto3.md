@@ -11,7 +11,7 @@ specifiche dell'hardware il quale ha detto che non si necessita dell'elenco dei
 componenti presenti nei vari PC.
 
 Fadil:
-
+Ho lavorato con luca sull'implementazione del flight recording e ho aggiunto il riconoscimento delle gesture per il controllo del yaw del drone.
 Luca:
 Ho continuato l'implementazione delle classi relative al recording dei 
 voli.
@@ -24,3 +24,5 @@ Andrea: Ho continuato con la documentazione modificando il sommario trasformando
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
+Chiedere se nei componenti dell'Hardware bisogna anche mettere i componenti
+specifici dei vari PC.
