@@ -6,12 +6,8 @@ import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
-import java.io.IOException;
 import settings.SettingsListener;
 import settings.SettingsManager;
-import recorder.FlightBuffer;
-import recorder.FlightRecord;
-import recorder.FlightRecorder;
 
 /**
  * This class reads the input from the LeapMotion and sends the commands to the
