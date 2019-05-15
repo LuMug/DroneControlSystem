@@ -13,6 +13,8 @@ componenti presenti nei vari PC.
 Fadil:
 
 Luca:
+Ho continuato l'implementazione delle classi relative al recording dei 
+voli.
 
 Andrea: Ho continuato con la documentazione modificando il sommario trasformandolo in una lista numerata, ho aggiunto e aggiornato le immagini degli UML e i siti della libreria JFreeChart nella sitografia.
 
