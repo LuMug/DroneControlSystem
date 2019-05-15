@@ -1,4 +1,4 @@
-# Drone Control System [METTERE TITOLO?]
+# Drone Control System
 
 #### Da Fare:
 - 1.5: Aggiungere eventuali requisiti
@@ -10,7 +10,6 @@
 - 6.2: da fare
 - 8.1: da fare
 - Sommario: aggiornarlo
-- Discutere per titolo doc
 
 ---
 
@@ -376,6 +375,7 @@ Usando le proprie mani è possibile guidare il drone per l'aria avendo la possib
 -   https://stackoverflow.com/, *StackOverflow*, 13.02.2019 - 10.05.2019
 - https://www.leapmotion.com/, *Leap Motion*, 13.02.2019 - 10.05.2019.
 -   https://www.ryzerobotics.com/tello, *Tello SDK*, 13.02.2019 - 10.05.2019
+-   https://www.draw.io/, *Draw io*, 15.05.2019
 
 
 ## 8 Allegati -> DA CONTROLLARE
