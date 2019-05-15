@@ -1,10 +1,8 @@
 package controller;
 
-import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Gesture;
-import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
@@ -107,7 +105,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
         COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
@@ -120,11 +117,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 if (isLeapMotionEnabled) {
                     Frame frame = CONTROLLER.frame();
                     FRAME_HELPER.setFrame(frame);
-                    if (!getExecutingCommand()) {
+                    if (!isExecutingCommand()) {
                         if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
 
-                            //                    setExecutingCommand(true);
-                            checkGesture();
                             setExecutingCommand(true);
                             checkHeightControl();
                             setExecutingCommand(true);
@@ -234,15 +229,17 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         lastY = (int) ((lastHeightReal - 300) / 2);
         if (FRAME_HELPER.getLeftHand(null) != null) {
 
-            float rollValue = FRAME_HELPER.getRoll(FRAME_HELPER.getLeftHand(null));
+            float rollLeftValue = FRAME_HELPER.getRoll(FRAME_HELPER.getLeftHand(null));
 
-            if (Math.abs(rollValue) > controllerDegreesSensibility * 2) {
-                System.out.println("yaw: " + (Math.abs((int) rollValue) - controllerDegreesSensibility * 2));
+            if (Math.abs(rollLeftValue) > controllerDegreesSensibility * 3) {
 
-                if ((Math.abs((int) rollValue) - controllerDegreesSensibility * 2) != 0) {
-                    String message = rollValue < 0
-                            ? Commands.rotateCounterClockwise((int) Math.abs(rollValue - controllerDegreesSensibility))
-                            : Commands.rotateClockwise((int) (rollValue - controllerDegreesSensibility));
+                int rollLeftRelative = (int) (Math.abs(rollLeftValue) - controllerDegreesSensibility * 3);
+
+                if (rollLeftRelative != 0) {
+                    System.out.println("yaw: " + rollLeftRelative);
+                    String message = rollLeftValue < 0
+                            ? Commands.rotateClockwise(rollLeftRelative)
+                            : Commands.rotateCounterClockwise(rollLeftRelative);
                     commands[0] = message;
                     if (listener != null) {
                         listener.commandSent(message + "\n");
@@ -255,10 +252,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                     commands[1] = message;
 
-                    COMMAND_MANAGER.sendCommand(message);
-
                     //Add commands to recorder
-                    if(isRecordingFlight){
+                    if (isRecordingFlight) {
                         //REMOVE
                         System.err.println("Added command to file: " + message);
                         recordBuffer.addCommand(message);
@@ -269,7 +264,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 }
             }
         }
-//        COMMAND_MANAGER.sendCommands(commands);
+        COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
 
     }
@@ -282,15 +277,16 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         String[] commands = new String[3];
         if (FRAME_HELPER.getRightHand(null) != null) {
             float pitchValue = FRAME_HELPER.getPitch(FRAME_HELPER.getRightHand(null));
-            float rollValue = FRAME_HELPER.getRoll(FRAME_HELPER.getRightHand(null));
-            float yawValue = FRAME_HELPER.getYaw(FRAME_HELPER.getLeftHand(null));
+            float rollRightValue = FRAME_HELPER.getRoll(FRAME_HELPER.getRightHand(null));
 
-            if (Math.abs(rollValue) > controllerDegreesSensibility) {
+            int rollRightRelative = (int) (Math.abs((int) rollRightValue) - controllerDegreesSensibility);
 
-                if ((Math.abs((int) rollValue) - controllerDegreesSensibility) != 0) {
-                    String message = rollValue < 0
-                            ? Commands.right((int) Math.abs(rollValue - controllerDegreesSensibility))
-                            : Commands.left((int) (rollValue - controllerDegreesSensibility));
+            if (Math.abs(rollRightValue) > controllerDegreesSensibility) {
+
+                if (rollRightRelative != 0) {
+                    String message = rollRightValue < 0
+                            ? Commands.right((int) rollRightRelative)
+                            : Commands.left((int) rollRightRelative);
                     commands[0] = message;
                     if (listener != null) {
                         listener.commandSent(message + "\n");
@@ -299,10 +295,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             }
 
             if (Math.abs(pitchValue) > controllerDegreesSensibility) {
-                if ((Math.abs((int) pitchValue) - controllerDegreesSensibility) != 0) {
+                int pitchRelative = (int) (Math.abs((int) pitchValue) - controllerDegreesSensibility);
+
+                if (pitchRelative != 0) {
                     String message = pitchValue > 0
-                            ? Commands.back((int) (pitchValue - controllerDegreesSensibility))
-                            : Commands.forward((int) Math.abs(pitchValue - controllerDegreesSensibility));
+                            ? Commands.back(pitchRelative)
+                            : Commands.forward(pitchRelative);
                     commands[1] = message;
                     if (listener != null) {
                         listener.commandSent(message + "\n");
@@ -310,22 +308,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 }
             }
 
-            if (Math.abs(yawValue) > controllerDegreesSensibility) {
-                if ((Math.abs((int) yawValue) - controllerDegreesSensibility) != 0) {
-                    String message = yawValue > 0
-                            ? Commands.rotateCounterClockwise((int) (yawValue - controllerDegreesSensibility))
-                            : Commands.rotateClockwise((int) Math.abs(yawValue - controllerDegreesSensibility));
-                    commands[1] = message;
-                    if (listener != null) {
-                        listener.commandSent(message + "\n");
-                    }
-
-                }
-
-            }
         }
 
-//        COMMAND_MANAGER.sendCommands(commands);
+        COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
         if (isRecordingFlight) {
             recordBuffer.addCommands(commands);
@@ -362,17 +347,29 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     /**
+     * Getter method used to check if the Controller is currently executing any
+     * command.
      *
-     * @return
+     * @return true if the controller is executing a command, false if it
+     * finished executing the last command.
      */
-    public synchronized boolean getExecutingCommand() {
+    public synchronized boolean isExecutingCommand() {
         return executingCommand;
     }
 
+    /**
+     * Setter method for the executingCommand field.
+     *
+     * @param executingCommand the value to set
+     */
     public synchronized void setExecutingCommand(boolean executingCommand) {
         this.executingCommand = executingCommand;
     }
 
+    /**
+     * This method clears the recording buffer and starts a new recording.
+     *
+     */
     public void startRecording() {
         this.recordBuffer.clear();
         this.isRecordingFlight = true;
@@ -380,11 +377,15 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         System.out.println("[Info] Start recording");
     }
 
+    /**
+     * This method stops the recording of the commands buffer and saves them to
+     * a file.
+     */
     public void stopRecording() {
         this.isRecordingFlight = false;
 
-        try{
-            if(recordBuffer.length() > 0){
+        try {
+            if (recordBuffer.length() > 0) {
                 RECORDER.createBase();
                 FlightRecord record = RECORDER.generateRecordFile();
                 System.out.println("Generated file: " + record.getSaveLocation());
@@ -398,35 +399,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         System.out.println("[Info] Stopped recording");
     }
 
+    /**
+     * 
+     */
     @Override
     public synchronized void doneExecuting() {
         setExecutingCommand(false);
-    }
-
-    private void checkGesture() {
-        Frame f = FRAME_HELPER.getCurrentFrame();
-        GestureList gestures = f.gestures();
-
-        for (Gesture gesture : gestures) {
-            System.out.println("gestures: " + gestures.count());
-            if (gesture.type() == Gesture.Type.TYPE_CIRCLE) {
-                CircleGesture circleGesture = new CircleGesture(gesture);
-                float turns = circleGesture.progress();
-
-                System.out.println("CircleGesture progress: " + turns);
-
-                String clockwiseness;
-                if (circleGesture.pointable().direction().angleTo(circleGesture.normal()) <= Math.PI / 2) {
-                    clockwiseness = "clockwise";
-                } else {
-                    clockwiseness = "counterclockwise";
-                }
-                System.out.println(clockwiseness);
-                break;
-            }
-        }
-
-//        doneExecuting();
     }
 
     /**
@@ -439,7 +417,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         this.isLeapMotionEnabled = true;
 
         synchronized (this) {
-            System.out.println("[Info] Re-Enabled the LeapMotion controller");
+            System.out.println("[Info] Enabled the LeapMotion controller");
             this.notifyAll();
         }
     }
@@ -453,11 +431,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
         this.isLeapMotionEnabled = false;
     }
-    
+
     /**
      * Getter method for the controller enabled flag.
      */
-    public boolean isLeapMotionEnabled(){
+    public boolean isLeapMotionEnabled() {
         return isLeapMotionEnabled;
     }
 }
