@@ -491,7 +491,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jTabbedPane1.addTab("Recording", jPanelRecording);
 
-        jPanelSettings.setLayout(new java.awt.GridLayout(3, 2));
+        jPanelSettings.setLayout(new java.awt.GridLayout(4, 1));
 
         sensibilityJPanel.setLayout(new java.awt.GridLayout());
 
@@ -502,10 +502,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         sensibilityJPanel.add(sensibilityValueTextBox);
 
         jPanelSettings.add(sensibilityJPanel);
-        jPanelSettings.add(degreesJPanel);
+
+        degreesJPanel.setLayout(new java.awt.GridLayout());
 
         degreesLabel.setText("Degrees Sensibility");
-        jPanelSettings.add(degreesLabel);
+        degreesJPanel.add(degreesLabel);
 
         DeltaAverageMultiplierValueTextBox.setText("VALUE");
         DeltaAverageMultiplierValueTextBox.addActionListener(new java.awt.event.ActionListener() {
@@ -513,7 +514,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
                 DeltaAverageMultiplierValueTextBoxActionPerformed(evt);
             }
         });
-        jPanelSettings.add(DeltaAverageMultiplierValueTextBox);
+        degreesJPanel.add(DeltaAverageMultiplierValueTextBox);
+
+        jPanelSettings.add(degreesJPanel);
 
         jButtonApplySettings.setText("Apply settings");
         jButtonApplySettings.addActionListener(new java.awt.event.ActionListener() {
