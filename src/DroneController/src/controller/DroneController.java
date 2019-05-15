@@ -106,7 +106,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             listener.controllerMessage("DroneController started\n");
         }
 
-//        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
+        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
@@ -254,8 +255,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                     commands[1] = message;
 
-                    //Add commands to RECORDER
-                    if (isRecordingFlight) {
+                    COMMAND_MANAGER.sendCommand(message);
+
+                    //Add commands to recorder
+                    if(isRecordingFlight){
+                        //REMOVE
+                        System.err.println("Added command to file: " + message);
                         recordBuffer.addCommand(message);
                     }
 
@@ -322,7 +327,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
 //        COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
-
         if (isRecordingFlight) {
             recordBuffer.addCommands(commands);
         }
@@ -379,18 +383,17 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public void stopRecording() {
         this.isRecordingFlight = false;
 
-        try {
-            if (recordBuffer.length() > 0) {
+        try{
+            if(recordBuffer.length() > 0){
                 RECORDER.createBase();
                 FlightRecord record = RECORDER.generateRecordFile();
+                System.out.println("Generated file: " + record.getSaveLocation());
                 RECORDER.saveFlightPattern(this.recordBuffer, record);
                 System.out.println("[Info] File saved to path: " + record.getSaveLocation());
             }
         } catch (IOException ex) {
             System.out.println("[Info] Can't save the flight. *SAD SMILE*");
         }
-
-        this.recordBuffer.clear();
 
         System.out.println("[Info] Stopped recording");
     }
@@ -449,5 +452,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             return;
         }
         this.isLeapMotionEnabled = false;
+    }
+    
+    /**
+     * Getter method for the controller enabled flag.
+     */
+    public boolean isLeapMotionEnabled(){
+        return isLeapMotionEnabled;
     }
 }
