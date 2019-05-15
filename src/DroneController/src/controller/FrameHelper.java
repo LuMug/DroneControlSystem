@@ -72,11 +72,11 @@ public class FrameHelper {
     public Hand getLeftHand(Frame frame) {
         Hand lHand;
         if (frame != null && frame.isValid()) {
-            lHand = frame.hands().rightmost();
+            lHand = frame.hands().leftmost();
         } else {
-            lHand = getCurrentFrame().hands().rightmost();
+            lHand = getCurrentFrame().hands().leftmost();
         }
-                
+
         if (lHand.isLeft()) {
             return lHand;
         } else {
@@ -134,9 +134,10 @@ public class FrameHelper {
             return 0;
         }
     }
-    
+
     /**
      * This method returns the velocity of the hand passed as the parameter
+     *
      * @param hand the hand whose velocity is requested
      * @return the velocity of the hand
      */
@@ -180,6 +181,7 @@ public class FrameHelper {
 
     /**
      * Getter method fro the currentFrame variable
+     *
      * @return the currentFrame variable
      */
     public synchronized Frame getCurrentFrame() {
