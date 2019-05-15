@@ -69,20 +69,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     private boolean isLeapMotionEnabled = true;
 
-    /**
-     * This field contains information whether the flight commands are being
-     * recorded or not.
-     */
-    private boolean isRecordingFlight = false;
-    /**
-     * This field is a FlightRecorder object used to record.
-     */
-    private final FlightRecorder RECORDER = new FlightRecorder();
-    /**
-     * This field contains the buffer of commands that will be written to the
-     * recording file.
-     */
-    private FlightBuffer recordBuffer = new FlightBuffer();
+    
 
     /**
      * Drone controller constructor that adds this object as the LeapMotion
@@ -252,21 +239,13 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                     commands[1] = message;
 
-                    //Add commands to recorder
-                    if (isRecordingFlight) {
-                        //REMOVE
-                        System.err.println("Added command to file: " + message);
-                        recordBuffer.addCommand(message);
-                    }
-
+                    //COMMAND_MANAGER.sendCommand(message);
                     listener.commandSent(message + "\n");
-
                 }
             }
         }
         COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
-
     }
 
     /**
@@ -312,9 +291,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
-        if (isRecordingFlight) {
-            recordBuffer.addCommands(commands);
-        }
     }
 
     /**
@@ -366,42 +342,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         this.executingCommand = executingCommand;
     }
 
-    /**
-     * This method clears the recording buffer and starts a new recording.
-     *
-     */
-    public void startRecording() {
-        this.recordBuffer.clear();
-        this.isRecordingFlight = true;
-
-        System.out.println("[Info] Start recording");
-    }
-
-    /**
-     * This method stops the recording of the commands buffer and saves them to
-     * a file.
-     */
-    public void stopRecording() {
-        this.isRecordingFlight = false;
-
-        try {
-            if (recordBuffer.length() > 0) {
-                RECORDER.createBase();
-                FlightRecord record = RECORDER.generateRecordFile();
-                System.out.println("Generated file: " + record.getSaveLocation());
-                RECORDER.saveFlightPattern(this.recordBuffer, record);
-                System.out.println("[Info] File saved to path: " + record.getSaveLocation());
-            }
-        } catch (IOException ex) {
-            System.out.println("[Info] Can't save the flight. *SAD SMILE*");
-        }
-
-        System.out.println("[Info] Stopped recording");
-    }
-
-    /**
-     * 
-     */
     @Override
     public synchronized void doneExecuting() {
         setExecutingCommand(false);

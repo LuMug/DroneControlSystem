@@ -64,7 +64,7 @@ public class FlightRecorder {
     public void saveFlightPattern(FlightBuffer buffer, FlightRecord flightSaveLocation) throws IOException {
         try {
             System.out.println("[Recorder] I detected " + buffer.length() + " new lines");
-            while (buffer.existsNextCommand()) {
+            while(buffer.length() > 0){
                 String command = buffer.getNextCommand();
                 System.out.println("Added line to file: " + command);
                 Files.write(flightSaveLocation.getSaveLocation(), (command + "\n").getBytes(), StandardOpenOption.APPEND);
