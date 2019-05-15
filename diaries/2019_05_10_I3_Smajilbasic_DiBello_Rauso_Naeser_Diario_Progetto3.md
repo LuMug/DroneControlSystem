@@ -10,6 +10,7 @@ Fadil:
 Ho aggiunto commenti alla classe DroneController e ho messo apposto il gantt consuntivo.
 
 Luca:
+Aggiunto un menù nella GUI utile per la registrazione e l'esecuzione dei voli già registrati.
 
 Andrea:
 

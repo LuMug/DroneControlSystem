@@ -10,6 +10,8 @@ Fadil:
 Ho continuato ad aiutare luca a implementare il flight recording e l'abbiamo portato a termine. Inoltre ho c
 
 Luca:
+Ho fixato tutti gli errori/bug che rendevano il "flight recorder" (registratore/esecutore di voli). Ora il programma è in grado di 
+registrare tutti i comandi inviati al drone e salvarli in un file per poi poter eseguire nuovamente lo stesso identico volo.
 
 Andrea:
 
