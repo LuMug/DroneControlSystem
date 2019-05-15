@@ -6,7 +6,6 @@
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
 - 4.3: Da fare
-- 6.0: Da fare
 - 6.1: da fare
 - 6.2: da fare
 - 8.1: da fare
@@ -355,11 +354,8 @@ Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osse
 
 ## 6 Conclusioni
 ---
-Quali sono le implicazioni della mia soluzione? Che impatto avrà?
-Cambierà il mondo? È un successo importante? È solo un’aggiunta
-marginale o è semplicemente servita per scoprire che questo percorso è
-stato una perdita di tempo? I risultati ottenuti sono generali,
-facilmente generalizzabili o sono specifici di un caso particolare? ecc
+Il nostro prodotto permette un uso molto semplice e anche abbastanza accessibile a chiunque sia appassionato oppure anche nuovo nel mondo dei droni.
+Usando le proprie mani è possibile guidare il drone per l'aria avendo la possibilità di farli fare svariati movimenti come quelli normali di movimento oppure quelli acrobatici come un looping.
 
 ### 6.1 Sviluppi futuri
   Migliorie o estensioni che possono essere sviluppate sul prodotto.

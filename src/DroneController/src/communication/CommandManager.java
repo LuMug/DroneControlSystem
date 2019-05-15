@@ -1,32 +1,62 @@
 package communication;
 
-//import static controller.DroneController.settingsManager;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import settings.ControllerSettings;
 
 /**
+ * This class is used to send and receive data from ant to the Drone.
  *
  * @author Luca Di Bello
  */
 public class CommandManager {
 
+    /**
+     * The socket used to communicate.
+     */
     private DatagramSocket commandSocket;
 
+    /**
+     * Class used to load settings found in the config.dcs file.
+     */
     private ControllerSettings settings = new ControllerSettings();
 
-    private final String JARI_ADDRESS = settings.getCommunicationJariAddress();
+    /**
+     * This constant contains the IP address of the tello drone.
+     */
     private final String TELLO_ADDRESS = settings.getCommunicationTelloAddress();
+    /**
+     * This constant contains the tello communication port to which the tello
+     * will send the responses to the commands sent.
+     */
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
+    /**
+     * This constant contains the tello communication port to which the commands
+     * will be sent to.
+     */
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
+    /**
+     * This constant contains the tello communication port to which we send
+     * commands about the state of the drone. Using this port we can query the
+     * drone about it's battery status, it's velocity, altitude and other
+     * parameters.
+     */
     private final int TELLO_STATE_SEND_PORT = settings.getTelloStatePort();
-    private final CommandManagerListener listener;
+    /**
+     * This field contains the listener of the Command manager class. This
+     * listener gets notified when a command is executed.
+     */
+    private final CommandManagerListener LISTENER;
 
+    /**
+     * The constructor of the CommandManager that creates a new DatagramSocket.
+     *
+     * @param listener the listener of the CommandManager class.
+     */
     public CommandManager(CommandManagerListener listener) {
         try {
             commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
@@ -35,7 +65,7 @@ public class CommandManager {
         } catch (SocketException ex) {
             System.err.println("Can't create client socket: " + ex.getMessage());
         }
-        this.listener = listener;
+        this.LISTENER = listener;
 
     }
 
@@ -47,24 +77,22 @@ public class CommandManager {
     public void sendCommand(String command) {
         System.out.println("sending command: " + command);
 
-        //Create a socket for sending the data
         try {
             DatagramPacket packet;
-            //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
-            if (command.contains("?")) {
-                System.out.println("Contains state command");
-                packet = this.sendStateString(command);
-            } else {
-                packet = this.sendString(command);
-            }
-            //Wait for response
+
+            // Identifies the command in order to use the right method
+            packet = this.createPacket(command);
+
+            commandSocket.send(packet);
+
             System.out.println("Wait for response from drone");
             packet.setData(new byte[255]);
             commandSocket.receive(packet);
 
             String response = new String(packet.getData()).trim();
 
-            listener.doneExecuting();
+            LISTENER.doneExecuting(); // notifies the listener that the drone has executed the command, no matter if it is postitive or negative
+
             if (command.contains("?")) {
                 System.out.println("Response: " + response);
             } else {
@@ -82,12 +110,17 @@ public class CommandManager {
         }
     }
 
+    /**
+     * This command sends the command without waiting for the drone's response.
+     *
+     * @param command the command to send
+     */
     public void sendCommandAsync(String command) {
+
         System.out.println("sending command async: " + command);
-        //Create a socket for sending the data
+
         try {
-            //Prima di inviare il pacchetto aspetta che il drone ha riposto correttamente (OK) al comando precedente
-            this.sendString(command);
+            this.createPacket(command);
         } catch (UnknownHostException uhe) {
             System.out.println("Cannot resolve hostname: " + uhe.getMessage());
         } catch (IOException ioex) {
@@ -95,38 +128,48 @@ public class CommandManager {
         }
     }
 
-    private DatagramPacket sendString(String command) throws UnknownHostException, IOException {
-        //Creo il pacchetto
+    /**
+     * This method creates a DatagramPacket based on the command that comes as
+     * the parameter.
+     *
+     * @param command the command to include in the packet.
+     * @return the DataGramPacket that cam be sent as is.
+     * @throws UnknownHostException exception thrown if the packet address is
+     * invalid.
+     * @throws IOException exception thrown when an IO exception occurs during
+     * the creation of the packet.
+     */
+    private DatagramPacket createPacket(String command) throws UnknownHostException, IOException {
+
         byte[] commandData = command.getBytes();
+        DatagramPacket packet;
+        if (command.contains("?")) {
+            System.out.println("Contains state command");
+            packet = new DatagramPacket(
+                    commandData,
+                    commandData.length,
+                    InetAddress.getByName(this.TELLO_ADDRESS),
+                    this.TELLO_STATE_SEND_PORT
+            );
+        } else {
+            packet = new DatagramPacket(
+                    commandData,
+                    commandData.length,
+                    InetAddress.getByName(this.TELLO_ADDRESS),
+                    TELLO_COMMAND_SEND_PORT
+            );
 
-        DatagramPacket packet = new DatagramPacket(
-                commandData,
-                commandData.length,
-                InetAddress.getByName(this.TELLO_ADDRESS),
-                TELLO_COMMAND_SEND_PORT
-        );
-
-        commandSocket.send(packet);
+        }
 
         return packet;
     }
 
-    private DatagramPacket sendStateString(String command) throws UnknownHostException, IOException {
-        //Creo il pacchetto
-        byte[] commandData = command.getBytes();
-
-        DatagramPacket packet = new DatagramPacket(
-                commandData,
-                commandData.length,
-                InetAddress.getByName(this.TELLO_ADDRESS),
-                this.TELLO_STATE_SEND_PORT
-        );
-
-        commandSocket.send(packet);
-
-        return packet;
-    }
-
+    /**
+     * This method is used to send multiple commands received as an array of
+     * Commands. This method uses the sendCommand(String command) method
+     *
+     * @param commands the array of commands to send.
+     */
     public void sendCommands(String[] commands) {
         for (String command : commands) {
             if (command != null) {

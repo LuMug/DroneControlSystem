@@ -16,36 +16,89 @@ import recorder.FlightRecord;
 import recorder.FlightRecorder;
 
 /**
- * This class describes the drone controller
+ * This class reads the input from the LeapMotion and sends the commands to the
+ * drone.
+ *
  * @author Fadil Smajilbasic
+ * @author Luca Di Bello
  */
 public class DroneController extends Listener implements Runnable, SettingsListener, CommandManagerListener {
 
+    /**
+     * This constant is the command manager required in order to send commands
+     * and receive responses from the drone.
+     */
     private final CommandManager COMMAND_MANAGER = new CommandManager(this);
+    /**
+     * This constant is the settings manager used to load variable values form
+     * the config.dcs configuration file.
+     */
     private final SettingsManager SETTINGS_MANAGER = new SettingsManager();
+    /**
+     * This constant is the frame helper containing useful methods to obtain
+     * information from a frame read by the LeapMotion.
+     */
     private final FrameHelper FRAME_HELPER = new FrameHelper();
+    /**
+     * This constant is a Controller form the Leap SDK.
+     */
     private final Controller CONTROLLER = new Controller();
 
-    private float controllerSensibility;
-    private float controllerDeltaPoints;
+    /**
+     * This field contains the degrees threshold used in the
+     * checkMovementControl method.
+     */
     private float controllerDegreesSensibility;
-    private float movementDelay;
-    private float deltaAverageMultiplier;
+    /**
+     * This is the listener that gets notified when a new command is registered
+     * by the DroneController.
+     */
     private CommandListener listener;
+    /**
+     * This field contains the Threshold of the Y axis used in the
+     * checkHeightControl method.
+     */
     private float heightThreshold;
+    /**
+     * This field is a boolean containing the status of the DroneController,
+     * whether is is executing a command or is it reading a new frame.
+     */
     private boolean executingCommand = false;
-    
+
+    /**
+     * This field contains information on whether or not the controller should
+     * read new commands from the LeapMotion or not.
+     */
     private boolean isLeapMotionEnabled = true;
-    
-    //Recording variables
+
+    /**
+     * This field contains information whether the flight commands are being
+     * recorded or not.
+     */
     private boolean isRecordingFlight = false;
-    private FlightRecorder recorder = new FlightRecorder();
+    /**
+     * This field is a FlightRecorder object used to record.
+     */
+    private final FlightRecorder RECORDER = new FlightRecorder();
+    /**
+     * This field contains the buffer of commands that will be written to the
+     * recording file.
+     */
     private FlightBuffer recordBuffer = new FlightBuffer();
-    
+
+    /**
+     * Drone controller constructor that adds this object as the LeapMotion
+     * controller listener.
+     */
     public DroneController() {
         CONTROLLER.addListener(this);
     }
 
+    /**
+     * The run method reads the LeapMotion input and calls the appropriate
+     * methods to translate the input of the LeapMotion to tello commands, after
+     * which it sends the commands to the drone.
+     */
     @Override
     public void run() {
 
@@ -61,8 +114,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
 
         listener.controllerMessage("Sending commands\n");
-         
-        
+
         while (CONTROLLER.isConnected()) {
             try {
                 if (isLeapMotionEnabled) {
@@ -84,15 +136,14 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                     }
                 } else {
                     System.err.println("[Info] Leap Motion controller is disabled. Wait until notify");
-                    
-                    synchronized(this){
+
+                    synchronized (this) {
                         this.wait();
                     }
-                    
+
                     System.out.println("[Info] LeapMotion controller re-enabled successfully");
                 }
-            }
-            catch(InterruptedException ex){
+            } catch (InterruptedException ex) {
                 System.err.println("[Error] Detected an error: " + ex.getMessage());
             }
         }
@@ -106,14 +157,39 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         COMMAND_MANAGER.sendCommand(Commands.LAND);
     }
 
+    /**
+     * Setter method for the listener field.
+     *
+     * @param listener the CommandListener that will be notified when a new
+     * command is executed.
+     */
     public void setListener(CommandListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Getter method for the SETTINGS_MANAGER field.
+     *
+     * @return the SETTINGS_MANAGER object.
+     */
     public SettingsManager getSettingsManager() {
         return SETTINGS_MANAGER;
     }
+    
+    /**
+     * Getter method for the COMMAND_MANAGER field.
+     * @return the command manager object.
+     */
+    public CommandManager getCommandManager() {
+        return this.COMMAND_MANAGER;
+    }
 
+    /**
+     * This method is called by the LeapMotion service when a LeapMotion
+     * controller is connected.
+     *
+     * @param controller the LeapMotion Controller
+     */
     @Override
     public void onConnect(Controller controller) {
         if (listener != null) {
@@ -126,32 +202,29 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
     }
 
+    /**
+     * This method loads the variables found in the config.dcs using the
+     * SETTINGS_MANAGER
+     */
     private void loadVariables() {
         System.out.println("loading variables");
-        final float CONTROLLER_SENSIBILITY_DEFAULT_VALUE = 2;
-        final float CONTROLLER_HEIGHT_DELTA_POINTS = 20;
-        final float CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE = 5;
-        final float MOVEMENT_DELAY_DEFAULT_VALUE = 500;
-        final float DELTA_AVERAGE_MULTIPLIER = 1.5f;
         final float HEIGHT_THRESHOLD = 4;
+        final float DEGREES_SENSIBILITY = 10;
 
-        this.controllerSensibility = getFloatValueFromSetting("sensibility", CONTROLLER_SENSIBILITY_DEFAULT_VALUE);
-        this.controllerDeltaPoints = getFloatValueFromSetting("heightPointsNumber", CONTROLLER_HEIGHT_DELTA_POINTS);
-        this.controllerDegreesSensibility = getFloatValueFromSetting("degreesSensibility", CONTROLLER_DEGREES_SENSIBILITY_DEFAULT_VALUE);
-        this.movementDelay = getFloatValueFromSetting("movementDelay", MOVEMENT_DELAY_DEFAULT_VALUE);
-        this.deltaAverageMultiplier = getFloatValueFromSetting("deltaAverageMultiplier", DELTA_AVERAGE_MULTIPLIER);
         this.heightThreshold = getFloatValueFromSetting("heightThreshold", HEIGHT_THRESHOLD);
+        this.controllerDegreesSensibility = getFloatValueFromSetting("degreesSensibility", DEGREES_SENSIBILITY);
 
         listener.controllerMessage("Settings updated\n");
-        listener.controllerMessage("Controller sensibility: " + controllerSensibility + "\n");
-        listener.controllerMessage("Controller delta points: " + controllerDeltaPoints + "\n");
         listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
-        listener.controllerMessage("movement delay: " + movementDelay + "\n");
-        listener.controllerMessage("delta average multiplier: " + deltaAverageMultiplier + "\n");
         listener.controllerMessage("height threshold: " + heightThreshold + "\n");
 
     }
 
+    /**
+     * This method gets the height of the left hand from the frame read by the
+     * LeapMotion and then calculates the command to send to the drone regarding
+     * its height. There is a threshold to prevent accidental height commands.
+     */
     private void checkHeightControl() {
 
         float lastHeightReal = FRAME_HELPER.getHandY(FRAME_HELPER.getLeftHand(null));
@@ -163,15 +236,16 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             if (Math.abs(lastY) > heightThreshold && lastY != 0.0) {
                 if (lastY != 0.0) {
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
+
                     COMMAND_MANAGER.sendCommand(message);
-                    
+
                     //Add commands to recorder
                     if(isRecordingFlight){
                         //REMOVE
                         System.err.println("Added command to file: " + message);
                         recordBuffer.addCommand(message);
                     }
-                    
+
                     listener.commandSent(message + "\n");
 
                 }
@@ -181,6 +255,10 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
     }
 
+    /**
+     * This method gets the right hand object and calculates the angle of pitch,
+     * yaw and roll angles and then sends the appropriate command to the drone.
+     */
     private void checkMovementControl() {
         String[] commands = new String[3];
         if (FRAME_HELPER.getRightHand(null) != null) {
@@ -230,9 +308,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
-        
-        if(isRecordingFlight){
-            //REMOVE
+        if (isRecordingFlight) {
             recordBuffer.addCommands(commands);
         }
     }
@@ -257,9 +333,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
     }
 
-    public CommandManager getCommandManager() {
-        return this.COMMAND_MANAGER;
-    }
 
     /**
      * Method called when the user updates the settings from the GUI
@@ -270,6 +343,10 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         loadVariables();
     }
 
+    /**
+     * 
+     * @return 
+     */
     public synchronized boolean getExecutingCommand() {
         return executingCommand;
     }
@@ -277,31 +354,29 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public synchronized void setExecutingCommand(boolean executingCommand) {
         this.executingCommand = executingCommand;
     }
-    
-    public void startRecording(){
+
+    public void startRecording() {
         this.recordBuffer.clear();
         this.isRecordingFlight = true;
-        
+
         System.out.println("[Info] Start recording");
     }
-    
-    public void stopRecording(){
+
+    public void stopRecording() {
         this.isRecordingFlight = false;
-        
+
         try{
             if(recordBuffer.length() > 0){
-                recorder.createBase();
-                FlightRecord record = recorder.generateRecordFile();
+                RECORDER.createBase();
+                FlightRecord record = RECORDER.generateRecordFile();
                 System.out.println("Generated file: " + record.getSaveLocation());
-                recorder.saveFlightPattern(this.recordBuffer, record);
+                RECORDER.saveFlightPattern(this.recordBuffer, record);
                 System.out.println("[Info] File saved to path: " + record.getSaveLocation());
             }
-        }
-        catch(IOException ex){
+        } catch (IOException ex) {
             System.out.println("[Info] Can't save the flight. *SAD SMILE*");
         }
-        
-        //this.recordBuffer.clear();
+
         System.out.println("[Info] Stopped recording");
     }
 
@@ -335,27 +410,29 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
 //        doneExecuting();
     }
-    
+
     /**
      * This method enables the LeapMotion controller.
      */
     public void EnableLeapMotionController() {
-        if (isLeapMotionEnabled) 
+        if (isLeapMotionEnabled) {
             return;
+        }
         this.isLeapMotionEnabled = true;
-        
-        synchronized(this){
+
+        synchronized (this) {
             System.out.println("[Info] Re-Enabled the LeapMotion controller");
             this.notifyAll();
         }
     }
-    
+
     /**
      * This method disables the LeapMotion controller.
      */
-    public void DisableLeapMotionController(){
-        if(!isLeapMotionEnabled)
+    public void DisableLeapMotionController() {
+        if (!isLeapMotionEnabled) {
             return;
+        }
         this.isLeapMotionEnabled = false;
     }
     
