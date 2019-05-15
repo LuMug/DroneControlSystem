@@ -22,7 +22,9 @@ import settings.FlipCommand;
 import settings.SettingsListener;
 
 /**
- * This class describes the drone controller monitor: a GUI where you can record your flights, control the drone, and many other things.
+ * This class describes the drone controller monitor: a GUI where you can record
+ * your flights, control the drone, and many other things.
+ *
  * @author Luca Di Bello
  */
 public class DroneControllerMonitor extends javax.swing.JFrame implements CommandListener, CommandManagerListener, MouseListener {
@@ -38,28 +40,28 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private final String RECORDING_DISABLED = BASE_STATUS + " DISABLED";
     private final String RECORDING_ENABLED = BASE_STATUS + " ENABLED";
     private Thread recordingExecutionThread;
-    
+
     /**
      * Creates new form DroneControllerMonitor
      */
     public DroneControllerMonitor() {
         //Prepare GUI components
         initComponents();
-        
+
         //Autoscroll textarea for logging
         DefaultCaret caret = (DefaultCaret) logTextArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        
+
         //Insert settings values in textboxes
         updateSettingsValues(manager);
-        
+
         //Cross-set controller listener for cross comunication between threads
         controller.setListener(this);
         this.setListener(controller);
-        
+
         //Get the commandManager from the controller
         commandManager = controller.getCommandManager();
-        
+
         //Finally start the controller in a new thread
         new Thread(controller).start();
 
@@ -69,6 +71,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     /**
      * This method start the GUI in a new thread.
+     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -104,12 +107,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             }
         });
     }
-    
+
     // <editor-fold desc="GUI-used methods" defaultstate="collapsed">
-    
     /**
-     * This method reads all flight recording files located in the folder 'records' and 
-     * add them in the combobox present in the recording section.
+     * This method reads all flight recording files located in the folder
+     * 'records' and add them in the combobox present in the recording section.
      */
     public final void insertRecordsInSelector() {
         // read all files in 'records'
@@ -133,9 +135,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             jLabelRecordSelectorMessage.setText("Cannot find any record file");
         }
     }
-    
+
     /**
-     * This method is used for getting the date of a recording using its filename.
+     * This method is used for getting the date of a recording using its
+     * filename.
+     *
      * @param filename The recording filename
      * @return A formatted datetime (yyyy-mm-dd hh:mm:ss)
      */
@@ -154,16 +158,14 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     /**
      * This method is used for updating the config file.
+     *
      * @param manager The setting manager.
      */
     private void updateSettingsValues(SettingsManager manager) {
         Map<String, String> options = manager.getSettings();
 
-        this.DegreesSensibilityValueTextBox.setText(options.get("degreesSensibility"));
         this.DeltaAverageMultiplierValueTextBox.setText(options.get("deltaAverageMultiplier"));
-        this.MovementDelayValueTextBox.setText(options.get("movementDelay"));
         this.sensibilityValueTextBox.setText(options.get("sensibility"));
-        this.heightPointsValueTextBox.setText(options.get("heightPointsNumber"));
     }
     // </editor-fold>
 
@@ -220,15 +222,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonStartRecording = new javax.swing.JButton();
         jButtonStopRecording = new javax.swing.JButton();
         jPanelSettings = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        sensibilityJPanel = new javax.swing.JPanel();
+        settingsLabel = new javax.swing.JLabel();
         sensibilityValueTextBox = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        heightPointsValueTextBox = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        DegreesSensibilityValueTextBox = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        MovementDelayValueTextBox = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        degreesJPanel = new javax.swing.JPanel();
+        degreesLabel = new javax.swing.JLabel();
         DeltaAverageMultiplierValueTextBox = new javax.swing.JTextField();
         jButtonApplySettings = new javax.swing.JButton();
         jButtonRefreshSettings = new javax.swing.JButton();
@@ -491,38 +489,30 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jPanelRecording.add(jPanelRecordButtons, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("TO TEST", jPanelRecording);
+        jTabbedPane1.addTab("Recording", jPanelRecording);
 
-        jPanelSettings.setLayout(new java.awt.GridLayout(6, 2));
+        jPanelSettings.setLayout(new java.awt.GridLayout(3, 2));
 
-        jLabel2.setText("Sensibility");
-        jPanelSettings.add(jLabel2);
+        sensibilityJPanel.setLayout(new java.awt.GridLayout());
+
+        settingsLabel.setText("Sensibility");
+        sensibilityJPanel.add(settingsLabel);
 
         sensibilityValueTextBox.setText("VALUE");
-        jPanelSettings.add(sensibilityValueTextBox);
+        sensibilityJPanel.add(sensibilityValueTextBox);
 
-        jLabel3.setText("Height Points");
-        jPanelSettings.add(jLabel3);
+        jPanelSettings.add(sensibilityJPanel);
+        jPanelSettings.add(degreesJPanel);
 
-        heightPointsValueTextBox.setText("VALUE");
-        jPanelSettings.add(heightPointsValueTextBox);
-
-        jLabel4.setText("Degrees Sensibility");
-        jPanelSettings.add(jLabel4);
-
-        DegreesSensibilityValueTextBox.setText("VALUE");
-        jPanelSettings.add(DegreesSensibilityValueTextBox);
-
-        jLabel5.setText("Moviment Delay");
-        jPanelSettings.add(jLabel5);
-
-        MovementDelayValueTextBox.setText("VALUE");
-        jPanelSettings.add(MovementDelayValueTextBox);
-
-        jLabel6.setText("Delta Average Multiplier");
-        jPanelSettings.add(jLabel6);
+        degreesLabel.setText("Degrees Sensibility");
+        jPanelSettings.add(degreesLabel);
 
         DeltaAverageMultiplierValueTextBox.setText("VALUE");
+        DeltaAverageMultiplierValueTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeltaAverageMultiplierValueTextBoxActionPerformed(evt);
+            }
+        });
         jPanelSettings.add(DeltaAverageMultiplierValueTextBox);
 
         jButtonApplySettings.setText("Apply settings");
@@ -552,16 +542,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     // <editor-fold desc="Generated code (GUI events)" defaultstate="collapsed">
     private void jButtonApplySettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApplySettingsActionPerformed
-        
+
         int userAnswer = JOptionPane.showConfirmDialog(null,
                 "Do you wanna apply this settings?", "DCS Controller - Settings", JOptionPane.YES_NO_OPTION);
 
         if (userAnswer == JOptionPane.YES_OPTION) {
-            manager.setSetting("degrees_sensibility", this.DegreesSensibilityValueTextBox.getText());
             manager.setSetting("deltaAverageMultiplier", this.DeltaAverageMultiplierValueTextBox.getText());
-            manager.setSetting("movementDelay", this.MovementDelayValueTextBox.getText());
             manager.setSetting("sensibility", this.sensibilityValueTextBox.getText());
-            manager.setSetting("height_points_number", this.heightPointsValueTextBox.getText());
 
             System.out.println("[Success] Settings applied successfully");
 
@@ -661,7 +648,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void jButtonStopRecordingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopRecordingActionPerformed
         //Stop recording and save file
         commandManager.stopRecording();
-        
+
         // Check if added another file
         insertRecordsInSelector();
     }//GEN-LAST:event_jButtonStopRecordingActionPerformed
@@ -692,75 +679,77 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         //Cut out the leapmotion controller
         System.err.println("[Info] Trying to disable the leapmotion...");
         controller.DisableLeapMotionController();
-            
+
         System.out.println("[Recorder] Setting recording status");
         jLabelRecordingStatusMessage.setText(this.RECORDING_ENABLED);
         jLabelRecordSelectorMessage.repaint();
-        
-        try{
+
+        try {
             //Get the commands of the selected flight
             FlightBuffer commands = flightRecords.get(jComboBoxSelectRecord.getSelectedIndex()).getFlightCommands();
-            
+
             //Start the command execution in new thread -> GUI doesn't blocks
             recordingExecutionThread = new Thread("Recording thread") {
                 @Override
-                public void run(){
+                public void run() {
                     String command;
-                    while((command = commands.getNextCommand()) != null && !this.isInterrupted()){
+                    while (commands.length() > 0 && !this.isInterrupted()) {
+                        command = commands.getNextCommand();
                         System.out.println("Executing command: " + command);
                         commandManager.sendCommand(command);
                     }
-                    
+
                     controller.EnableLeapMotionController();
                     jLabelRecordingStatusMessage.setText(RECORDING_DISABLED);
                 }
             };
-            
+
             //Start the recording execution on the drone
             recordingExecutionThread.start();
-        }
-        catch(IOException ex){
+        } catch (IOException ex) {
             System.err.println("[Info] Error while getting the recording commands. Stop pre-configured flight and re-enable the leapmotion controller.");
         }
     }//GEN-LAST:event_jButtonStartSelectedFlightActionPerformed
 
-    
+
     private void jButtonStopSelectedFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopSelectedFlightActionPerformed
         //Cut out the leapmotion controller
-        if(recordingExecutionThread != null){
-            if(!controller.isLeapMotionEnabled() || recordingExecutionThread.isAlive()){
+        if (recordingExecutionThread != null) {
+            if (!controller.isLeapMotionEnabled() || recordingExecutionThread.isAlive()) {
                 //Interrupt the code execution in recordingExecutionThread
                 System.err.println("[Info] Interrupting recording execution...");
                 recordingExecutionThread.interrupt();
 
                 System.err.println("[Info] Trying to re-enable the leapmotion...");
                 controller.EnableLeapMotionController();
-                
+
                 jLabelRecordingStatusMessage.setText(this.RECORDING_DISABLED);
                 jLabelRecordingStatusMessage.repaint();
-                
+
                 JOptionPane.showMessageDialog(this,
-                    "LeapMotion controller enabled successfully.",
-                    "Information",
-                    JOptionPane.INFORMATION_MESSAGE
+                        "LeapMotion controller enabled successfully.",
+                        "Information",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "LeapMotion controller is already enabled.",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
                 );
             }
-            else{
-                JOptionPane.showMessageDialog(this,
-                    "LeapMotion controller is already enabled.",
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "There is any flight running.",
                     "Warning",
                     JOptionPane.WARNING_MESSAGE
-                );
-            }
-        }
-        else{
-            JOptionPane.showMessageDialog(this,
-                "There is any flight running.",
-                "Warning",
-                JOptionPane.WARNING_MESSAGE
             );
         }
     }//GEN-LAST:event_jButtonStopSelectedFlightActionPerformed
+
+    private void DeltaAverageMultiplierValueTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeltaAverageMultiplierValueTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DeltaAverageMultiplierValueTextBoxActionPerformed
     // </editor-fold>
 
     // <editor-fold desc="Custom events" defaultstate="collapsed">
@@ -812,7 +801,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         this.listener = listener;
     }
     // </editor-fold>
-    
+
     // <editor-fold desc="Event triggers" defaultstate="collapsed">
     public void notifyChangeSettings() {
         listener.settingsChanged();
@@ -821,13 +810,12 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     // <editor-fold desc="Variables declaration" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField DegreesSensibilityValueTextBox;
     private javax.swing.JTextField DeltaAverageMultiplierValueTextBox;
-    private javax.swing.JTextField MovementDelayValueTextBox;
     private javax.swing.JButton batteryButton;
+    private javax.swing.JPanel degreesJPanel;
+    private javax.swing.JLabel degreesLabel;
     private javax.swing.JButton downButton;
     private javax.swing.JPanel flipJPanel;
-    private javax.swing.JTextField heightPointsValueTextBox;
     private javax.swing.JButton jButtonAbortFlight;
     private javax.swing.JButton jButtonApplySettings;
     private javax.swing.JButton jButtonDroneDown;
@@ -845,11 +833,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JComboBox<String> jComboBoxFlip;
     private javax.swing.JComboBox<String> jComboBoxSelectRecord;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelRecordSelectorMessage;
@@ -879,7 +862,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JScrollPane logScrollPane;
     private javax.swing.JTextArea logTextArea;
     private javax.swing.JLabel movementSteopJLabel;
+    private javax.swing.JPanel sensibilityJPanel;
     private javax.swing.JTextField sensibilityValueTextBox;
+    private javax.swing.JLabel settingsLabel;
     private javax.swing.JLabel titleJLabel;
     private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables

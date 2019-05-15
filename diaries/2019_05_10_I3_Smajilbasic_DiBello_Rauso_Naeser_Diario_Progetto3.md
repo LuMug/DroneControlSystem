@@ -11,6 +11,7 @@ specifiche dell'hardware il quale ha detto che non si necessita dell'elenco dei
 componenti presenti nei vari PC.
 
 Fadil:
+Ho aggiunto commenti alla classe DroneController e ho messo apposto il gantt consuntivo.
 
 Luca:
 
