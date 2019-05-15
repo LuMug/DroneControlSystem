@@ -2,7 +2,6 @@
 
 #### Da Fare:
 - 1.5: Aggiungere eventuali requisiti
-- 2.4: Da fare
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
 - 4.3: Da fare
