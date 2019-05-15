@@ -29,8 +29,6 @@ public class FlightRecord {
         catch(IOException ex){
             throw new IOException("Can't find any type of file in the path: " + file_record_path);
         }
-        
-        
     }
     
     public Path getSaveLocation() {
