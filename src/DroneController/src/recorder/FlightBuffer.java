@@ -11,7 +11,9 @@ public class FlightBuffer{
     private LinkedList<String> buffer = new LinkedList<>();
     
     public synchronized void addCommand(String command){
-        buffer.add(command);
+        if(command != null){
+            buffer.add(command);
+        }
     }
     
     public synchronized void addCommands(String[] commands){
@@ -31,8 +33,8 @@ public class FlightBuffer{
     public int length(){
         return buffer.size();
     }
-    
+
     public synchronized boolean existsNextCommand(){
-        return buffer.poll() != null;
+        return buffer.peek() != null;
     }
 }

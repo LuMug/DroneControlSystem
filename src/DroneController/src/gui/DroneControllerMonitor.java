@@ -34,9 +34,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private List<FlightRecord> flightRecords = new ArrayList<>();
     private CommandManager commandManager;
 
-    
-    private final String RECORDING_STATUS_DISABLED = "LeapMotion-Controlled";
-    private final String RECORDING_STATUS_ENABLED = "Running a recorded flight";
+    private final String BASE_STATUS = "Current status:";
+    private final String RECORDING_DISABLED = BASE_STATUS + " DISABLED";
+    private final String RECORDING_ENABLED = BASE_STATUS + " ENABLED";
     private Thread recordingExecutionThread;
     
     /**
@@ -491,7 +491,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jPanelRecording.add(jPanelRecordButtons, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Recording", jPanelRecording);
+        jTabbedPane1.addTab("TO TEST", jPanelRecording);
 
         jPanelSettings.setLayout(new java.awt.GridLayout(6, 2));
 
@@ -655,15 +655,15 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private void jButtonStartRecordingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartRecordingActionPerformed
         //Start recording
-        controller.startRecording();
+        commandManager.startRecording();
     }//GEN-LAST:event_jButtonStartRecordingActionPerformed
 
     private void jButtonStopRecordingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopRecordingActionPerformed
+        //Stop recording and save file
+        commandManager.stopRecording();
+        
         // Check if added another file
         insertRecordsInSelector();
-
-        //Stop recording and save file
-        controller.stopRecording();
     }//GEN-LAST:event_jButtonStopRecordingActionPerformed
 
     private void jComboBoxSelectRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSelectRecordActionPerformed
@@ -692,8 +692,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         //Cut out the leapmotion controller
         System.err.println("[Info] Trying to disable the leapmotion...");
         controller.DisableLeapMotionController();
-             
-        jLabelRecordingStatusMessage.setText(this.RECORDING_STATUS_ENABLED);
+            
+        System.out.println("[Recorder] Setting recording status");
+        jLabelRecordingStatusMessage.setText(this.RECORDING_ENABLED);
+        jLabelRecordSelectorMessage.repaint();
         
         try{
             //Get the commands of the selected flight
@@ -703,28 +705,14 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             recordingExecutionThread = new Thread("Recording thread") {
                 @Override
                 public void run(){
-                    //Sleep a 5 seconds
-                    fancyCountdown(5);
-
                     String command;
                     while((command = commands.getNextCommand()) != null && !this.isInterrupted()){
                         System.out.println("Executing command: " + command);
                         commandManager.sendCommand(command);
                     }
-                }
-                
-                /**
-                 * This methods creates a countdown (sleep and output in the console). 
-                 * @param seconds Seconds to wait.
-                 */
-                private void fancyCountdown(int seconds){
-                    for(int i = 0; i < seconds; i++){
-                        try{
-                            System.out.println(String.format("Starting in %d seconds...",seconds-i));
-                            Thread.sleep(1000);
-                        }
-                        catch(InterruptedException ex){}
-                    }
+                    
+                    controller.EnableLeapMotionController();
+                    jLabelRecordingStatusMessage.setText(RECORDING_DISABLED);
                 }
             };
             
@@ -734,33 +722,40 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         catch(IOException ex){
             System.err.println("[Info] Error while getting the recording commands. Stop pre-configured flight and re-enable the leapmotion controller.");
         }
-
-        controller.EnableLeapMotionController();
-        jLabelRecordingStatusMessage.setText(this.RECORDING_STATUS_DISABLED);
     }//GEN-LAST:event_jButtonStartSelectedFlightActionPerformed
 
     
     private void jButtonStopSelectedFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopSelectedFlightActionPerformed
         //Cut out the leapmotion controller
-        if(!controller.isLeapMotionEnabled() || recordingExecutionThread.isAlive()){
-            
-            //Interrupt the code execution in recordingExecutionThread
-            System.err.println("[Info] Interrupting recording execution...");
-            recordingExecutionThread.interrupt();
-            
-            System.err.println("[Info] Trying to re-enable the leapmotion...");
-            controller.EnableLeapMotionController();
-            jLabelRecordingStatusMessage.setText(this.RECORDING_STATUS_DISABLED);
+        if(recordingExecutionThread != null){
+            if(!controller.isLeapMotionEnabled() || recordingExecutionThread.isAlive()){
+                //Interrupt the code execution in recordingExecutionThread
+                System.err.println("[Info] Interrupting recording execution...");
+                recordingExecutionThread.interrupt();
 
-            JOptionPane.showMessageDialog(this,
-                "LeapMotion controller enabled successfully.",
-                "Information",
-                JOptionPane.INFORMATION_MESSAGE
-            );
+                System.err.println("[Info] Trying to re-enable the leapmotion...");
+                controller.EnableLeapMotionController();
+                
+                jLabelRecordingStatusMessage.setText(this.RECORDING_DISABLED);
+                jLabelRecordingStatusMessage.repaint();
+                
+                JOptionPane.showMessageDialog(this,
+                    "LeapMotion controller enabled successfully.",
+                    "Information",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+            else{
+                JOptionPane.showMessageDialog(this,
+                    "LeapMotion controller is already enabled.",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE
+                );
+            }
         }
         else{
             JOptionPane.showMessageDialog(this,
-                "LeapMotion controller is already enabled.",
+                "There is any flight running.",
                 "Warning",
                 JOptionPane.WARNING_MESSAGE
             );
