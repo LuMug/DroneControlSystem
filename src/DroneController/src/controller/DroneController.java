@@ -123,11 +123,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                         if (FRAME_HELPER.getCurrentFrame().id() != FRAME_HELPER.getLastFrame().id()) {
 
                             //                    setExecutingCommand(true);
-                            //                    checkGesture();
-                            //                    setExecutingCommand(true);
+                            checkGesture();
+                            setExecutingCommand(true);
                             checkHeightControl();
-                            //                    setExecutingCommand(true);
-                            //                    checkMovementControl();
+                            setExecutingCommand(true);
+                            checkMovementControl();
 
                         }
                     } else {
@@ -174,9 +174,10 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public SettingsManager getSettingsManager() {
         return SETTINGS_MANAGER;
     }
-    
+
     /**
      * Getter method for the COMMAND_MANAGER field.
+     *
      * @return the command manager object.
      */
     public CommandManager getCommandManager() {
@@ -227,15 +228,31 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private void checkHeightControl() {
 
         float lastHeightReal = FRAME_HELPER.getHandY(FRAME_HELPER.getLeftHand(null));
-
+        String[] commands = new String[2];
         float lastY = FRAME_HELPER.getDeltaY();
         lastY = (int) ((lastHeightReal - 300) / 2);
         if (FRAME_HELPER.getLeftHand(null) != null) {
 
-            if (Math.abs(lastY) > heightThreshold && lastY != 0.0) {
+            float rollValue = FRAME_HELPER.getRoll(FRAME_HELPER.getLeftHand(null));
+
+            if (Math.abs(rollValue) > controllerDegreesSensibility * 2) {
+                System.out.println("yaw: " + (Math.abs((int) rollValue) - controllerDegreesSensibility * 2));
+
+                if ((Math.abs((int) rollValue) - controllerDegreesSensibility * 2) != 0) {
+                    String message = rollValue < 0
+                            ? Commands.rotateCounterClockwise((int) Math.abs(rollValue - controllerDegreesSensibility))
+                            : Commands.rotateClockwise((int) (rollValue - controllerDegreesSensibility));
+                    commands[0] = message;
+                    if (listener != null) {
+                        listener.commandSent(message + "\n");
+                    }
+                }
+            }
+
+            if (Math.abs(lastY) > heightThreshold && lastY != 0.0 && Math.abs(lastY) > 20 && Math.abs(lastY) < 500) {
                 if (lastY != 0.0) {
                     String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
-//                    COMMAND_MANAGER.sendCommand(message);
+                    commands[1] = message;
 
                     //Add commands to RECORDER
                     if (isRecordingFlight) {
@@ -247,6 +264,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 }
             }
         }
+//        COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
 
     }
@@ -302,7 +320,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             }
         }
 
-        COMMAND_MANAGER.sendCommands(commands);
+//        COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
 
         if (isRecordingFlight) {
@@ -330,7 +348,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         }
     }
 
-
     /**
      * Method called when the user updates the settings from the GUI
      */
@@ -341,8 +358,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public synchronized boolean getExecutingCommand() {
         return executingCommand;
