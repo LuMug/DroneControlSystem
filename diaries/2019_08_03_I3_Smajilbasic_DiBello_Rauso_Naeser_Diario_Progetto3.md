@@ -5,6 +5,10 @@
 ## Lavori svolti
 
 Jari:
+Ho continuato con lo sviluppo e correzione della documentazione.
+Inoltre come dovuto ho richiesto il parere del docente Luca Muggiasca sulle
+specifiche dell'hardware il quale ha detto che non si necessita dell'elenco dei
+componenti presenti nei vari PC.
 
 Fadil:
 
@@ -16,16 +20,7 @@ Andrea:
 
 ## Problemi riscontrati e soluzioni adottate
 
-Per mettere apposto la questione del autoscroll nel panello di log, bastava aggiungere un MouseListener che quando l'utente entra con il mouse nella schermata o quando clicca da qualsiasi parte nellos chermo, il focus della finestra passa al JTextArea dove viene scritto il log.
-
-`public void mouseClicked(MouseEvent e) {`
-        `logTextArea.requestFocus();`
-   ` }`
-
-
 ## Punto della situazione rispetto alla pianificazione
 Siamo al passo con il gantt preventivo.
 
 #### Programma di massima per la prossima giornata di lavoro
-Chiedere se nei componenti dell'Hardware bisogna anche mettere i componenti
-specifici dei vari PC.
