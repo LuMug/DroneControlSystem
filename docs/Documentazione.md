@@ -88,9 +88,7 @@
 
 ### 1.4 Analisi del dominio
 
-  Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica
-  attualmente esiste solamente progettato e scritto privatamente in vari linguaggi come
-  Ruby, Python e PHP ma non ancora in Java.
+  Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica attualmente è stato solamente sviluppato e progettato in vari linguaggi come Ruby, Python e PHP ma non ancora in Java.
 
 ### 1.5 Analisi e specifica dei requisiti
 
@@ -149,7 +147,7 @@ Per la realizzazione di questo progetto abbiamo usato come software:
 - Atom 1.36.1: Editore di testo per scrivere principalmente la documentazione e
 risolvere conflitti.
 
-- NetBeans 8.2:  IDE per sviluppare tutto il codice scritto in Java.
+- NetBeans 8.2: IDE per sviluppare tutto il codice scritto in Java.
 
 - VisualStudio Code 1.33.1: Editore di testo usato in tutti i contesti.
 
@@ -167,7 +165,7 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 
 - Apple MacBook Pro 2015 con OSX Mojave.
 
-- Asus VivoBook 2015 con Windows 10.
+- Asus VivoBook Pro 2018 con Windows 10.
 
 - Asus ROG GL702VM con Windows 10.
 
