@@ -42,21 +42,19 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private final String RECORDING_ENABLED = BASE_STATUS + " ENABLED";
     private Thread recordingExecutionThread;
 
-    private final Thread controllerThread;
-
-    public void intrruptControllerThread() {
-        controllerThread.interrupt();
-    }
-
     /**
      * Creates new form DroneControllerMonitor
      */
     public DroneControllerMonitor() {
         //Prepare GUI components
-        try{
-        initComponents();
+        try {
+            controller = new DroneController();
+        } catch (SocketException se) {
+            System.out.println(se.getMessage());
+            System.exit(0);
+        }
 
-        controller = new DroneController();
+        initComponents();
 
         //Autoscroll textarea for logging
         DefaultCaret caret = (DefaultCaret) logTextArea.getCaret();
@@ -73,13 +71,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager = controller.getCommandManager();
 
         //Finally start the controller in a new thread
-        controllerThread = new Thread(controller);
+        new Thread(controller);
 
         //Insert in the selector all the recorded flights
         insertRecordsInSelector();
-        }catch(SocketException se){
-            System.out.println(se.getMessage());
-        }
+
     }
 
     /**
@@ -178,7 +174,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void updateSettingsValues(SettingsManager manager) {
         Map<String, String> options = manager.getSettings();
 
-        this.DeltaAverageMultiplierValueTextBox.setText(options.get("deltaAverageMultiplier"));
+        this.degreesSensibilityValue.setText(options.get("degreesSensibility"));
         this.sensibilityValueTextBox.setText(options.get("sensibility"));
     }
     // </editor-fold>
@@ -241,7 +237,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         sensibilityValueTextBox = new javax.swing.JTextField();
         degreesJPanel = new javax.swing.JPanel();
         degreesLabel = new javax.swing.JLabel();
-        DeltaAverageMultiplierValueTextBox = new javax.swing.JTextField();
+        degreesSensibilityValue = new javax.swing.JTextField();
         jButtonApplySettings = new javax.swing.JButton();
         jButtonRefreshSettings = new javax.swing.JButton();
 
@@ -507,7 +503,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jPanelSettings.setLayout(new java.awt.GridLayout(4, 1));
 
-        sensibilityJPanel.setLayout(new java.awt.GridLayout());
+        sensibilityJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         settingsLabel.setText("Sensibility");
         sensibilityJPanel.add(settingsLabel);
@@ -517,18 +513,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jPanelSettings.add(sensibilityJPanel);
 
-        degreesJPanel.setLayout(new java.awt.GridLayout());
+        degreesJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         degreesLabel.setText("Degrees Sensibility");
         degreesJPanel.add(degreesLabel);
 
-        DeltaAverageMultiplierValueTextBox.setText("VALUE");
-        DeltaAverageMultiplierValueTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeltaAverageMultiplierValueTextBoxActionPerformed(evt);
-            }
-        });
-        degreesJPanel.add(DeltaAverageMultiplierValueTextBox);
+        degreesSensibilityValue.setText("VALUE");
+        degreesJPanel.add(degreesSensibilityValue);
 
         jPanelSettings.add(degreesJPanel);
 
@@ -564,7 +555,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
                 "Do you wanna apply this settings?", "DCS Controller - Settings", JOptionPane.YES_NO_OPTION);
 
         if (userAnswer == JOptionPane.YES_OPTION) {
-            manager.setSetting("deltaAverageMultiplier", this.DeltaAverageMultiplierValueTextBox.getText());
+            manager.setSetting("degreesSensibility", this.degreesSensibilityValue.getText());
             manager.setSetting("sensibility", this.sensibilityValueTextBox.getText());
 
             System.out.println("[Success] Settings applied successfully");
@@ -763,10 +754,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             );
         }
     }//GEN-LAST:event_jButtonStopSelectedFlightActionPerformed
-
-    private void DeltaAverageMultiplierValueTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeltaAverageMultiplierValueTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DeltaAverageMultiplierValueTextBoxActionPerformed
     // </editor-fold>
 
     // <editor-fold desc="Custom events" defaultstate="collapsed">
@@ -827,10 +814,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     // <editor-fold desc="Variables declaration" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField DeltaAverageMultiplierValueTextBox;
     private javax.swing.JButton batteryButton;
     private javax.swing.JPanel degreesJPanel;
     private javax.swing.JLabel degreesLabel;
+    private javax.swing.JTextField degreesSensibilityValue;
     private javax.swing.JButton downButton;
     private javax.swing.JPanel flipJPanel;
     private javax.swing.JButton jButtonAbortFlight;

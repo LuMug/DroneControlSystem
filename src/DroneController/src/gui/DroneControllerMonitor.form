@@ -619,13 +619,10 @@
                         <Property name="text" type="java.lang.String" value="Degrees Sensibility"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="DeltaAverageMultiplierValueTextBox">
+                    <Component class="javax.swing.JTextField" name="degreesSensibilityValue">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="VALUE"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DeltaAverageMultiplierValueTextBoxActionPerformed"/>
-                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
