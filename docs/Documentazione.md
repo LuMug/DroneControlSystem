@@ -245,15 +245,111 @@ La parte principale della classe sono i seguenti due metodi:
 
 ##### CheckHeightControl
 
-```
+Si occupa di leggere il valore Y della mano sinistra rispetto al punto d'origine (Il sensore LeapMotion). Per leggere i dati da interpretare si usa la classe *FrameHelper* che contine tutte le informationi catturate dal LeapMOtion nel istante corrente e di quello precedente.
+Se il valore Y (l'altezza della mano) è superiore al minimo definito in un file di config, allora il commando viene formattato usando la classe *Commands* e viene aggiunto all'array commands. Alla fine del metodo viene usato il metodo *sendCommands* della classe *CommandsManager* per mandare al drone il commando. Per leggere il valore della soglia minima dell'altezza dal file di config si usa la classe *SettingsManager* nel costruttore della classe *DroneController*.
+In questo metodo oltre a interpretare l'altezza della mano sinistra si valuta anche l'inclinazione del rollio della mano per il controllo dell'imbardata del drone.
+
+```java
+/**
+ * This method gets the height of the left hand from the frame read by the
+ * LeapMotion and then calculates the command to send to the drone regarding
+ * its height. There is a threshold to prevent accidental height commands.
+ */
+private void checkHeightControl() {
+
+    float lastHeightReal = FRAME_HELPER.getHandY(FRAME_HELPER.getLeftHand(null));
+    String[] commands = new String[2];
+    float lastY = FRAME_HELPER.getDeltaY();
+    lastY = (int) ((lastHeightReal - 300) / 2);
+
+    if (FRAME_HELPER.getLeftHand(null) != null) {
+
+        float rollLeftValue = FRAME_HELPER.getRoll(FRAME_HELPER.getLeftHand(null));
+
+        if (Math.abs(rollLeftValue) > controllerDegreesSensibility * 3) {
+
+            int rollLeftRelative = (int) (Math.abs(rollLeftValue)
+                                          - controllerDegreesSensibility * 3);
+
+            if (rollLeftRelative != 0) {
+
+                String message = rollLeftValue < 0
+                        ? Commands.rotateClockwise(rollLeftRelative)
+                        : Commands.rotateCounterClockwise(rollLeftRelative);
+
+                commands[0] = message;
+                listener.commandSent(message + "\n");
+            }
+        }
+
+        if (Math.abs(lastY) > heightThreshold && lastY != 0.0 
+            && Math.abs(lastY) > 20 
+            && Math.abs(lastY) < 500) {
+
+            if (lastY != 0.0) {
+                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : 
+                Commands.down(Math.abs((int) lastY + (int) heightThreshold));
+                commands[1] = message;
+                listener.commandSent(message + "\n");
+            }
+        }
+    }
     COMMAND_MANAGER.sendCommands(commands);
     doneExecuting();
 }
 ```
-### 3.1.2 FrameHelper
 
-FrameHelper è la classe che contiene le informazioni lette dal LeapMotion, aggiornate con ogni nuovo Frame letto, inoltre contiene dei metodi utili per l'ottenimento e calcolo dei dati. 
+##### checkMovementControl
 
+Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*. 
+*controllerDegreesSensibility* è la soglia minima dell'incl.inazione della mano definita nel file di config e letta usando la classe *SettingsManager*
+
+```java
+/**
+ * This method gets the right hand object and calculates the angle of pitch,
+ * yaw and roll angles and then sends the appropriate command to the drone.
+ */
+private void checkMovementControl() {
+    String[] commands = new String[3];
+    if (FRAME_HELPER.getRightHand(null) != null) {
+        float pitchValue = FRAME_HELPER.getPitch(FRAME_HELPER.getRightHand(null));
+        float rollRightValue = FRAME_HELPER.getRoll(FRAME_HELPER.getRightHand(null));
+
+        int rollRightRelative = (int) (Math.abs((int) rollRightValue) - controllerDegreesSensibility);
+
+        if (Math.abs(rollRightValue) > controllerDegreesSensibility) {
+
+            if (rollRightRelative != 0) {
+                String message = rollRightValue < 0
+                        ? Commands.right((int) rollRightRelative)
+                        : Commands.left((int) rollRightRelative);
+                commands[0] = message;
+                if (listener != null) {
+                    listener.commandSent(message + "\n");
+                }
+            }
+        }
+
+        if (Math.abs(pitchValue) > controllerDegreesSensibility) {
+            int pitchRelative = (int) (Math.abs((int) pitchValue) - controllerDegreesSensibility);
+
+            if (pitchRelative != 0) {
+                String message = pitchValue > 0
+                        ? Commands.back(pitchRelative)
+                        : Commands.forward(pitchRelative);
+                commands[1] = message;
+                if (listener != null) {
+                    listener.commandSent(message + "\n");
+                }
+            }
+        }
+
+    }
+
+    COMMAND_MANAGER.sendCommands(commands);
+    doneExecuting();
+}
+```
 
 ##### getRoll
 
