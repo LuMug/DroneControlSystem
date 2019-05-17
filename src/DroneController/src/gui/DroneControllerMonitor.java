@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private SettingsManager manager = new SettingsManager();
     private SettingsListener listener;
-    private DroneController controller = new DroneController();
+    private DroneController controller;
     private final Path recordFolderPath = Paths.get("records");
     private List<FlightRecord> flightRecords = new ArrayList<>();
     private CommandManager commandManager;
@@ -41,12 +42,21 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private final String RECORDING_ENABLED = BASE_STATUS + " ENABLED";
     private Thread recordingExecutionThread;
 
+    private final Thread controllerThread;
+
+    public void intrruptControllerThread() {
+        controllerThread.interrupt();
+    }
+
     /**
      * Creates new form DroneControllerMonitor
      */
     public DroneControllerMonitor() {
         //Prepare GUI components
+        try{
         initComponents();
+
+        controller = new DroneController();
 
         //Autoscroll textarea for logging
         DefaultCaret caret = (DefaultCaret) logTextArea.getCaret();
@@ -63,10 +73,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager = controller.getCommandManager();
 
         //Finally start the controller in a new thread
-        new Thread(controller).start();
+        controllerThread = new Thread(controller);
 
         //Insert in the selector all the recorded flights
         insertRecordsInSelector();
+        }catch(SocketException se){
+            System.out.println(se.getMessage());
+        }
     }
 
     /**
@@ -75,6 +88,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
+        final DroneControllerMonitor dcm = new DroneControllerMonitor();
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -98,9 +114,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         }
         //</editor-fold>
 
-        DroneControllerMonitor dcm = new DroneControllerMonitor();
         /* Create and display the form */
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 dcm.setVisible(true);
@@ -108,7 +122,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         });
     }
 
-    // <editor-fold desc="GUI-used methods" defaultstate="collapsed">
+    // <editor-fold desc="Methods used by the GUI" defaultstate="collapsed">
     /**
      * This method reads all flight recording files located in the folder
      * 'records' and add them in the combobox present in the recording section.
