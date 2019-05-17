@@ -195,16 +195,39 @@ Sul lato sinistro si può vedere il sensore ed il controller che fanno da client
 
 ### 2.3 Design delle interfacce
 
-Interfaccia della posizione del drone:
+#### 2.3.1 Simulatore
+
+##### Interfaccia della posizione del drone
+
 Per la visualizzazione della posizione del drone nel simulatore é stato scelto un diagramma cartesiano in cui verra mostrato lo spostamento del drone su 2 assi.
 Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una con visuale di profilo (Assi X e Y)
 
 ![Interfaccia posizione](../media/mockup/MockPosizioneDallAlto.png)
 
-Interfaccia della rotazione del drone:
+##### Interfaccia della rotazione del drone
+
 Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 
 ![alt Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
+
+#### 2.3.2 Controller
+
+##### Interfaccia del controller del drone
+
+Per la GUI del controller abbiamo pensato ad una finestra con più tab dove ogni sezione ha uno scopo specifico.
+Le sezioni che abbiamo pensato sono queste:
+
+- Log
+  - Textarea che permette di leggere direttamente dalla GUI i log
+
+- Comandi rapidi
+  - Serie di pulsanti che permettono di guidare il drone a distanza senza utilizzare il controller Leap Motion
+- Recording
+  - Pulsanti che permettono di iniziare/finire una registrazione ed un selettore che permette di selezionare il file di registrazione per poi eseguirlo
+- Settings
+  - Una tabella che mostra il nome dei ogni opzione presente nel file di config ed delle textbox affianco ad ogni label che permettono di leggere/scrivere l'impostazione salvata su file
+
+# INSERIRE IMMAGINE SCHIZZO (GIMP)
 
 ### 2.4 Design procedurale
 
@@ -328,11 +351,12 @@ public class PacketReceivingCheckerThread extends Thread{
 
 ### 4.2 Risultati test
 
-Tabella riassuntiva in cui si inseriscono i test riusciti e non del
-prodotto finale. Se un test non riesce e viene corretto l’errore, questo
-dovrà risultare nel documento finale come riuscito (la procedura della
-correzione apparirà nel diario), altrimenti dovrà essere descritto
-l’errore con eventuali ipotesi di correzione.
+|Test      | Risultato test                               |
+|---------------|--------------------------------------|
+|TC-001      | Passato ✔                            |
+|TC-003      | Non passato ❌                               |
+|ECCETERA      | ECCETERA                               |
+
 
 ### 4.3 Mancanze/limitazioni conosciute
 
@@ -341,6 +365,7 @@ Esso infatti non permette ricevere i dati dello stream video del drone e quindi 
 La seconda mancanza è la pagina web con le statistiche relative allo stato del drone.
 
 ## 5 Consuntivo
+
 ---
 
 Rispetto al diagramma iniziale abbiamo in parte unito le due fasi di progettazione ed
