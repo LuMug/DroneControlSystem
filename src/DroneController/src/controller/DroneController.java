@@ -73,6 +73,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public DroneController() throws SocketException {
         COMMAND_MANAGER = new CommandManager(this);
         CONTROLLER.addListener(this);
+        loadVariables();
     }
 
     /**
@@ -168,7 +169,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         } else {
             System.out.println("Controller connected");
         }
-        loadVariables();
+        
         System.out.println("enabled gestures");
         controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
     }
@@ -200,8 +201,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         float lastHeightReal = FRAME_HELPER.getHandY(FRAME_HELPER.getLeftHand(null));
         String[] commands = new String[2];
-        float lastY = FRAME_HELPER.getDeltaY();
-        lastY = (int) ((lastHeightReal - 300) / 2);
+        float lastY = (int) ((lastHeightReal - 300) / 2);
+        
         if (FRAME_HELPER.getLeftHand(null) != null) {
 
             float rollLeftValue = FRAME_HELPER.getRoll(FRAME_HELPER.getLeftHand(null));
@@ -211,7 +212,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 int rollLeftRelative = (int) (Math.abs(rollLeftValue) - controllerDegreesSensibility * 3);
 
                 if (rollLeftRelative != 0) {
-                    System.out.println("yaw: " + rollLeftRelative);
                     String message = rollLeftValue < 0
                             ? Commands.rotateClockwise(rollLeftRelative)
                             : Commands.rotateCounterClockwise(rollLeftRelative);
@@ -224,10 +224,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
             if (Math.abs(lastY) > heightThreshold && lastY != 0.0 && Math.abs(lastY) > 20 && Math.abs(lastY) < 500) {
                 if (lastY != 0.0) {
-                    String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
+                    String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : 
+                            Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                     commands[1] = message;
-
-                    //COMMAND_MANAGER.sendCommand(message);
                     listener.commandSent(message + "\n");
                 }
             }
