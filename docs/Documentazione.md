@@ -130,6 +130,34 @@
   |**002**      | Possibilità di manipolare le impostazioni salvate all'interno del file anche tramite codice |
   |**002**      | Codice ben commentato (Inglese o Italiano)|
 
+  |ID  |REQ-004                                         |
+  |----|------------------------------------------------|
+  |**Nome**    |Socket di comunicazione fra Controller e Simulator|
+  |**Priorità**|1                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Funzionamento corretto dell'invio e ricezione dei pacchetti in entrambe le direzioni |
+
+  |ID  |REQ-005                                         |
+  |----|------------------------------------------------|
+  |**Nome**    | Traduzione stringa in comando |
+  |**Priorità**|1                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Ricezione del pacchetto contenente la stringa |
+  |**002**      | Controllo esistenza del comando richiesto |
+  |**003**      | Esecuzione comando |
+
+  |ID  |REQ-006                                         |
+  |----|------------------------------------------------|
+  |**Nome**    | Modifica grafici al cambiamento dei valori di riferimento |
+  |**Priorità**|1                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Modifica effettiva dei valori di riferimento come le assi X,Y,Z e attributi Pitch, Roll e Yaw |
+  |**002**      | Lettura dei nuovi valori |
+  |**003**      | Modifica e ricaricamento dei nuovi grafici |
+
 ### 1.6 Pianificazione
 
 Questa è la pianificazione e struttura che abbiamo cercato di rispettare per
@@ -379,7 +407,7 @@ Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osse
 
 ---
 Il nostro prodotto permette un uso molto semplice e anche abbastanza accessibile a chiunque sia appassionato oppure anche nuovo nel mondo dei droni.
-Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia 
+Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia
 Usando le proprie mani è possibile guidare il drone per l'aria avendo la possibilità di farli fare svariati movimenti come quelli normali di movimento oppure quelli acrobatici come un looping.
 
 ### 6.1 Sviluppi futuri
