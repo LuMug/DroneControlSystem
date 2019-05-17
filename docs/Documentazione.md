@@ -407,18 +407,18 @@ Uno sviluppo futuro molto utile sarebbe sicuramente la possibilità di mostrare 
 
 ### 6.2 Considerazioni personali
 
-### 6.3 Luca
+### 6.2.1 Luca
 
 Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazione tramite socket tra due dispositivi di rete. Grazie a queste nuove conoscenze apprese ho potuto continuare a programmare dei miei progetti privati che avevo lasciato in sospeso (Reverse TCP Shell, invio di file da remoto,...)
 
-### 6.4 Fadil
+### 6.2.2 Fadil
 
 # DA COMPLETARE
 
-### 6.4 Jari
+### 6.2.3 Jari
 # DA COMPLETARE
 
-### 6.4 Rausone
+### 6.2.4 Rausone
 # DA COMPLETARE
 
 ## 7 Bibliografia
