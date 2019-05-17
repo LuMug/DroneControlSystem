@@ -4,10 +4,7 @@
 - 1.5: Aggiungere eventuali requisiti
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
-- 4.3: Da fare
-- 6.1: da fare
-- 6.2: da fare
-- 8.1: da fare
+- 6.2: Da completare
 - Sommario: aggiornarlo
 
 ---
@@ -142,32 +139,44 @@ tutto il percorso di questo progetto.
 ### 1.7 Analisi dei mezzi
 
 ### 1.7.1 Software
+
 Per la realizzazione di questo progetto abbiamo usato come software:
-- GitHub 2.20.1: Punto di riferimento per tutto il team sul quale si carica
-continuamente il lavoro fatto attraverso commit in un sistema di versioning.
-- GitHub Desktop 1.6.5: Programma per effettuare il push e pull di commit
-attraverso un'interfaccia grafica.
+
+- GitHub 2.20.1: Punto di riferimento per tutto il team sul quale si carica continuamente il lavoro fatto attraverso commit in un sistema di versioning.
+
+- GitHub Desktop 1.6.5: Programma per effettuare il push e pull di commit attraverso un'interfaccia grafica.
+
 - Atom 1.36.1: Editore di testo per scrivere principalmente la documentazione e
 risolvere conflitti.
+
 - NetBeans 8.2:  IDE per sviluppare tutto il codice scritto in Java.
+
 - VisualStudio Code 1.33.1: Editore di testo usato in tutti i contesti.
-- SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere
-i vari movimenti delle mani dal sensore LeapMotion.
-- GanttProject 2.8.9: Software per creare una progettazione delle tempistiche
- per il progetto.
+
+- SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere i vari movimenti delle mani dal sensore LeapMotion.
+
+- GanttProject 2.8.9: Software per creare una progettazione delle tempistiche per il progetto.
 
 ### 1.7.2 Hardware
+
 Per poter realizzare questo progetto abbiamo usato il seguente materiale:
+
 - Sensore LeapMotion.
+
 - Drone DJI Tello.
+
 - Apple MacBook Pro 2015 con OSX Mojave.
+
 - Asus VivoBook 2015 con Windows 10.
+
 - Asus ROG GL702VM con Windows 10.
+
 - HP Pavilion CS-0800 con Linux Ubuntu 19.04.
 
-
 ## 2 Progettazione
+
 ---
+
 ### 2.1 Design dell’architettura del sistema
 
 Nell'immagine sottostante viene rappresentata la struttura delle classi del Controller del drone
@@ -177,7 +186,8 @@ Nell'immagine sottostante viene rappresentata la struttura delle classi del Simu
 
 ![DroneSimulator UML](ClassDiagrams/DroneController.png)
 
-### 2.2 Schema logico.
+### 2.2 Schema logico
+
 Nell'immagine sottostante viene rappresentato lo schema logico di questo progetto.<br>
 Sul lato sinistro si può vedere il sensore ed il controller che fanno da client, successivamente i dati rilevati verranno mandati attraverso un socket UDP in Java al Simulatore oppure al Drone stesso.
 
@@ -185,16 +195,39 @@ Sul lato sinistro si può vedere il sensore ed il controller che fanno da client
 
 ### 2.3 Design delle interfacce
 
-Interfaccia della posizione del drone:
+#### 2.3.1 Simulatore
+
+##### Interfaccia della posizione del drone
+
 Per la visualizzazione della posizione del drone nel simulatore é stato scelto un diagramma cartesiano in cui verra mostrato lo spostamento del drone su 2 assi.
 Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una con visuale di profilo (Assi X e Y)
 
 ![Interfaccia posizione](../media/mockup/MockPosizioneDallAlto.png)
 
-Interfaccia della rotazione del drone:
+##### Interfaccia della rotazione del drone
+
 Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 
 ![alt Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
+
+#### 2.3.2 Controller
+
+##### Interfaccia del controller del drone
+
+Per la GUI del controller abbiamo pensato ad una finestra con più tab dove ogni sezione ha uno scopo specifico.
+Le sezioni che abbiamo pensato sono queste:
+
+- Log
+  - Textarea che permette di leggere direttamente dalla GUI i log
+
+- Comandi rapidi
+  - Serie di pulsanti che permettono di guidare il drone a distanza senza utilizzare il controller Leap Motion
+- Recording
+  - Pulsanti che permettono di iniziare/finire una registrazione ed un selettore che permette di selezionare il file di registrazione per poi eseguirlo
+- Settings
+  - Una tabella che mostra il nome dei ogni opzione presente nel file di config ed delle textbox affianco ad ogni label che permettono di leggere/scrivere l'impostazione salvata su file
+
+# INSERIRE IMMAGINE SCHIZZO (GIMP)
 
 ### 2.4 Design procedurale
 
@@ -203,6 +236,7 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 ![Diagramma di flusso](../media/img/DiagrammaFlusso.png)
 
 ## 3 Implementazione
+
 ---
 
 ### 3.1 Drone Controller
@@ -301,7 +335,9 @@ public class PacketReceivingCheckerThread extends Thread{
 ```
 
 ## 4 Test
+
 ---
+
 ### 4.1 Protocollo di test
 
 |Test Case      | TC-001                               |
@@ -315,11 +351,12 @@ public class PacketReceivingCheckerThread extends Thread{
 
 ### 4.2 Risultati test
 
-Tabella riassuntiva in cui si inseriscono i test riusciti e non del
-prodotto finale. Se un test non riesce e viene corretto l’errore, questo
-dovrà risultare nel documento finale come riuscito (la procedura della
-correzione apparirà nel diario), altrimenti dovrà essere descritto
-l’errore con eventuali ipotesi di correzione.
+|Test      | Risultato test                               |
+|---------------|--------------------------------------|
+|TC-001      | Passato ✔                            |
+|TC-003      | Non passato ❌                               |
+|ECCETERA      | ECCETERA                               |
+
 
 ### 4.3 Mancanze/limitazioni conosciute
 
@@ -328,6 +365,7 @@ Esso infatti non permette ricevere i dati dello stream video del drone e quindi 
 La seconda mancanza è la pagina web con le statistiche relative allo stato del drone.
 
 ## 5 Consuntivo
+
 ---
 
 Rispetto al diagramma iniziale abbiamo in parte unito le due fasi di progettazione ed
@@ -352,6 +390,7 @@ Uno sviluppo futuro molto utile sarebbe sicuramente la possibilità di mostrare 
 Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazione tramite socket tra due dispositivi di rete. Grazie a queste nuove conoscenze apprese ho potuto continuare a programmare dei miei progetti privati che avevo lasciato in sospeso (Reverse TCP Shell, invio di file da remoto,...)
 
 ### 6.4 Fadil
+
 # DA COMPLETARE
 
 ### 6.4 Jari
@@ -360,40 +399,40 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 ### 6.4 Rausone
 # DA COMPLETARE
 
-
 ## 7 Bibliografia
+
 ---
 
 ### 7.1 Sitografia
 
--   http://standards.ieee.org/guides/style/section7.html, *IEEE
-    Standards Style Manual*, 13.02.2019 - 10.05.2019.
--   http://www.jfree.org/jfreechart/, *JFreeChart*, 13.02.2019 - 10.05.2019
--   https://github.com/jfree/jfreechart, *A 2D chart library for Java applications (JavaFX, Swing or server-side)*, 13.02.2019 - 10.05.2019
--   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*, 13.02.2019 - 10.05.2019
--   https://stackoverflow.com/, *StackOverflow*, 13.02.2019 - 10.05.2019
-- https://www.leapmotion.com/, *Leap Motion*, 13.02.2019 - 10.05.2019.
--   https://www.ryzerobotics.com/tello, *Tello SDK*, 13.02.2019 - 10.05.2019
--   https://www.draw.io/, *Draw io*, 15.05.2019
+- <http://standards.ieee.org/guides/style/section7.html>, *IEEE Standards Style Manual*, 13.02.2019 - 10.05.2019.
 
+- <http://www.jfree.org/jfreechart/>, *JFreeChart*, 13.02.2019 - 10.05.2019
 
-## 8 Allegati -> DA CONTROLLARE
+- <https://github.com/jfree/jfreechart>, *A 2D chart library for Java applications (JavaFX, Swing or server-side)*, 13.02.2019 - 10.05.2019
+
+- <http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html>, *JFreeChart 1.5.0 API*, 13.02.2019 - 10.05.2019
+
+- <https://stackoverflow.com/>, *StackOverflow*, 13.02.2019 - 10.05.2019
+
+- <https://www.leapmotion.com/>, *Leap Motion*, 13.02.2019 - 10.05.2019.
+
+- <https://www.ryzerobotics.com/tello>, *Tello SDK*, 13.02.2019 - 10.05.2019
+
+- <https://www.draw.io/>, *Draw io*, 15.05.2019
+
+## 8 Allegati
+
 ---
-Elenco degli allegati, esempio:
 
--   Diari di lavoro
+- Diari di lavoro
 
--   Codici sorgente/documentazione macchine virtuali
+- Codici sorgente
 
--   Istruzioni di installazione del prodotto (con credenziali
-    di accesso) e/o di eventuali prodotti terzi
+- Gantt preventivo e Gantt consuntivo
 
--   Documentazione di prodotti di terzi
+- Documentazione protocollo di comunicazione per DJI Tello
 
--   Eventuali guide utente / Manuali di utilizzo
+- Qdc
 
--   Mandato e/o Qdc
-
--   Prodotto
-
--   …
+- Prodotto
