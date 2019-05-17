@@ -215,8 +215,6 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 Questa classe ha lo scopo di mostrare all'interno di un JFrame le informazioni sulla posizione del drone sui 3 assi con una vista di profilo e una vista dall'alto e la rotazione del drone sui 3 assi di rotazione (beccheggio, imbardata e rollio).
 La rappresentazione delle informazioni avvengono tramite grafici cartesiani per la posizione e tramite grafico a barre per la rotazione, i grafici sono stati costruiti grazie alla libreria gratuita JFreeChart.
 
-
-
 #### 3.2.2 Simulator
 
 La classe Simulator permette di ricevere tutte le richiese e i comandi in entrata sulla porta del socket ```8889```.
@@ -326,10 +324,9 @@ l’errore con eventuali ipotesi di correzione.
 
 ### 4.3 Mancanze/limitazioni conosciute
 
-Descrizione con motivazione di eventuali elementi mancanti o non
-completamente implementati, al di fuori dei test case. Non devono essere
-riportati gli errori e i problemi riscontrati e poi risolti durante il
-progetto.
+Il nostro prodotto ha delle limitazioni soltanto dalla parte del controller.
+Esso infatti non permette ricevere i dati dello stream video del drone e quindi non permette all'utente di visionare ciò che vede Tello con la sua telecamera.
+La seconda mancanza è la pagina web con le statistiche relative allo stato del drone.
 
 ## 5 Consuntivo
 ---
@@ -340,15 +337,30 @@ Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osse
 ![alt Gantt Consuntivo](..\media\img\Immagine_Gantt_Consuntivo.png)
 
 ## 6 Conclusioni
+
 ---
 Il nostro prodotto permette un uso molto semplice e anche abbastanza accessibile a chiunque sia appassionato oppure anche nuovo nel mondo dei droni.
 Usando le proprie mani è possibile guidare il drone per l'aria avendo la possibilità di farli fare svariati movimenti come quelli normali di movimento oppure quelli acrobatici come un looping.
 
 ### 6.1 Sviluppi futuri
-  Migliorie o estensioni che possono essere sviluppate sul prodotto.
+
+Uno sviluppo futuro molto utile sarebbe sicuramente la possibilità di mostrare lo stream video del drone direttamente sulla GUI del controller. Questo infatti permetterebbe di pilotare il drone a distanza senza doverlo per forza vedere con i propri occhi.
 
 ### 6.2 Considerazioni personali
-  Cosa ho imparato in questo progetto? ecc
+
+### 6.3 Luca
+
+Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazione tramite socket tra due dispositivi di rete. Grazie a queste nuove conoscenze apprese ho potuto continuare a programmare dei miei progetti privati che avevo lasciato in sospeso (Reverse TCP Shell, invio di file da remoto,...)
+
+### 6.4 Fadil
+# DA COMPLETARE
+
+### 6.4 Jari
+# DA COMPLETARE
+
+### 6.4 Rausone
+# DA COMPLETARE
+
 
 ## 7 Bibliografia
 ---
