@@ -266,8 +266,9 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 ## 3 Implementazione
 
 ---
-
 ### 3.1 Drone Controller
+
+### 3.1.1 DroneController
 
 Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe *FrameHelper*, che contiene i metodi utili per ricavare tutte le informazioni dal *Frame* letto dal *LeapMotion*, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone. Una volta tradotti i valori vengono mandati al drone, grazie alla classe *CommandManager*,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
 
@@ -380,6 +381,50 @@ private void checkMovementControl() {
     doneExecuting();
 }
 ```
+### 3.1.2 FrameHelper
+
+FrameHelper è la classe che contiene le informazioni lette dal LeapMotion, aggiornate con ogni nuovo Frame letto, inoltre contiene dei metodi utili per l'ottenimento e calcolo dei dati. 
+
+
+##### getRoll
+
+Questo metodo calcola l'angolo di rollio dell'oggetto mano passato come parametro. L'angolo è calcolato rispetto al piano trasversale del LeapMotion. Prima vengono estratti i Vettori delle dita agli estremi della mano e poi vengono svolti i calcoli usando la classe di java *Math*
+
+--- 
+Per il calcolo preciso dell angolo della mano.
+
+Soluzione trovata su due siti:
+
+- https://stackoverflow.com/questions/2676719/Calculating-the-angle-between-the-line-defined-by-two-points
+- https://math.stackexchange.com/questions/1201337/finding-the-angle-between-two-points
+
+Codice:
+`Math.toDegrees(Math.atan2(Y1 - Y2, X1 - X2));`
+
+---
+
+
+```java
+/**
+     * This method returns the roll angle of the hand
+     *
+     * @param hand the hand from which it needs to read the roll angle
+     * @return the roll angle in degrees
+     */
+    public float getRoll(Hand hand) {
+        try {
+            Vector lVector = hand.fingers().leftmost().tipPosition();
+            Vector rVector = hand.fingers().rightmost().tipPosition();
+            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(),
+                                          rVector.getX() - lVector.getX()));
+
+        } catch (NullPointerException npe) {
+            return 0;
+        }
+    }
+```
+
+
 ### 3.2 Drone Simulator
 
 #### 3.2.1 TelloChartFrame
@@ -531,7 +576,7 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 
 ### 6.4 Fadil
 
-# DA COMPLETARE
+Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della communicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
 
 ### 6.4 Jari
 # DA COMPLETARE
@@ -560,6 +605,10 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 - <https://www.ryzerobotics.com/tello>, *Tello SDK*, 13.02.2019 - 10.05.2019
 
 - <https://www.draw.io/>, *Draw io*, 15.05.2019
+
+- <https://stackoverflow.com/questions/2676719/Calculating-the-angle-between-the-line-defined-by-two-points/>, *Calculating the angle between the line defined by two points/*, 03.04.2019
+
+- <https://math.stackexchange.com/questions/1201337/finding-the-angle-between-two-points/>, *Finding the angle between two points*, 03.04.2019
 
 ## 8 Allegati
 
