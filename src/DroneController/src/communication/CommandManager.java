@@ -81,15 +81,14 @@ public class CommandManager {
      *
      * @param listener the listener of the CommandManager class.
      */
-    public CommandManager(CommandManagerListener listener) {
+    public CommandManager(CommandManagerListener listener) throws SocketException {
         try {
             commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
             System.out.println("[SUCCESS] Listening on port " + this.TELLO_COMMAND_LISTEN_PORT);
-
+            this.LISTENER = listener;
         } catch (SocketException ex) {
-            System.err.println("Can't create client socket: " + ex.getMessage());
+            throw new SocketException("Can't create client socket: " + ex.getMessage());
         }
-        this.LISTENER = listener;
     }
 
     /**
