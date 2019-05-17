@@ -6,6 +6,7 @@ import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
+import java.net.SocketException;
 import settings.SettingsListener;
 import settings.SettingsManager;
 
@@ -22,7 +23,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      * This constant is the command manager required in order to send commands
      * and receive responses from the drone.
      */
-    private final CommandManager COMMAND_MANAGER = new CommandManager(this);
+    private final CommandManager COMMAND_MANAGER;
     /**
      * This constant is the settings manager used to load variable values form
      * the config.dcs configuration file.
@@ -65,13 +66,12 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     private boolean isLeapMotionEnabled = true;
 
-    
-
     /**
      * Drone controller constructor that adds this object as the LeapMotion
      * controller listener.
      */
-    public DroneController() {
+    public DroneController() throws SocketException {
+        COMMAND_MANAGER = new CommandManager(this);
         CONTROLLER.addListener(this);
     }
 
@@ -83,15 +83,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     @Override
     public void run() {
 
-        if (listener != null) {
-            listener.controllerMessage("DroneController started\n");
-        }
+        listener.controllerMessage("DroneController started\n");
 
         COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-        }
 
         listener.controllerMessage("Sending commands\n");
 
@@ -126,11 +120,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
             }
         }
 
-        if (listener != null) {
-            listener.controllerMessage("controller not connected\n");
-        } else {
-            System.out.println("controller not connected");
-        }
+        listener.controllerMessage("controller not connected\n");
+
+        System.out.println("controller not connected");
 
         COMMAND_MANAGER.sendCommand(Commands.LAND);
     }

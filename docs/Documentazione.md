@@ -208,7 +208,7 @@ Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una 
 
 Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 
-![alt Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
+![Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
 
 #### 2.3.2 Controller
 
@@ -231,7 +231,7 @@ Le sezioni che abbiamo pensato sono queste:
 
 ### 2.4 Design procedurale
 
-Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone oppure a DroneSimulator.
+Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone DJI Tello oppure a DroneSimulator.
 
 ![Diagramma di flusso](../media/img/DiagrammaFlusso.png)
 
@@ -240,6 +240,8 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 ---
 
 ### 3.1 Drone Controller
+
+Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe *FrameHelper*, che contiene i metodi utili per ricavare tutte le informazioni dal *Frame* letto dal *LeapMotion*, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone. Una volta tradotti i valori vengono mandati al drone, grazie alla classe *CommandManager*,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
 
 ### 3.2 Drone Simulator
 
@@ -377,6 +379,7 @@ Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osse
 
 ---
 Il nostro prodotto permette un uso molto semplice e anche abbastanza accessibile a chiunque sia appassionato oppure anche nuovo nel mondo dei droni.
+Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia 
 Usando le proprie mani è possibile guidare il drone per l'aria avendo la possibilità di farli fare svariati movimenti come quelli normali di movimento oppure quelli acrobatici come un looping.
 
 ### 6.1 Sviluppi futuri
