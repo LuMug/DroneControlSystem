@@ -79,8 +79,8 @@
 ### 1.2 Abstract
 
   Nowadays drones are really popular in various areas such as personal use and professional environment.
-  To make this awesome quadcopters accessible to all ages in a really fun way as a team we decided to create a library that connects a sensor that reads the user's hands motions, transforms them in commands and sends them to the drone.
-  With our product it's really easy to fly a drone with your own hand's motions.
+  To make these awesome quadcopters accessible to all ages in a really fun way as a team we decided to create a program that reads data from a sensor (LeapMotion©) that tracks the user's hands, transforms the movement in commands and sends them to the drone.
+  With our product it's really easy to fly a drone with your own hands.
 
 ### 1.3 Scopo
 
@@ -137,7 +137,7 @@
 
 Questa è la pianificazione e struttura che abbiamo cercato di rispettare per
 tutto il percorso di questo progetto.
-![alt Gantt Preventivo](..\media\img\Immagine_Gantt_Preventivo.png)
+![Gantt Preventivo](../media/img/Immagine_Gantt_Preventivo.png)
 
 ### 1.7 Analisi dei mezzi
 
@@ -172,17 +172,16 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 
 Nell'immagine sottostante viene rappresentata la struttura delle classi del Controller del drone
 
-![alt DroneController UML](Class%20Diagrams\DroneController.png)
-
+![DroneController UML](ClassDiagrams/DroneSimulator.png)
 Nell'immagine sottostante viene rappresentata la struttura delle classi del Simulatore del drone
 
-![alt DroneSimulator UML](Class%20Diagrams\DroneSimulator.png)
+![DroneSimulator UML](ClassDiagrams/DroneController.png)
 
 ### 2.2 Schema logico.
 Nell'immagine sottostante viene rappresentato lo schema logico di questo progetto.<br>
 Sul lato sinistro si può vedere il sensore ed il controller che fanno da client, successivamente i dati rilevati verranno mandati attraverso un socket UDP in Java al Simulatore oppure al Drone stesso.
 
-![alt SchemaLogico Progetto](..\media\img\SchemaLogico.png)
+![SchemaLogico Progetto](../media/img/SchemaLogico.png)
 
 ### 2.3 Design delle interfacce
 
@@ -190,18 +189,18 @@ Interfaccia della posizione del drone:
 Per la visualizzazione della posizione del drone nel simulatore é stato scelto un diagramma cartesiano in cui verra mostrato lo spostamento del drone su 2 assi.
 Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una con visuale di profilo (Assi X e Y)
 
-![alt Interfaccia posizione](..\media\mockup\MockPosizioneDallAlto.png)
+![Interfaccia posizione](../media/mockup/MockPosizioneDallAlto.png)
 
 Interfaccia della rotazione del drone:
 Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 
-![alt Interfaccia rotazione](..\media\mockup\MockRotazioneAssi.png)
+![alt Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
 
 ### 2.4 Design procedurale
 
 Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone oppure a DroneSimulator.
 
-![Diagramma di flusso](..\media\img\DiagrammaFlusso.png)
+![Diagramma di flusso](../media/img/DiagrammaFlusso.png)
 
 ## 3 Implementazione
 ---
@@ -337,7 +336,7 @@ progetto.
 Rispetto al diagramma iniziale abbiamo in parte unito le due fasi di progettazione ed
 implementazione visto che era un lavoro spesso asincrono per ogni membro del team, di conseguenza non conoscendo ancora la natura di svariati componenti utilizzati per realizzare questo prodotto abbiamo optato per questa soluzione potendo così informarci e lavorare sul progetto contemporaneamente.
 Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osservare i movimenti del drone e l'invio dei vari comandi via socket.
-![alt Gantt Consuntivo](..\media\img\Immagine_Gantt_Consuntivo.png)
+![alt Gantt Consuntivo](../media/img/Immagine_Gantt_Consuntivo.png)
 
 ## 6 Conclusioni
 ---
