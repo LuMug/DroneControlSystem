@@ -10,6 +10,8 @@ Ho continuato con lo sviluppo e correzione della documentazione.
 Fadil:
 Ho lavorato con luca sull'implementazione del flight recording e ho aggiunto il riconoscimento delle gesture per il controllo del yaw del drone.
 Luca:
+Ho continuato l'implementazione delle classi relative al recording dei 
+voli.
 
 Andrea: Ho continuato con la documentazione modificando il sommario trasformandolo in una lista numerata, ho aggiunto e aggiornato le immagini degli UML e i siti della libreria JFreeChart nella sitografia.
 
