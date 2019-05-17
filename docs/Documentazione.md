@@ -1,4 +1,4 @@
-# Drone Control System
+# Drone Control System<>
 
 #### Da Fare:
 - 1.5: Aggiungere eventuali requisiti
@@ -17,7 +17,7 @@
 
     1.3[Scopo](#1.3-scopo)
 
-  - [Analisi](#analisi)
+2. [Analisi](#analisi)
 
     1.4 [Analisi del dominio](#1.4-analisi-del-dominio)
 
@@ -27,7 +27,7 @@
 
     1.7 [Pianificazione](#1.7-pianificazione)
 
-2. [Progettazione](#2.-progettazione)
+3.  [Progettazione](#2.-progettazione)
 
     2.1 [Design dell’architettura del sistema](#2.1-design-dell’architettura-del-sistema)
 
@@ -37,13 +37,13 @@
 
     2.4 [Design procedurale](#2.4-design-procedurale)
 
-3. [Implementazione](#3.-implementazione)
+4. [Implementazione](#3.-implementazione)
 
     3.1 [Drone Controller](#3.1-drone-controller)
 
     3.2 [Drone Simulator](#3.2-drone-simulator)
 
-4. [Test](#4.-test)
+5. [Test](#4.-test)
 
     4.1 [Protocollo di test](#4.1-protocollo-di-test)
 
@@ -51,19 +51,19 @@
 
     4.3 [Mancanze/limitazioni conosciute](#4.3-mancanze/limitazioni-conosciute)
 
-5. [Consuntivo](#5.-consuntivo)
+6. [Consuntivo](#5.-consuntivo)
 
-6. [Conclusioni](#6.-conclusioni)
+7. [Conclusioni](#6.-conclusioni)
 
     6.1 [Sviluppi futuri](#6.1-sviluppi-futuri)
 
     6.2 [Considerazioni personali](#6.2-considerazioni-personali)
 
-7. [Bibliografia](#7.-bibliografia)
+8. [Bibliografia](#7.-bibliografia)
 
     7.1 [Sitografia](#7.1-sitografia)
 
-8. [Allegati](#8.-allegati)
+9. [Allegati](#8.-allegati)
 
 ## 1. Introduzione
 ---
@@ -88,9 +88,7 @@
 
 ### 1.4 Analisi del dominio
 
-  Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica
-  attualmente esiste solamente progettato e scritto privatamente in vari linguaggi come
-  Ruby, Python e PHP ma non ancora in Java.
+  Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica attualmente è stato solamente sviluppato e progettato in vari linguaggi come Ruby, Python e PHP ma non ancora in Java.
 
 ### 1.5 Analisi e specifica dei requisiti
 
@@ -188,7 +186,7 @@ Per la realizzazione di questo progetto abbiamo usato come software:
 - Atom 1.36.1: Editore di testo per scrivere principalmente la documentazione e
 risolvere conflitti.
 
-- NetBeans 8.2:  IDE per sviluppare tutto il codice scritto in Java.
+- NetBeans 8.2: IDE per sviluppare tutto il codice scritto in Java.
 
 - VisualStudio Code 1.33.1: Editore di testo usato in tutti i contesti.
 
@@ -206,7 +204,7 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 
 - Apple MacBook Pro 2015 con OSX Mojave.
 
-- Asus VivoBook 2015 con Windows 10.
+- Asus VivoBook Pro 2018 con Windows 10.
 
 - Asus ROG GL702VM con Windows 10.
 
@@ -247,26 +245,49 @@ Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una 
 
 Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 
-![Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
+![alt Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
 
 #### 2.3.2 Controller
-
-##### Interfaccia del controller del drone
 
 Per la GUI del controller abbiamo pensato ad una finestra con più tab dove ogni sezione ha uno scopo specifico.
 Le sezioni che abbiamo pensato sono queste:
 
 - Log
+
   - Textarea che permette di leggere direttamente dalla GUI i log
 
 - Comandi rapidi
+
   - Serie di pulsanti che permettono di guidare il drone a distanza senza utilizzare il controller Leap Motion
+
 - Recording
+
   - Pulsanti che permettono di iniziare/finire una registrazione ed un selettore che permette di selezionare il file di registrazione per poi eseguirlo
+
 - Settings
+
   - Una tabella che mostra il nome dei ogni opzione presente nel file di config ed delle textbox affianco ad ogni label che permettono di leggere/scrivere l'impostazione salvata su file
 
-# INSERIRE IMMAGINE SCHIZZO (GIMP)
+##### Log
+
+Questa è la schermata che viene visualizzata di default all'apertura dell'applicazione:  
+![Mockup Log](../media/mockup/controller/log.PNG)
+
+##### Comandi rapidi
+
+Questa schemata è composta interamente di pulsanti i quali, come detto in precedenza, serviranno per controllare il drone in mancanza del Leap Motion:
+![Mockup comandi rapidi](../media/mockup/controller/comandiRapidi.PNG)
+
+##### Recording
+
+Questa schermata invece è divisa in due sezioni principali. La prima sezione è quella dell'esecuzione di voli tramite file (file selector, file infos, run e stop) mentre la seconda sezione sarà utile per la registrazione di tutti i comandi inviati al drone:
+![Mockup recording](../media/mockup/controller/recording.PNG)
+
+##### Settings
+
+Questa schermata invece è molto intuitiva. C'è una tabella dove si possono
+visualizzare tutte le impostazioni ed il loro relativo valore. I dati potranno essere modificati e salvati tramite il pulsante "Apply":
+![Mockup settings](../media/mockup/controller/settings.PNG)
 
 ### 2.4 Design procedurale
 
@@ -279,8 +300,6 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 ---
 
 ### 3.1 Drone Controller
-
-Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe *FrameHelper*, che contiene i metodi utili per ricavare tutte le informazioni dal *Frame* letto dal *LeapMotion*, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone. Una volta tradotti i valori vengono mandati al drone, grazie alla classe *CommandManager*,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
 
 ### 3.2 Drone Simulator
 
@@ -427,18 +446,18 @@ Uno sviluppo futuro molto utile sarebbe sicuramente la possibilità di mostrare 
 
 ### 6.2 Considerazioni personali
 
-### 6.3 Luca
+### 6.2.1 Luca
 
 Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazione tramite socket tra due dispositivi di rete. Grazie a queste nuove conoscenze apprese ho potuto continuare a programmare dei miei progetti privati che avevo lasciato in sospeso (Reverse TCP Shell, invio di file da remoto,...)
 
-### 6.4 Fadil
+### 6.2.2 Fadil
 
 # DA COMPLETARE
 
-### 6.4 Jari
+### 6.2.3 Jari
 # DA COMPLETARE
 
-### 6.4 Rausone
+### 6.2.4 Rausone
 # DA COMPLETARE
 
 ## 7 Bibliografia
