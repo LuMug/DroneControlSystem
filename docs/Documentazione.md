@@ -4,10 +4,7 @@
 - 1.5: Aggiungere eventuali requisiti
 - 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
-- 4.3: Da fare
-- 6.1: da fare
-- 6.2: da fare
-- 8.1: da fare
+- 6.2: Da completare
 - Sommario: aggiornarlo
 
 ---
@@ -142,32 +139,44 @@ tutto il percorso di questo progetto.
 ### 1.7 Analisi dei mezzi
 
 ### 1.7.1 Software
+
 Per la realizzazione di questo progetto abbiamo usato come software:
-- GitHub 2.20.1: Punto di riferimento per tutto il team sul quale si carica
-continuamente il lavoro fatto attraverso commit in un sistema di versioning.
-- GitHub Desktop 1.6.5: Programma per effettuare il push e pull di commit
-attraverso un'interfaccia grafica.
+
+- GitHub 2.20.1: Punto di riferimento per tutto il team sul quale si carica continuamente il lavoro fatto attraverso commit in un sistema di versioning.
+
+- GitHub Desktop 1.6.5: Programma per effettuare il push e pull di commit attraverso un'interfaccia grafica.
+
 - Atom 1.36.1: Editore di testo per scrivere principalmente la documentazione e
 risolvere conflitti.
+
 - NetBeans 8.2:  IDE per sviluppare tutto il codice scritto in Java.
+
 - VisualStudio Code 1.33.1: Editore di testo usato in tutti i contesti.
-- SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere
-i vari movimenti delle mani dal sensore LeapMotion.
-- GanttProject 2.8.9: Software per creare una progettazione delle tempistiche
- per il progetto.
+
+- SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere i vari movimenti delle mani dal sensore LeapMotion.
+
+- GanttProject 2.8.9: Software per creare una progettazione delle tempistiche per il progetto.
 
 ### 1.7.2 Hardware
+
 Per poter realizzare questo progetto abbiamo usato il seguente materiale:
+
 - Sensore LeapMotion.
+
 - Drone DJI Tello.
+
 - Apple MacBook Pro 2015 con OSX Mojave.
+
 - Asus VivoBook 2015 con Windows 10.
+
 - Asus ROG GL702VM con Windows 10.
+
 - HP Pavilion CS-0800 con Linux Ubuntu 19.04.
 
-
 ## 2 Progettazione
+
 ---
+
 ### 2.1 Design dell’architettura del sistema
 
 Nell'immagine sottostante viene rappresentata la struttura delle classi del Controller del drone
@@ -177,7 +186,8 @@ Nell'immagine sottostante viene rappresentata la struttura delle classi del Simu
 
 ![DroneSimulator UML](ClassDiagrams/DroneController.png)
 
-### 2.2 Schema logico.
+### 2.2 Schema logico
+
 Nell'immagine sottostante viene rappresentato lo schema logico di questo progetto.<br>
 Sul lato sinistro si può vedere il sensore ed il controller che fanno da client, successivamente i dati rilevati verranno mandati attraverso un socket UDP in Java al Simulatore oppure al Drone stesso.
 
@@ -203,6 +213,7 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 ![Diagramma di flusso](../media/img/DiagrammaFlusso.png)
 
 ## 3 Implementazione
+
 ---
 
 ### 3.1 Drone Controller
@@ -301,7 +312,9 @@ public class PacketReceivingCheckerThread extends Thread{
 ```
 
 ## 4 Test
+
 ---
+
 ### 4.1 Protocollo di test
 
 |Test Case      | TC-001                               |
@@ -352,6 +365,7 @@ Uno sviluppo futuro molto utile sarebbe sicuramente la possibilità di mostrare 
 Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazione tramite socket tra due dispositivi di rete. Grazie a queste nuove conoscenze apprese ho potuto continuare a programmare dei miei progetti privati che avevo lasciato in sospeso (Reverse TCP Shell, invio di file da remoto,...)
 
 ### 6.4 Fadil
+
 # DA COMPLETARE
 
 ### 6.4 Jari
@@ -360,40 +374,40 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 ### 6.4 Rausone
 # DA COMPLETARE
 
-
 ## 7 Bibliografia
+
 ---
 
 ### 7.1 Sitografia
 
--   http://standards.ieee.org/guides/style/section7.html, *IEEE
-    Standards Style Manual*, 13.02.2019 - 10.05.2019.
--   http://www.jfree.org/jfreechart/, *JFreeChart*, 13.02.2019 - 10.05.2019
--   https://github.com/jfree/jfreechart, *A 2D chart library for Java applications (JavaFX, Swing or server-side)*, 13.02.2019 - 10.05.2019
--   http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html, *JFreeChart 1.5.0 API*, 13.02.2019 - 10.05.2019
--   https://stackoverflow.com/, *StackOverflow*, 13.02.2019 - 10.05.2019
-- https://www.leapmotion.com/, *Leap Motion*, 13.02.2019 - 10.05.2019.
--   https://www.ryzerobotics.com/tello, *Tello SDK*, 13.02.2019 - 10.05.2019
--   https://www.draw.io/, *Draw io*, 15.05.2019
+- <http://standards.ieee.org/guides/style/section7.html>, *IEEE Standards Style Manual*, 13.02.2019 - 10.05.2019.
 
+- <http://www.jfree.org/jfreechart/>, *JFreeChart*, 13.02.2019 - 10.05.2019
 
-## 8 Allegati -> DA CONTROLLARE
+- <https://github.com/jfree/jfreechart>, *A 2D chart library for Java applications (JavaFX, Swing or server-side)*, 13.02.2019 - 10.05.2019
+
+- <http://www.jfree.org/jfreechart/api/javadoc/overview-summary.html>, *JFreeChart 1.5.0 API*, 13.02.2019 - 10.05.2019
+
+- <https://stackoverflow.com/>, *StackOverflow*, 13.02.2019 - 10.05.2019
+
+- <https://www.leapmotion.com/>, *Leap Motion*, 13.02.2019 - 10.05.2019.
+
+- <https://www.ryzerobotics.com/tello>, *Tello SDK*, 13.02.2019 - 10.05.2019
+
+- <https://www.draw.io/>, *Draw io*, 15.05.2019
+
+## 8 Allegati
+
 ---
-Elenco degli allegati, esempio:
 
--   Diari di lavoro
+- Diari di lavoro
 
--   Codici sorgente/documentazione macchine virtuali
+- Codici sorgente
 
--   Istruzioni di installazione del prodotto (con credenziali
-    di accesso) e/o di eventuali prodotti terzi
+- Gantt preventivo e Gantt consuntivo
 
--   Documentazione di prodotti di terzi
+- Documentazione protocollo di comunicazione per DJI Tello
 
--   Eventuali guide utente / Manuali di utilizzo
+- Qdc
 
--   Mandato e/o Qdc
-
--   Prodotto
-
--   …
+- Prodotto
