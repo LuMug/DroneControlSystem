@@ -18,7 +18,7 @@ Andrea:
 -
 
 ## Problemi riscontrati e soluzioni adottate
-Un calclo preciso dei angoli della mano destra
+Un calcolo preciso dei angoli della mano destra
 Soluzione trovata su due siti:
 
 - https://stackoverflow.com/questions/2676719/Calculating-the-angle-between-the-line-defined-by-two-points

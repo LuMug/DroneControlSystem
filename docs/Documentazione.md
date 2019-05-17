@@ -1,4 +1,4 @@
-# Drone Control System
+# Drone Control System<>
 
 #### Da Fare:
 - 1.5: Aggiungere eventuali requisiti
@@ -17,7 +17,7 @@
 
     1.3[Scopo](#1.3-scopo)
 
-  - [Analisi](#analisi)
+2. [Analisi](#analisi)
 
     1.4 [Analisi del dominio](#1.4-analisi-del-dominio)
 
@@ -27,7 +27,7 @@
 
     1.7 [Pianificazione](#1.7-pianificazione)
 
-2. [Progettazione](#2.-progettazione)
+3.  [Progettazione](#2.-progettazione)
 
     2.1 [Design dell’architettura del sistema](#2.1-design-dell’architettura-del-sistema)
 
@@ -37,13 +37,13 @@
 
     2.4 [Design procedurale](#2.4-design-procedurale)
 
-3. [Implementazione](#3.-implementazione)
+4. [Implementazione](#3.-implementazione)
 
     3.1 [Drone Controller](#3.1-drone-controller)
 
     3.2 [Drone Simulator](#3.2-drone-simulator)
 
-4. [Test](#4.-test)
+5. [Test](#4.-test)
 
     4.1 [Protocollo di test](#4.1-protocollo-di-test)
 
@@ -51,19 +51,19 @@
 
     4.3 [Mancanze/limitazioni conosciute](#4.3-mancanze/limitazioni-conosciute)
 
-5. [Consuntivo](#5.-consuntivo)
+6. [Consuntivo](#5.-consuntivo)
 
-6. [Conclusioni](#6.-conclusioni)
+7. [Conclusioni](#6.-conclusioni)
 
     6.1 [Sviluppi futuri](#6.1-sviluppi-futuri)
 
     6.2 [Considerazioni personali](#6.2-considerazioni-personali)
 
-7. [Bibliografia](#7.-bibliografia)
+8. [Bibliografia](#7.-bibliografia)
 
     7.1 [Sitografia](#7.1-sitografia)
 
-8. [Allegati](#8.-allegati)
+9. [Allegati](#8.-allegati)
 
 ## 1. Introduzione
 ---
@@ -88,9 +88,7 @@
 
 ### 1.4 Analisi del dominio
 
-  Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica
-  attualmente esiste solamente progettato e scritto privatamente in vari linguaggi come
-  Ruby, Python e PHP ma non ancora in Java.
+  Questo genere di prodotto orientato verso entusiasti di aviazione ed informatica attualmente è stato solamente sviluppato e progettato in vari linguaggi come Ruby, Python e PHP ma non ancora in Java.
 
 ### 1.5 Analisi e specifica dei requisiti
 
@@ -130,34 +128,6 @@
   |**002**      | Possibilità di manipolare le impostazioni salvate all'interno del file anche tramite codice |
   |**002**      | Codice ben commentato (Inglese o Italiano)|
 
-  |ID  |REQ-004                                         |
-  |----|------------------------------------------------|
-  |**Nome**    |Socket di comunicazione fra Controller e Simulator|
-  |**Priorità**|1                     |
-  |**Versione**|1.0                   |
-  |            |**Sotto requisiti**|
-  |**001**      | Funzionamento corretto dell'invio e ricezione dei pacchetti in entrambe le direzioni |
-
-  |ID  |REQ-005                                         |
-  |----|------------------------------------------------|
-  |**Nome**    | Traduzione stringa in comando |
-  |**Priorità**|1                     |
-  |**Versione**|1.0                   |
-  |            |**Sotto requisiti**|
-  |**001**      | Ricezione del pacchetto contenente la stringa |
-  |**002**      | Controllo esistenza del comando richiesto |
-  |**003**      | Esecuzione comando |
-
-  |ID  |REQ-006                                         |
-  |----|------------------------------------------------|
-  |**Nome**    | Modifica grafici al cambiamento dei valori di riferimento |
-  |**Priorità**|1                     |
-  |**Versione**|1.0                   |
-  |            |**Sotto requisiti**|
-  |**001**      | Modifica effettiva dei valori di riferimento come le assi X,Y,Z e attributi Pitch, Roll e Yaw |
-  |**002**      | Lettura dei nuovi valori |
-  |**003**      | Modifica e ricaricamento dei nuovi grafici |
-
 ### 1.6 Pianificazione
 
 Questa è la pianificazione e struttura che abbiamo cercato di rispettare per
@@ -177,7 +147,7 @@ Per la realizzazione di questo progetto abbiamo usato come software:
 - Atom 1.36.1: Editore di testo per scrivere principalmente la documentazione e
 risolvere conflitti.
 
-- NetBeans 8.2:  IDE per sviluppare tutto il codice scritto in Java.
+- NetBeans 8.2: IDE per sviluppare tutto il codice scritto in Java.
 
 - VisualStudio Code 1.33.1: Editore di testo usato in tutti i contesti.
 
@@ -195,7 +165,7 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 
 - Apple MacBook Pro 2015 con OSX Mojave.
 
-- Asus VivoBook 2015 con Windows 10.
+- Asus VivoBook Pro 2018 con Windows 10.
 
 - Asus ROG GL702VM con Windows 10.
 
@@ -236,16 +206,15 @@ Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una 
 
 Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 
-![Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
+![alt Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
 
 #### 2.3.2 Controller
-
-##### Interfaccia del controller del drone
 
 Per la GUI del controller abbiamo pensato ad una finestra con più tab dove ogni sezione ha uno scopo specifico.
 Le sezioni che abbiamo pensato sono queste:
 
 - Log
+
   - Textarea che permette di leggere direttamente dalla GUI i log
 
 - Comandi rapidi
@@ -276,107 +245,7 @@ La parte principale della classe sono i seguenti due metodi:
 
 ##### CheckHeightControl
 
-Si occupa di leggere il valore Y della mano sinistra rispetto al punto d'origine (Il sensore LeapMotion). Per leggere i dati da interpretare si usa la classe *FrameHelper* che contine tutte le informationi catturate dal LeapMOtion nel istante corrente e di quello precedente.
-Se il valore Y (l'altezza della mano) è superiore al minimo definito in un file di config, allora il commando viene formattato usando la classe *Commands* e viene aggiunto all'array commands. Alla fine del metodo viene usato il metodo *sendCommands* della classe *CommandsManager* per mandare al drone il commando. Per leggere il valore della soglia minima dell'altezza dal file di config si usa la classe *SettingsManager* nel costruttore della classe *DroneController*.
-In questo metodo oltre a interpretare l'altezza della mano sinistra si valuta anche l'inclinazione del rollio della mano per il controllo dell'imbardata del drone.
-
-```java
-/**
- * This method gets the height of the left hand from the frame read by the
- * LeapMotion and then calculates the command to send to the drone regarding
- * its height. There is a threshold to prevent accidental height commands.
- */
-private void checkHeightControl() {
-
-    float lastHeightReal = FRAME_HELPER.getHandY(FRAME_HELPER.getLeftHand(null));
-    String[] commands = new String[2];
-    float lastY = FRAME_HELPER.getDeltaY();
-    lastY = (int) ((lastHeightReal - 300) / 2);
-
-    if (FRAME_HELPER.getLeftHand(null) != null) {
-
-        float rollLeftValue = FRAME_HELPER.getRoll(FRAME_HELPER.getLeftHand(null));
-
-        if (Math.abs(rollLeftValue) > controllerDegreesSensibility * 3) {
-
-            int rollLeftRelative = (int) (Math.abs(rollLeftValue)
-                                          - controllerDegreesSensibility * 3);
-
-            if (rollLeftRelative != 0) {
-
-                String message = rollLeftValue < 0
-                        ? Commands.rotateClockwise(rollLeftRelative)
-                        : Commands.rotateCounterClockwise(rollLeftRelative);
-
-                commands[0] = message;
-                listener.commandSent(message + "\n");
-            }
-        }
-
-        if (Math.abs(lastY) > heightThreshold && lastY != 0.0 
-            && Math.abs(lastY) > 20 
-            && Math.abs(lastY) < 500) {
-
-            if (lastY != 0.0) {
-                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : 
-                Commands.down(Math.abs((int) lastY + (int) heightThreshold));
-                commands[1] = message;
-                listener.commandSent(message + "\n");
-            }
-        }
-    }
-    COMMAND_MANAGER.sendCommands(commands);
-    doneExecuting();
-}
 ```
-
-##### checkMovementControl
-
-Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*. 
-*controllerDegreesSensibility* è la soglia minima dell'incl.inazione della mano definita nel file di config e letta usando la classe *SettingsManager*
-
-```java
-/**
- * This method gets the right hand object and calculates the angle of pitch,
- * yaw and roll angles and then sends the appropriate command to the drone.
- */
-private void checkMovementControl() {
-    String[] commands = new String[3];
-    if (FRAME_HELPER.getRightHand(null) != null) {
-        float pitchValue = FRAME_HELPER.getPitch(FRAME_HELPER.getRightHand(null));
-        float rollRightValue = FRAME_HELPER.getRoll(FRAME_HELPER.getRightHand(null));
-
-        int rollRightRelative = (int) (Math.abs((int) rollRightValue) - controllerDegreesSensibility);
-
-        if (Math.abs(rollRightValue) > controllerDegreesSensibility) {
-
-            if (rollRightRelative != 0) {
-                String message = rollRightValue < 0
-                        ? Commands.right((int) rollRightRelative)
-                        : Commands.left((int) rollRightRelative);
-                commands[0] = message;
-                if (listener != null) {
-                    listener.commandSent(message + "\n");
-                }
-            }
-        }
-
-        if (Math.abs(pitchValue) > controllerDegreesSensibility) {
-            int pitchRelative = (int) (Math.abs((int) pitchValue) - controllerDegreesSensibility);
-
-            if (pitchRelative != 0) {
-                String message = pitchValue > 0
-                        ? Commands.back(pitchRelative)
-                        : Commands.forward(pitchRelative);
-                commands[1] = message;
-                if (listener != null) {
-                    listener.commandSent(message + "\n");
-                }
-            }
-        }
-
-    }
-
     COMMAND_MANAGER.sendCommands(commands);
     doneExecuting();
 }
@@ -561,7 +430,7 @@ Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osse
 
 ---
 Il nostro prodotto permette un uso molto semplice e anche abbastanza accessibile a chiunque sia appassionato oppure anche nuovo nel mondo dei droni.
-Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia
+Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia 
 Usando le proprie mani è possibile guidare il drone per l'aria avendo la possibilità di farli fare svariati movimenti come quelli normali di movimento oppure quelli acrobatici come un looping.
 
 ### 6.1 Sviluppi futuri
