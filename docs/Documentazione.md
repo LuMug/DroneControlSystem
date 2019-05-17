@@ -231,7 +231,7 @@ Le sezioni che abbiamo pensato sono queste:
 
 ### 2.4 Design procedurale
 
-Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone oppure a DroneSimulator.
+Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone DJI Tello oppure a DroneSimulator.
 
 ![Diagramma di flusso](../media/img/DiagrammaFlusso.png)
 
@@ -377,6 +377,7 @@ Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osse
 
 ---
 Il nostro prodotto permette un uso molto semplice e anche abbastanza accessibile a chiunque sia appassionato oppure anche nuovo nel mondo dei droni.
+Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia 
 Usando le proprie mani è possibile guidare il drone per l'aria avendo la possibilità di farli fare svariati movimenti come quelli normali di movimento oppure quelli acrobatici come un looping.
 
 ### 6.1 Sviluppi futuri
