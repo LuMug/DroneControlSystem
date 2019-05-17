@@ -98,65 +98,76 @@
   del drone *DJI Tello* mentre il controller si occuperà di controllare il drone all'interno della simulazione utilizzando il controller *Leap Motion*. Il drone verrà controllato con entrambe le mani: Una mano si occuperà di controllare l'altitudine del drone mentre l'altra mano si occuperà dei movimenti del drone, quindi imbardata, rollio e beccheggio.
   I comandi inviati dal controller verso il drone simulato verranno inviati rispettando il protocollo di comunicazione ufficiale fornito da *ryzerobotics.com*.
 
-  |ID  |REQ-001                                         |
+  |ID  |REQ-001                                        |
   |----|------------------------------------------------|
-  |**Nome**    |Controller in Java|
+  |**Nome**    | Traduzione dei movimenti delle mani in comandi |
   |**Priorità**|1                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Controllo del drone tramite Leap Motion |
-  |**002**      | Visualizzazione in streaming video riportato dal drone |
-  |**003**      | Possibilità di registrazione del volo in modo da poterlo ripetere |
-  |**004**      | Deve ottenere tutte le informazioni del drone per poi renderle disponibili in una pagina web sotto forma di statistica |
-  |**005**      | Codice ben commentato (Inglese o Italiano)|
+  |**001**      | Lettura movimenti attraverso LeapMotion |
+  |**002**      | Corretto utilizzo della libreria LeapMotion |
+  |**003**      | Ricezione del comando nella classe Controller |
 
   |ID  |REQ-002                                         |
   |----|------------------------------------------------|
-  |**Nome**    |Simulazione DJI Tello in Java|
+  |**Nome**    | Movimento del drone attraverso la ricezione di comandi |
   |**Priorità**|1                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Visualizzazione in 2d dell'imbardata, beccheggio, rollio ed altitudine del drone |
-  |**002**      | Codice ben commentato (Inglese o Italiano)|
+  |**001**      | Creazione del comando corretta |
+  |**002**      | Invio del comando al Drone attraverso socket UDP |
+  |**003**      | Interpretazione del comando dal Drone, esecuzione e risposta Ok/Error |
 
   |ID  |REQ-003                                         |
   |----|------------------------------------------------|
-  |**Nome**    |File di config per controller|
+  |**Nome**    | Pagina Web con stream video dal Drone |
   |**Priorità**|2                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Modificabile tramite GUI in modo semplice e veloce |
-  |**002**      | Le impostazioni devono venir caricate automaticamente all'avvio del programma |
-  |**002**      | Possibilità di manipolare le impostazioni salvate all'interno del file anche tramite codice |
-  |**002**      | Codice ben commentato (Inglese o Italiano)|
+  |**001**      | Ricezione dei pacchetti video via Socket UDP dal Drone |
+  |**002**      | Decompressione dei pacchetti |
+  |**003**      | Mostra delle sequenze di frame su pagina Web |
 
   |ID  |REQ-004                                         |
   |----|------------------------------------------------|
-  |**Nome**    |Socket di comunicazione fra Controller e Simulator|
-  |**Priorità**|1                     |
+  |**Nome**    | Registrazione sequenza comandi del volo |
+  |**Priorità**|2                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Funzionamento corretto dell'invio e ricezione dei pacchetti in entrambe le direzioni |
+  |**001**      | Ricezione dei comandi inviati al Drone |
+  |**002**      | Salvataggio comandi |
+  |**003**      | Creazione file contenente tutti i comandi per risimulare il volo |
 
   |ID  |REQ-005                                         |
   |----|------------------------------------------------|
-  |**Nome**    | Traduzione stringa in comando |
-  |**Priorità**|1                     |
+  |**Nome**    | Pagina web con statistiche del volo |
+  |**Priorità**|2                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Ricezione del pacchetto contenente la stringa |
-  |**002**      | Controllo esistenza del comando richiesto |
-  |**003**      | Esecuzione comando |
+  |**001**      | Richiesta dei valori da mostrare sulla pagina |
+  |**002**      | Ricezione dei valori via Socket UDP dal Drone |
+  |**003**      | Mostra dei valori richiesti su pagina Web |
 
   |ID  |REQ-006                                         |
   |----|------------------------------------------------|
-  |**Nome**    | Modifica grafici al cambiamento dei valori di riferimento |
+  |**Nome**    | Implementazione di ogni comando presente nella SDK del Drone |
   |**Priorità**|1                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Modifica effettiva dei valori di riferimento come le assi X,Y,Z e attributi Pitch, Roll e Yaw |
-  |**002**      | Lettura dei nuovi valori |
-  |**003**      | Modifica e ricaricamento dei nuovi grafici |
+  |**001**      | Analisi SDK di Tello |
+  |**002**      | Comprensione delle varie funzionalità e utilità dei svatiati comandi |
+  |**003**      | Implementazione di ogni comando con le sue rispettive funzionalità |
+
+  |ID  |REQ-007                                         |
+  |----|------------------------------------------------|
+  |**Nome**    | Simulazione grafica del drone attraverso 4 Frame |
+  |**Priorità**|1                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Ricezione dei comandi via Socket UDP dalla classe Controller |
+  |**002**      | Traduzione comandi ed esecuzione modificando gli attributi di posizionamento |
+  |**003**      | Lettura degli attributi di posizionamento e modifica dei grafici |
+
 
 ### 1.6 Pianificazione
 
