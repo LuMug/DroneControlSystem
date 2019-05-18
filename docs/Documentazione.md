@@ -1,4 +1,4 @@
-# Drone Control System<>
+# Drone Control System
 
 #### Da Fare:
 - 1.5: Aggiungere eventuali requisiti
@@ -96,37 +96,76 @@
   del drone *DJI Tello* mentre il controller si occuperà di controllare il drone all'interno della simulazione utilizzando il controller *Leap Motion*. Il drone verrà controllato con entrambe le mani: Una mano si occuperà di controllare l'altitudine del drone mentre l'altra mano si occuperà dei movimenti del drone, quindi imbardata, rollio e beccheggio.
   I comandi inviati dal controller verso il drone simulato verranno inviati rispettando il protocollo di comunicazione ufficiale fornito da *ryzerobotics.com*.
 
-  |ID  |REQ-001                                         |
+  |ID  |REQ-001                                        |
   |----|------------------------------------------------|
-  |**Nome**    |Controller in Java|
+  |**Nome**    | Traduzione dei movimenti delle mani in comandi |
   |**Priorità**|1                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Controllo del drone tramite Leap Motion |
-  |**002**      | Visualizzazione in streaming video riportato dal drone |
-  |**003**      | Possibilità di registrazione del volo in modo da poterlo ripetere |
-  |**004**      | Deve ottenere tutte le informazioni del drone per poi renderle disponibili in una pagina web sotto forma di statistica |
-  |**005**      | Codice ben commentato (Inglese o Italiano)|
+  |**001**      | Lettura movimenti attraverso LeapMotion |
+  |**002**      | Corretto utilizzo della libreria LeapMotion |
+  |**003**      | Ricezione del comando nella classe Controller |
 
   |ID  |REQ-002                                         |
   |----|------------------------------------------------|
-  |**Nome**    |Simulazione DJI Tello in Java|
+  |**Nome**    | Movimento del drone attraverso la ricezione di comandi |
   |**Priorità**|1                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Visualizzazione in 2d dell'imbardata, beccheggio, rollio ed altitudine del drone |
-  |**002**      | Codice ben commentato (Inglese o Italiano)|
+  |**001**      | Creazione del comando corretta |
+  |**002**      | Invio del comando al Drone attraverso socket UDP |
+  |**003**      | Interpretazione del comando dal Drone, esecuzione e risposta Ok/Error |
 
   |ID  |REQ-003                                         |
   |----|------------------------------------------------|
-  |**Nome**    |File di config per controller|
+  |**Nome**    | Pagina Web con stream video dal Drone |
   |**Priorità**|2                     |
   |**Versione**|1.0                   |
   |            |**Sotto requisiti**|
-  |**001**      | Modificabile tramite GUI in modo semplice e veloce |
-  |**002**      | Le impostazioni devono venir caricate automaticamente all'avvio del programma |
-  |**002**      | Possibilità di manipolare le impostazioni salvate all'interno del file anche tramite codice |
-  |**002**      | Codice ben commentato (Inglese o Italiano)|
+  |**001**      | Ricezione dei pacchetti video via Socket UDP dal Drone |
+  |**002**      | Decompressione dei pacchetti |
+  |**003**      | Mostra delle sequenze di frame su pagina Web |
+
+  |ID  |REQ-004                                         |
+  |----|------------------------------------------------|
+  |**Nome**    | Registrazione sequenza comandi del volo |
+  |**Priorità**|2                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Ricezione dei comandi inviati al Drone |
+  |**002**      | Salvataggio comandi |
+  |**003**      | Creazione file contenente tutti i comandi per risimulare il volo |
+
+  |ID  |REQ-005                                         |
+  |----|------------------------------------------------|
+  |**Nome**    | Pagina web con statistiche del volo |
+  |**Priorità**|2                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Richiesta dei valori da mostrare sulla pagina |
+  |**002**      | Ricezione dei valori via Socket UDP dal Drone |
+  |**003**      | Mostra dei valori richiesti su pagina Web |
+
+  |ID  |REQ-006                                         |
+  |----|------------------------------------------------|
+  |**Nome**    | Implementazione di ogni comando presente nella SDK del Drone |
+  |**Priorità**|1                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Analisi SDK di Tello |
+  |**002**      | Comprensione delle varie funzionalità e utilità dei svatiati comandi |
+  |**003**      | Implementazione di ogni comando con le sue rispettive funzionalità |
+
+  |ID  |REQ-007                                         |
+  |----|------------------------------------------------|
+  |**Nome**    | Simulazione grafica del drone attraverso 4 Frame |
+  |**Priorità**|1                     |
+  |**Versione**|1.0                   |
+  |            |**Sotto requisiti**|
+  |**001**      | Ricezione dei comandi via Socket UDP dalla classe Controller |
+  |**002**      | Traduzione comandi ed esecuzione modificando gli attributi di posizionamento |
+  |**003**      | Lettura degli attributi di posizionamento e modifica dei grafici |
+
 
 ### 1.6 Pianificazione
 
@@ -218,13 +257,38 @@ Le sezioni che abbiamo pensato sono queste:
   - Textarea che permette di leggere direttamente dalla GUI i log
 
 - Comandi rapidi
+
   - Serie di pulsanti che permettono di guidare il drone a distanza senza utilizzare il controller Leap Motion
+
 - Recording
+
   - Pulsanti che permettono di iniziare/finire una registrazione ed un selettore che permette di selezionare il file di registrazione per poi eseguirlo
+
 - Settings
+
   - Una tabella che mostra il nome dei ogni opzione presente nel file di config ed delle textbox affianco ad ogni label che permettono di leggere/scrivere l'impostazione salvata su file
 
-# INSERIRE IMMAGINE SCHIZZO (GIMP)
+##### Log
+
+Questa è la schermata che viene visualizzata di default all'apertura dell'applicazione:  
+![Mockup Log](../media/mockup/controller/log.PNG)
+
+##### Comandi rapidi
+
+Questa schemata è composta interamente di pulsanti i quali, come detto in precedenza, serviranno per controllare il drone in mancanza del Leap Motion:
+![Mockup comandi rapidi](../media/mockup/controller/comandiRapidi.PNG)
+
+##### Recording
+
+Questa schermata invece è divisa in due sezioni principali. La prima sezione è quella dell'esecuzione di voli tramite file (file selector, file infos, run e stop) mentre la seconda sezione sarà utile per la registrazione di tutti i comandi inviati al drone:
+![Mockup recording](../media/mockup/controller/recording.PNG)
+
+##### Settings
+
+Questa schermata invece è molto intuitiva. C'è una tabella dove si possono
+visualizzare tutte le impostazioni ed il loro relativo valore. I dati potranno essere modificati e salvati tramite il pulsante "Apply":
+![Mockup settings](../media/mockup/controller/settings.PNG)
+
 
 ### 2.4 Design procedurale
 
@@ -526,7 +590,7 @@ Per il resto abbiamo allungato un po' la fase dei test dovendo raffinare ed osse
 
 ---
 Il nostro prodotto permette un uso molto semplice e anche abbastanza accessibile a chiunque sia appassionato oppure anche nuovo nel mondo dei droni.
-Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia 
+Il nostro prodotto offre un modo semplice ad accessibile a chiunque voglia
 Usando le proprie mani è possibile guidare il drone per l'aria avendo la possibilità di farli fare svariati movimenti come quelli normali di movimento oppure quelli acrobatici come un looping.
 
 ### 6.1 Sviluppi futuri
@@ -535,18 +599,18 @@ Uno sviluppo futuro molto utile sarebbe sicuramente la possibilità di mostrare 
 
 ### 6.2 Considerazioni personali
 
-### 6.3 Luca
+### 6.2.1 Luca
 
 Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazione tramite socket tra due dispositivi di rete. Grazie a queste nuove conoscenze apprese ho potuto continuare a programmare dei miei progetti privati che avevo lasciato in sospeso (Reverse TCP Shell, invio di file da remoto,...)
 
-### 6.4 Fadil
+### 6.2.2 Fadil
 
 Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della communicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
 
-### 6.4 Jari
+### 6.2.3 Jari
 # DA COMPLETARE
 
-### 6.4 Rausone
+### 6.2.4 Rausone
 # DA COMPLETARE
 
 ## 7 Bibliografia
