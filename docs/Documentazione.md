@@ -9,61 +9,68 @@
 
 ---
 
-1. [Introduzione](#1.-introduzione)
+* [1. Introduzione](#1-introduzione)
 
-    1.1 [Informazioni sul progetto](#1.1-informazioni-sul-progetto)
++ [1.1 Informazioni sul progetto](#11-informazioni-sul-progetto)
++ [1.2 Abstract](#12-abstract)
++ [1.3 Scopo](#13-scopo)
 
-    1.2 [Abstract](#1.2-abstract)
+* [Analisi](#analisi)
 
-    1.3[Scopo](#1.3-scopo)
++ [1.4 Analisi del dominio](#14-analisi-del-dominio)
++ [1.5 Analisi e specifica dei requisiti](#15-analisi-e-specifica-dei-requisiti)
++ [1.6 Pianificazione](#16-pianificazione)
++ [1.7 Analisi dei mezzi](#17-analisi-dei-mezzi)
++ [1.7.1 Software](#171-software)
++ [1.7.2 Hardware](#172-hardware)
 
-2. [Analisi](#analisi)
+* [2 Progettazione](#2-progettazione)
++ [2.1 Design dell’architettura del sistema](#21-design-dell-architettura-del-sistema)
++ [2.2 Schema logico](#22-schema-logico)
++ [2.3 Design delle interfacce](#23-design-delle-interfacce)
+    - [2.3.1 Simulatore](#231-simulatore)
+    * [Interfaccia della posizione del drone](#interfaccia-della-posizione-del-drone)
+    * [Interfaccia della rotazione del drone](#interfaccia-della-rotazione-del-drone)
+    - [2.3.2 Controller](#232-controller)
+    * [Log](#log)
+    * [Comandi rapidi](#comandi-rapidi)
+    * [Recording](#recording)
+    * [Settings](#settings)
++ [2.4 Design procedurale](#24-design-procedurale)
 
-    1.4 [Analisi del dominio](#1.4-analisi-del-dominio)
+* [3 Implementazione](#3-implementazione)
++ [3.1 Drone Controller](#31-drone-controller)
++ [3.1.1 DroneController](#311-dronecontroller)
+    * [CheckHeightControl](#checkheightcontrol)
+    * [checkMovementControl](#checkmovementcontrol)
+    * [getRoll](#getroll)
++ [3.2 Drone Simulator](#32-drone-simulator)
+    - [3.2.1 TelloChartFrame](#321-tellochartframe)
+    - [3.2.2 Simulator](#322-simulator)
+    - [3.2.3 CommandReader](#323-commandreader)
+    - [3.2.4 BatteryThread](#324-batterythread)
+    - [3.2.5 PacketReceivingCheckerThread](#325-packetreceivingcheckerthread)
 
-    1.5 [Analisi dei mezzi](#1.5-analisi-dei-mezzi)
+* [4 Test](#4-test)
++ [4.1 Protocollo di test](#41-protocollo-di-test)
++ [4.2 Risultati test](#42-risultati-test)
++ [4.3 Mancanze/limitazioni conosciute](#43-mancanze-limitazioni-conosciute)
 
-    1.6 [Analisi e specifica dei requisiti](#1.6-analisi-e-specifica-dei-requisiti)
+* [5 Consuntivo](#5-consuntivo)
 
-    1.7 [Pianificazione](#1.7-pianificazione)
+* [6 Conclusioni](#6-conclusioni)
++ [6.1 Sviluppi futuri](#61-sviluppi-futuri)
++ [6.2 Considerazioni personali](#62-considerazioni-personali)
++ [6.2.1 Luca](#621-luca)
++ [6.2.2 Fadil](#622-fadil)
++ [6.2.3 Jari](#623-jari)
+- [DA COMPLETARE](#da-completare)
++ [6.2.4 Rausone](#624-rausone)
+- [DA COMPLETARE](#da-completare-1)
 
-3.  [Progettazione](#2.-progettazione)
-
-    2.1 [Design dell’architettura del sistema](#2.1-design-dell’architettura-del-sistema)
-
-    2.2 [Schema logico](#2.2-schema-logico)
-
-    2.3 [Design delle interfacce](#2.3-design-delle-interfacce)
-
-    2.4 [Design procedurale](#2.4-design-procedurale)
-
-4. [Implementazione](#3.-implementazione)
-
-    3.1 [Drone Controller](#3.1-drone-controller)
-
-    3.2 [Drone Simulator](#3.2-drone-simulator)
-
-5. [Test](#4.-test)
-
-    4.1 [Protocollo di test](#4.1-protocollo-di-test)
-
-    4.2 [Risultati test](#4.2-risultati-test)
-
-    4.3 [Mancanze/limitazioni conosciute](#4.3-mancanze/limitazioni-conosciute)
-
-6. [Consuntivo](#5.-consuntivo)
-
-7. [Conclusioni](#6.-conclusioni)
-
-    6.1 [Sviluppi futuri](#6.1-sviluppi-futuri)
-
-    6.2 [Considerazioni personali](#6.2-considerazioni-personali)
-
-8. [Bibliografia](#7.-bibliografia)
-
-    7.1 [Sitografia](#7.1-sitografia)
-
-9. [Allegati](#8.-allegati)
+* [7 Bibliografia](#7-bibliografia)
++ [7.1 Sitografia](#71-sitografia)
+* [8 Allegati](#8-allegati)
 
 ## 1. Introduzione
 ---
