@@ -42,19 +42,26 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private final String RECORDING_ENABLED = BASE_STATUS + " ENABLED";
     private Thread recordingExecutionThread;
 
+    private final int FORWARD = 0;
+    private final int RIGHT = 1;
+    private final int BACK = 2;
+    private final int LEFT = 3;
+
     /**
      * Creates new form DroneControllerMonitor
      */
     public DroneControllerMonitor() {
         //Prepare GUI components
+        initComponents();
+
         try {
-            controller = new DroneController();
+
+            controller = new DroneController(this);
+            this.setListener(controller);
         } catch (SocketException se) {
             System.out.println(se.getMessage());
             System.exit(0);
         }
-
-        initComponents();
 
         //Autoscroll textarea for logging
         DefaultCaret caret = (DefaultCaret) logTextArea.getCaret();
@@ -62,10 +69,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         //Insert settings values in textboxes
         updateSettingsValues(manager);
-
-        //Cross-set controller listener for cross comunication between threads
-        controller.setListener(this);
-        this.setListener(controller);
 
         //Get the commandManager from the controller
         commandManager = controller.getCommandManager();
@@ -242,6 +245,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonRefreshSettings = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(404, 597));
+        setName("JFrame"); // NOI18N
 
         jPanelHeader.setBackground(new java.awt.Color(0, 78, 112));
 
@@ -501,7 +506,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         jTabbedPane1.addTab("Recording", jPanelRecording);
 
-        jPanelSettings.setLayout(new java.awt.GridLayout(4, 1));
+        jPanelSettings.setLayout(new java.awt.GridLayout(8, 1));
 
         sensibilityJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
@@ -581,23 +586,18 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         //Send flip commands
         int chosenFlipOption = jComboBoxFlip.getSelectedIndex();
 
-        final int FORWARD = 0;
-        final int RIGHT = 1;
-        final int BACK = 2;
-        final int LEFT = 3;
-
         switch (chosenFlipOption) {
             case FORWARD:
-                commandManager.sendCommandAsync(Commands.flip(FlipCommand.FORWARD));
+                commandManager.sendCommand(Commands.flip(FlipCommand.FORWARD));
                 break;
             case RIGHT:
-                commandManager.sendCommandAsync(Commands.flip(FlipCommand.RIGHT));
+                commandManager.sendCommand(Commands.flip(FlipCommand.RIGHT));
                 break;
             case BACK:
-                commandManager.sendCommandAsync(Commands.flip(FlipCommand.BACK));
+                commandManager.sendCommand(Commands.flip(FlipCommand.BACK));
                 break;
             case LEFT:
-                commandManager.sendCommandAsync(Commands.flip(FlipCommand.LEFT));
+                commandManager.sendCommand(Commands.flip(FlipCommand.LEFT));
                 break;
             default:
                 break;
@@ -758,7 +758,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     // <editor-fold desc="Custom events" defaultstate="collapsed">
     @Override
-    public void messageRecieved(String message) {
+    public void messageReceived(String message) {
         logTextArea.append("Recieved: " + message);
     }
 

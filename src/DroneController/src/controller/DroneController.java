@@ -70,10 +70,15 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      * Drone controller constructor that adds this object as the LeapMotion
      * controller listener.
      */
-    public DroneController() throws SocketException {
+    public DroneController(CommandListener listener) throws SocketException {
         COMMAND_MANAGER = new CommandManager(this);
+        
+        //Cross-set controller listener for cross comunication between threads
         CONTROLLER.addListener(this);
+        this.listener = listener;
+        
         loadVariables();
+
     }
 
     /**
@@ -129,16 +134,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     /**
-     * Setter method for the listener field.
-     *
-     * @param listener the CommandListener that will be notified when a new
-     * command is executed.
-     */
-    public void setListener(CommandListener listener) {
-        this.listener = listener;
-    }
-
-    /**
      * Getter method for the SETTINGS_MANAGER field.
      *
      * @return the SETTINGS_MANAGER object.
@@ -169,7 +164,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         } else {
             System.out.println("Controller connected");
         }
-        
+
         System.out.println("enabled gestures");
         controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
     }
@@ -202,7 +197,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         float lastHeightReal = FRAME_HELPER.getHandY(FRAME_HELPER.getLeftHand(null));
         String[] commands = new String[2];
         float lastY = (int) ((lastHeightReal - 300) / 2);
-        
+
         if (FRAME_HELPER.getLeftHand(null) != null) {
 
             float rollLeftValue = FRAME_HELPER.getRoll(FRAME_HELPER.getLeftHand(null));
@@ -224,8 +219,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
             if (Math.abs(lastY) > heightThreshold && lastY != 0.0 && Math.abs(lastY) > 20 && Math.abs(lastY) < 500) {
                 if (lastY != 0.0) {
-                    String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : 
-                            Commands.down(Math.abs((int) lastY + (int) heightThreshold));
+                    String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold)
+                            : Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                     commands[1] = message;
                     listener.commandSent(message + "\n");
                 }
