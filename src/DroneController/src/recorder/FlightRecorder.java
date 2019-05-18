@@ -10,7 +10,7 @@ import java.util.Date;
 import java.nio.file.StandardOpenOption;
 
 /**
- * This class is used for record a full flight, from the take off to the
+ * This class is used to record a full flight, from the take off to the
  * landing.
  *
  * @author Luca Di Bello
