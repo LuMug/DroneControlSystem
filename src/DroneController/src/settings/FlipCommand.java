@@ -1,5 +1,8 @@
 package settings;
-
+/**
+ * Enum containing values for the flip command.
+ * @author Luca Di Bello
+ */
 public enum FlipCommand {
     LEFT("l"), RIGHT("r"), FORWARD("f"), BACK("b");
     
