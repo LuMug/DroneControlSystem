@@ -141,7 +141,7 @@ public class CommandManager {
     /**
      * This command sends the command without waiting for the drone's response.
      *
-     * @param command the command to send
+     * @param command the command to send to the drone.
      */
     public void sendCommandAsync(String command) {
 

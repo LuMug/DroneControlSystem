@@ -68,6 +68,8 @@ public class SettingsManager {
      * Costruttore parametrizzato
      *
      * @param filePath Path del file di config.
+     * @param settingDelimiter Path del file di config.
+     * @param commentCharacter Path del file di config.
      */
     public SettingsManager(Path filePath, char settingDelimiter, char commentCharacter) {
         this.filePath = filePath;

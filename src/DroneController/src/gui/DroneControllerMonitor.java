@@ -48,7 +48,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private final int LEFT = 3;
 
     /**
-     * Creates new form DroneControllerMonitor
+     * Constructor method, it creates new form DroneControllerMonitor.
      */
     public DroneControllerMonitor() {
         //Prepare GUI components

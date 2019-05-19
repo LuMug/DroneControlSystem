@@ -27,7 +27,7 @@ public interface CommandListener {
      * Appends "Sent: " string before the message string and then
      * makes the message visible to the user in the Log GUI tab.
      *
-     * @param message
+     * @param command Command sent to the drone.
      */
     public void commandSent(String command);
 }

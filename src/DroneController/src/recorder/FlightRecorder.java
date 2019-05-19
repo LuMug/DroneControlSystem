@@ -58,7 +58,7 @@ public class FlightRecorder {
      *
      * @param buffer FlightBuffer that contains all the movements done during a
      * flight.
-     * @param generatedPath Path of the file.
+     * @param flightSaveLocation FlightRecord object.
      * @throws IOException Thrown when the file is unaccessible.
      */
     public void saveFlightPattern(FlightBuffer buffer, FlightRecord flightSaveLocation) throws IOException {
