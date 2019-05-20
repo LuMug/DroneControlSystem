@@ -213,6 +213,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonDroneLand = new javax.swing.JButton();
         flipJPanel = new javax.swing.JPanel();
         jButtonDroneFlip = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
         jComboBoxFlip = new javax.swing.JComboBox<>();
         jPanelRecording = new javax.swing.JPanel();
         jPanelRecordFiles = new javax.swing.JPanel();
@@ -246,7 +247,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonRefreshSettings = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(400, 725));
+        setMinimumSize(new java.awt.Dimension(400, 725));
         setName("JFrame"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(400, 725));
 
         jPanelHeader.setBackground(new java.awt.Color(0, 78, 112));
 
@@ -385,11 +389,15 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         });
         flipJPanel.add(jButtonDroneFlip);
 
+        jPanelExtraCommands.add(flipJPanel);
+
+        jPanel4.setLayout(new java.awt.GridLayout(2, 0));
+
         jComboBoxFlip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Forward", "Right", "Back", "Left" }));
         jComboBoxFlip.setSelectedIndex(0);
-        flipJPanel.add(jComboBoxFlip);
+        jPanel4.add(jComboBoxFlip);
 
-        jPanelExtraCommands.add(flipJPanel);
+        jPanelExtraCommands.add(jPanel4);
 
         jPanelFastCommands.add(jPanelExtraCommands);
 
@@ -569,7 +577,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     private void jButtonAbortFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbortFlightActionPerformed
         //Send emergency command
-        commandManager.sendCommandAsync(Commands.EMERGENCY);
+        commandManager.sendCommand(Commands.EMERGENCY);
         System.out.println("[GUI] Sent landing command to drone");
     }//GEN-LAST:event_jButtonAbortFlightActionPerformed
 
@@ -834,6 +842,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelAbortPanel;
     private javax.swing.JPanel jPanelBody;
     private javax.swing.JPanel jPanelExtraCommands;
