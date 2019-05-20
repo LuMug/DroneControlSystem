@@ -80,6 +80,8 @@ public class CommandManager {
      * The constructor of the CommandManager that creates a new DatagramSocket.
      *
      * @param listener the listener of the CommandManager class.
+     * @throws SocketException thrown when the server port 
+     * it's already used.
      */
     public CommandManager(CommandManagerListener listener) throws SocketException {
         try {
@@ -192,14 +194,21 @@ public class CommandManager {
             }
         }
     }
-
+    
+    /**
+     * This method is used for start the flight recording process using the FlightRecoder class.
+     */
     public void startRecording() {
         this.recordBuffer.clear();
         this.isRecordingFlight = true;
 
         System.out.println("[Info] Start recording");
     }
-
+    
+    /**
+     * This method is used for stop the recording process and save the file 
+     * containing all the commands sent to the drone.
+     */
     public void stopRecording() {
         if (isRecordingFlight) {
             this.isRecordingFlight = false;

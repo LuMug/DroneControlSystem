@@ -10,66 +10,66 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Questa classe si occupa di gestire un file di config. Di default utilizza un
- * file posto in questa path: 'config/config.dcs' ma tramite un secondo
- * costruttore parametrizzato è possibile impostarne uno differente. Il
- * carattere che identifica una riga commentata all'interno del file di config è
- * il carattere '#', anch'esso è possibile sostituirlo attraverso i costruttori.
+ * This class handles a config file. By default it uses a file placed in 
+ * this path: 'config/config.dcs' but through a second parameterized constructor 
+ * it is possible to set a different one. The character that identifies a 
+ * commented line within the config file is the '#' character, 
+ * also it is possible to replace it through the constructors.
  *
  * @author Luca Di Bello
  */
 public class SettingsManager {
 
     /**
-     * Path del file di config. Di default la path è 'config/config.dcs' (path
-     * relativa).
+     * Path of the configuration file. By default the path is 'config/config.dcs' (path
+     * relative).
      */
     private Path filePath = Paths.get("config", "config.dcs");
 
     /**
-     * Carattere che identifica una riga commentata all'interno del file di
+     * Character that identifies a commented line within the
      * config.
      */
     private char commentCharacter = this.DEFAULT_COMMENT_CHARACTER;
 
     /**
-     * Stringa che divide il nome dell'impostazione dal valore
-     * dell'impostazione. Esempio:
-     * nome_impostazioe<carattere_divisione>valore_impostazione.
+     * String that divides the setting name from the value
+     * setting. Example:
+     * setting_name<division_character>setting_value.
      */
     private char settingDelimiter = this.DEFAULT_SETTING_DELIMITER;
 
     /**
-     * Carattere di default per il parametro commentCharacter.
+     * Default character for the commentCharacter parameter.
      */
     private final char DEFAULT_COMMENT_CHARACTER = '#';
 
     /**
-     * Stringa di default per il parametro stringDelimiter.
+     * Default string for the stringDelimiter parameter.
      */
     private final char DEFAULT_SETTING_DELIMITER = '=';
 
     /**
-     * Costruttore vuoto
+     * Default constructor
      */
     public SettingsManager() {
     }
 
     /**
-     * Costruttore parametrizzato
+     * Parametrized constructor.
      *
-     * @param filePath Path del file di config.
+     * @param filePath config file location (path).
      */
     public SettingsManager(Path filePath) {
         this(filePath,'\u0000','\u0000');
     }
 
     /**
-     * Costruttore parametrizzato
+     * Costruttore parametrizzato.
      *
-     * @param filePath Path del file di config.
-     * @param settingDelimiter Path del file di config.
-     * @param commentCharacter Path del file di config.
+     * @param filePath config file location (path).
+     * @param settingDelimiter Delimiter that divides the setting name and the its value.
+     * @param commentCharacter Delimiter which indentifies if a line it's commented.
      */
     public SettingsManager(Path filePath, char settingDelimiter, char commentCharacter) {
         this.filePath = filePath;
@@ -78,16 +78,15 @@ public class SettingsManager {
     }
 
     /**
-     * Questo metodo permette di generare un dizionario contenente tutte le
-     * impostazioni presenti nel file di config. Il dizionario è strutturato
-     * così:
+     ** This method allows you to generate a dictionary containing all the
+     * settings in the configuration file. The dictionary is structured in this way:
      * <ul>
-     * <li>Chiave di ricerca = Nome impostazione</li>
-     * <li>Valore di ritorno = Valore dell'impostazione</li>
+     *  <li>Search key = Setting name</li>
+     *  <li>Return value = Setting value</li>
      * </ul>
      *
-     * @return Dizionario di strighe dove si può utilizzare il nome
-     * dell'impostazione come chiave di ricerca al suo interno.
+     * @return Dictionary of strings where you can use the name
+     * of the setting as a search key within it.
      */
     public Map<String, String> getSettings() {
         //Dictionary
@@ -118,13 +117,13 @@ public class SettingsManager {
     }
 
     /**
-     * Questo metodo permette di prendere il valore di un impostazione
-     * specifica.
+     * This method allows you to take the value of a specific setting just 
+     * using its name.
      *
-     * @param settingName Nome dell'impostazione.
-     * @return valore dell'impostazione
-     * @throws IllegalArgumentException Lanciata quando viene richiesta un
-     * impostazione senza valore o inesistente
+     * @param settingName Name of the setting.
+     * @return Setting value.
+     * @throws IllegalArgumentException throwed when a
+     * setting is without value or non-existent
      */
     public String getSetting(String settingName) throws IllegalArgumentException {
         Map<String, String> map = getSettings();
@@ -141,6 +140,15 @@ public class SettingsManager {
         }
     }
 
+    /**
+     * This method allows you to set/modify a value of a specific setting just using
+     * it's name.
+     * 
+     * @param settingName Name of the setting.
+     * @param value Value which will be set as setting value.
+     * @throws IllegalArgumentException throwed when a
+     * setting is without value or non-existent 
+     */
     public void setSetting(String settingName, String value) throws IllegalArgumentException {
         //Read all file lines
         try {
@@ -169,21 +177,18 @@ public class SettingsManager {
     }
 
     /**
-     * Metodo getter per il carattere che indentifica una riga commentata nel
-     * file di config.
+     * Getter method for commentCharacter parameter.
      *
-     * @return Carattere che indentifica la stringa commentata.
+     * @return Delimiter which indentifies if a line it's commented.
      */
     public char getCommentCharacter() {
         return commentCharacter;
     }
 
     /**
-     * Metoodo setter che permette di impostare il carattere che identifica una
-     * stringa di commento nel file di config.
+     * Setter method for commentCharacter parameter.
      *
-     * @param commentCharacter Nuovo carattere che indentifica la stringa di
-     * commento.
+     * @param commentCharacter Character that indentifies if a line it's commented.
      */
     private void setCommentCharacter(char commentCharacter) {
         char nullChar = '\u0000';
@@ -195,21 +200,18 @@ public class SettingsManager {
     }
 
     /**
-     * Metodo getter che permette di ricavare la stringa che divide il nome
-     * dell'impostazione dal valore dell'impostazione.
-     *
-     * @return Stringa che contiene il divisore tra il nome dell'impostazione e
-     * il valore dell'impostazione.
+     * Getter method for settingDelimiter parameter.
+     * 
+     * @return Delimiter that divides the setting name and the its value.
      */
     public char getSettingDelimiter() {
         return settingDelimiter;
     }
 
     /**
-     * Metodo setter che permette di impostare la stringa che divide il nome
-     * dell'impostazione ed il valore dell'impostazione.
+     * Setter method for settingDelimiter parameter.
      *
-     * @param settingDelimiter Stringa di divisione nuova.
+     * @param settingDelimiter New delimiter that divides the setting name and the its value.
      */
     private void setSettingDelimiter(char settingDelimiter) {
         char nullChar = '\u0000';

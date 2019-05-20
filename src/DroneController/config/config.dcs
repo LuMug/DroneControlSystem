@@ -1,7 +1,6 @@
 # Config file per il controller del drone.
 
 #Sensibilità di lettura del leap motion
-sensibility=1.5
 degreesSensibility=10
 heightThreshold=20
 

@@ -73,34 +73,4 @@ public class FlightRecorder {
             throw new IOException("Error while writing the recording pattern on file " + flightSaveLocation.getSaveLocation());
         }
     }
-
-    /**
-     * Main method. Used only for testing purposes.
-     *
-     * @param args Non used.
-     */
-    public static void main(String[] args) {
-        try {
-            FlightRecorder recorder = new FlightRecorder();
-            FlightBuffer buffer = new FlightBuffer();
-
-            for (int i = 0; i < 100; i++) {
-                buffer.addCommand("pota " + i);
-            }
-
-            recorder.createBase();
-            FlightRecord record = recorder.generateRecordFile();
-            recorder.saveFlightPattern(buffer, record);
-
-            System.out.println("File saved in path: " + record.getSaveLocation());
-
-            /*
-            for(String line : record.getFlightCommands()){
-                System.out.println("Command: " + line);
-            }
-             */
-        } catch (IOException ex) {
-            System.err.println("ERROR:" + ex.getMessage());
-        }
-    }
 }
