@@ -1,10 +1,7 @@
 Da fare:
 
 	Javadoc su file:
-		-> DroneControllerMonitor.java
-		-> FlightBuffer.java
 		-> FlightRecord.java
-		-> ControllerSettings.java
 
 
 
