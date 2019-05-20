@@ -74,7 +74,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager = controller.getCommandManager();
 
         //Finally start the controller in a new thread
-        new Thread(controller);
+        new Thread(controller).start();
 
         //Insert in the selector all the recorded flights
         insertRecordsInSelector();
@@ -212,7 +212,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         flipJPanel = new javax.swing.JPanel();
         jButtonDroneFlip = new javax.swing.JButton();
         jComboBoxFlip = new javax.swing.JComboBox<>();
-        batteryButton = new javax.swing.JButton();
         jPanelRecording = new javax.swing.JPanel();
         jPanelRecordFiles = new javax.swing.JPanel();
         jPanelRecordSelector = new javax.swing.JPanel();
@@ -376,7 +375,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         flipJPanel.setLayout(new java.awt.GridLayout(2, 2));
 
-        jButtonDroneFlip.setText("FLIP IT :0");
+        jButtonDroneFlip.setText("FLIP IT");
         jButtonDroneFlip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDroneFlipActionPerformed(evt);
@@ -389,14 +388,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         flipJPanel.add(jComboBoxFlip);
 
         jPanelExtraCommands.add(flipJPanel);
-
-        batteryButton.setText("Battery");
-        batteryButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                batteryButtonActionPerformed(evt);
-            }
-        });
-        jPanelExtraCommands.add(batteryButton);
 
         jPanelFastCommands.add(jPanelExtraCommands);
 
@@ -632,10 +623,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         commandManager.sendCommand(Commands.LAND);
     }//GEN-LAST:event_jButtonDroneLandActionPerformed
 
-    private void batteryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batteryButtonActionPerformed
-        commandManager.sendCommand(Commands.getBattery());
-    }//GEN-LAST:event_batteryButtonActionPerformed
-
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
         commandManager.sendCommand(Commands.up(stepValue));
@@ -812,7 +799,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     // <editor-fold desc="Variables declaration" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton batteryButton;
     private javax.swing.JPanel degreesJPanel;
     private javax.swing.JLabel degreesLabel;
     private javax.swing.JTextField degreesSensibilityValue;

@@ -460,6 +460,37 @@ Codice:
     }
 ```
 
+### 3.1.2 DroneControllerMonitor
+
+Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo. 
+
+#### Log tab
+
+La tab di *Log* contiene una *JTextArea* sulla quale vengono mostrati i comandi mandati dal drone e informazioni utili per l'utente, tutti questi messaggi vengono mandati tramite  il listener *CommandListener*.
+
+#### Fast Commands tab
+
+La *Fast Commands* tab contiene i commandi che si possono inviare singolarmente, i commandi disponibili:
+- up
+- down
+- forward
+- backward
+- left
+- right
+- Start flight! / *takeoff*
+- Land drone / *land command*
+- Flip it: / *flip command*
+
+Per i comandi di movimento si può impostare il valore, di quanto si deve muovere il drone.
+Per il comando flip si può impostare in quale direzione.
+
+#### Recording tab
+
+La *Recording* tab contiene due bottoni che abilitano e disabiltiano la registrazione dei comandi eseguitid al drone, permette l'esecuzione dei percorsi già registrati e si può fermare l'esecuzione del percorso già salvato.
+
+#### Settings tab
+
+La *Settings* tab contiene i campi che si trovano nel file di config, tramite questa tab si possono impostare nuovi valori di sensibilità del controller che vengono applicati subito durante l'esecuzione del programma.
 
 ### 3.2 Drone Simulator
 
