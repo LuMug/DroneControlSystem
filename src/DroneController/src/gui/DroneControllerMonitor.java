@@ -97,7 +97,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -178,7 +178,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         Map<String, String> options = manager.getSettings();
 
         this.degreesSensibilityValue.setText(options.get("degreesSensibility"));
-        this.sensibilityValueTextBox.setText(options.get("sensibility"));
+        this.heightThreasholdValueTextBox.setText(options.get("heightThreshold"));
     }
     // </editor-fold>
 
@@ -236,8 +236,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonStopRecording = new javax.swing.JButton();
         jPanelSettings = new javax.swing.JPanel();
         sensibilityJPanel = new javax.swing.JPanel();
-        settingsLabel = new javax.swing.JLabel();
-        sensibilityValueTextBox = new javax.swing.JTextField();
+        heightThresholdLabel = new javax.swing.JLabel();
+        heightThreasholdValueTextBox = new javax.swing.JTextField();
         degreesJPanel = new javax.swing.JPanel();
         degreesLabel = new javax.swing.JLabel();
         degreesSensibilityValue = new javax.swing.JTextField();
@@ -245,7 +245,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonRefreshSettings = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(404, 597));
         setName("JFrame"); // NOI18N
 
         jPanelHeader.setBackground(new java.awt.Color(0, 78, 112));
@@ -510,11 +509,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         sensibilityJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
-        settingsLabel.setText("Sensibility");
-        sensibilityJPanel.add(settingsLabel);
+        heightThresholdLabel.setText("HeightThreshold");
+        sensibilityJPanel.add(heightThresholdLabel);
 
-        sensibilityValueTextBox.setText("VALUE");
-        sensibilityJPanel.add(sensibilityValueTextBox);
+        heightThreasholdValueTextBox.setText("VALUE");
+        sensibilityJPanel.add(heightThreasholdValueTextBox);
 
         jPanelSettings.add(sensibilityJPanel);
 
@@ -555,13 +554,12 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
     // <editor-fold desc="Generated code (GUI events)" defaultstate="collapsed">
     private void jButtonApplySettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApplySettingsActionPerformed
-
         int userAnswer = JOptionPane.showConfirmDialog(null,
                 "Do you wanna apply this settings?", "DCS Controller - Settings", JOptionPane.YES_NO_OPTION);
 
         if (userAnswer == JOptionPane.YES_OPTION) {
             manager.setSetting("degreesSensibility", this.degreesSensibilityValue.getText());
-            manager.setSetting("sensibility", this.sensibilityValueTextBox.getText());
+            manager.setSetting("heightThreshold", this.heightThreasholdValueTextBox.getText());
 
             System.out.println("[Success] Settings applied successfully");
 
@@ -820,6 +818,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JTextField degreesSensibilityValue;
     private javax.swing.JButton downButton;
     private javax.swing.JPanel flipJPanel;
+    private javax.swing.JTextField heightThreasholdValueTextBox;
+    private javax.swing.JLabel heightThresholdLabel;
     private javax.swing.JButton jButtonAbortFlight;
     private javax.swing.JButton jButtonApplySettings;
     private javax.swing.JButton jButtonDroneDown;
@@ -867,8 +867,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JTextArea logTextArea;
     private javax.swing.JLabel movementSteopJLabel;
     private javax.swing.JPanel sensibilityJPanel;
-    private javax.swing.JTextField sensibilityValueTextBox;
-    private javax.swing.JLabel settingsLabel;
     private javax.swing.JLabel titleJLabel;
     private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables

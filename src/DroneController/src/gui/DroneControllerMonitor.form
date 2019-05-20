@@ -596,12 +596,12 @@
                     <Property name="rows" type="int" value="1"/>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JLabel" name="settingsLabel">
+                    <Component class="javax.swing.JLabel" name="heightThresholdLabel">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Sensibility"/>
+                        <Property name="text" type="java.lang.String" value="HeightThreshold"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="sensibilityValueTextBox">
+                    <Component class="javax.swing.JTextField" name="heightThreasholdValueTextBox">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="VALUE"/>
                       </Properties>
