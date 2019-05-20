@@ -699,12 +699,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
                     String command;
                     while (commands.length() > 0 && !this.isInterrupted()) {
                         command = commands.getNextCommand();
-                        System.out.println("Executing command: " + command);
+                        System.out.println("[Thread] Executing command: " + command);
                         commandManager.sendCommand(command);
                     }
-
                     controller.EnableLeapMotionController();
-                    jLabelRecordingStatusMessage.setText(RECORDING_DISABLED);
                 }
             };
 
@@ -713,6 +711,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         } catch (IOException ex) {
             System.err.println("[Info] Error while getting the recording commands. Stop pre-configured flight and re-enable the leapmotion controller.");
         }
+        
+        jLabelRecordingStatusMessage.setText(RECORDING_DISABLED);
     }//GEN-LAST:event_jButtonStartSelectedFlightActionPerformed
 
 

@@ -5,7 +5,10 @@ import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
+import gui.SendTask;
+import gui.TimeoutThread;
 import java.net.SocketException;
+import java.util.concurrent.TimeUnit;
 import settings.ControllerSettings;
 import settings.SettingsListener;
 
@@ -66,6 +69,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private boolean isLeapMotionEnabled = true;
     
     
+    private TimeoutThread executor = new TimeoutThread(2, TimeUnit.SECONDS);
+    
     
 
     /**
@@ -95,9 +100,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public void run() {
 
         listener.controllerMessage("DroneController started\n");
-
-        COMMAND_MANAGER.sendCommand(Commands.ENABLE_COMMANDS);
-
+        
+        executor.execute(new SendTask(COMMAND_MANAGER, Commands.ENABLE_COMMANDS));
+        
         listener.controllerMessage("Sending commands\n");
 
         while (CONTROLLER.isConnected()) {
@@ -135,7 +140,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
 
         System.out.println("controller not connected");
 
-        COMMAND_MANAGER.sendCommand(Commands.LAND);
+        //COMMAND_MANAGER.sendCommand(Commands.LAND);
+        executor.execute(new SendTask(COMMAND_MANAGER, Commands.LAND));
     }
 
     /**
@@ -224,6 +230,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 }
             }
         }
+        /*TODO: use executor object*/
         COMMAND_MANAGER.sendCommands(commands);
         doneExecuting();
     }
