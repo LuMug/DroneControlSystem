@@ -7,7 +7,6 @@ Da fare:
 		-> ControllerSettings.java
 		-> FlipCommand.java
 		-> SettingsListener.java
-		-> SettingsManager (Commenti in italiano dio caro)
 
 
 PS: Fadil tieni questo file aggiornato plz
