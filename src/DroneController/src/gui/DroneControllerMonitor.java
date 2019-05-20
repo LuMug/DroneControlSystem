@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import settings.SettingsManager;
 import javax.swing.JOptionPane;
 import javax.swing.text.DefaultCaret;
@@ -41,7 +42,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private final String RECORDING_DISABLED = BASE_STATUS + " DISABLED";
     private final String RECORDING_ENABLED = BASE_STATUS + " ENABLED";
     private Thread recordingExecutionThread;
-
+    private final TimeoutThread timeoutThread = new TimeoutThread(2, TimeUnit.SECONDS);
+    
     private final int FORWARD = 0;
     private final int RIGHT = 1;
     private final int BACK = 2;
@@ -180,6 +182,21 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         this.degreesSensibilityValue.setText(options.get("degreesSensibility"));
         this.heightThreasholdValueTextBox.setText(options.get("heightThreshold"));
     }
+    
+    /**
+     * This method is used to send a command in a different thread to avoid 
+     * the gui to bricks if the drone doesn't respond to the command.
+     * @param command Command to send to the drone.
+     */
+    private void sendThreaded(String command){
+        System.out.println(String.format("[Threading] Send %s to drone in another thread.", command));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                commandManager.sendCommand(command);
+            }
+        }).start();
+    }
     // </editor-fold>
 
     @SuppressWarnings("unchecked")
@@ -195,8 +212,8 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         logTextArea = new javax.swing.JTextArea();
         jPanelFastCommands = new javax.swing.JPanel();
         jPanelMoveInSpace = new javax.swing.JPanel();
-        jButtonDroneUp = new javax.swing.JButton();
-        jButtonDroneDown = new javax.swing.JButton();
+        jButtonDroneForward = new javax.swing.JButton();
+        jButtonDroneBack = new javax.swing.JButton();
         jButtonDroneLeft = new javax.swing.JButton();
         jButtonDroneRight = new javax.swing.JButton();
         jPanelAbortPanel = new javax.swing.JPanel();
@@ -277,21 +294,21 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jPanelMoveInSpace.setBorder(javax.swing.BorderFactory.createTitledBorder("Move in space"));
         jPanelMoveInSpace.setLayout(new java.awt.BorderLayout());
 
-        jButtonDroneUp.setText("FORWARD");
-        jButtonDroneUp.addActionListener(new java.awt.event.ActionListener() {
+        jButtonDroneForward.setText("FORWARD");
+        jButtonDroneForward.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonDroneUpActionPerformed(evt);
+                jButtonDroneForwardActionPerformed(evt);
             }
         });
-        jPanelMoveInSpace.add(jButtonDroneUp, java.awt.BorderLayout.PAGE_START);
+        jPanelMoveInSpace.add(jButtonDroneForward, java.awt.BorderLayout.PAGE_START);
 
-        jButtonDroneDown.setText("BACK");
-        jButtonDroneDown.addActionListener(new java.awt.event.ActionListener() {
+        jButtonDroneBack.setText("BACK");
+        jButtonDroneBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonDroneDownActionPerformed(evt);
+                jButtonDroneBackActionPerformed(evt);
             }
         });
-        jPanelMoveInSpace.add(jButtonDroneDown, java.awt.BorderLayout.PAGE_END);
+        jPanelMoveInSpace.add(jButtonDroneBack, java.awt.BorderLayout.PAGE_END);
 
         jButtonDroneLeft.setText("LEFT");
         jButtonDroneLeft.addActionListener(new java.awt.event.ActionListener() {
@@ -574,63 +591,64 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void jButtonDroneFlipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneFlipActionPerformed
         //Send flip commands
         int chosenFlipOption = jComboBoxFlip.getSelectedIndex();
+        String command = "";
 
         switch (chosenFlipOption) {
             case FORWARD:
-                commandManager.sendCommand(Commands.flip(FlipCommand.FORWARD));
+                command = Commands.flip(FlipCommand.FORWARD);
                 break;
             case RIGHT:
-                commandManager.sendCommand(Commands.flip(FlipCommand.RIGHT));
+                command = Commands.flip(FlipCommand.RIGHT);
                 break;
             case BACK:
-                commandManager.sendCommand(Commands.flip(FlipCommand.BACK));
+                command = Commands.flip(FlipCommand.BACK);
                 break;
             case LEFT:
-                commandManager.sendCommand(Commands.flip(FlipCommand.LEFT));
+                command = Commands.flip(FlipCommand.LEFT);
                 break;
             default:
                 break;
         }
-
-        System.out.println("[GUI] Sent flip command to drone");
+        
+        timeoutThread.execute(new SendTask(commandManager, command));
     }//GEN-LAST:event_jButtonDroneFlipActionPerformed
 
-    private void jButtonDroneUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneUpActionPerformed
+    private void jButtonDroneForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneForwardActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        commandManager.sendCommand(Commands.forward(stepValue));
-    }//GEN-LAST:event_jButtonDroneUpActionPerformed
+        timeoutThread.execute(new SendTask(commandManager, Commands.forward(stepValue)));
+    }//GEN-LAST:event_jButtonDroneForwardActionPerformed
 
     private void jButtonDroneRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneRightActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        commandManager.sendCommand(Commands.right(stepValue));
+        timeoutThread.execute(new SendTask(commandManager, Commands.right(stepValue)));
     }//GEN-LAST:event_jButtonDroneRightActionPerformed
 
-    private void jButtonDroneDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneDownActionPerformed
+    private void jButtonDroneBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneBackActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        commandManager.sendCommand(Commands.back(stepValue));
-    }//GEN-LAST:event_jButtonDroneDownActionPerformed
+        timeoutThread.execute(new SendTask(commandManager, Commands.back(stepValue)));
+    }//GEN-LAST:event_jButtonDroneBackActionPerformed
 
     private void jButtonDroneLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneLeftActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        commandManager.sendCommand(Commands.left(stepValue));
+        timeoutThread.execute(new SendTask(commandManager, Commands.left(stepValue)));
     }//GEN-LAST:event_jButtonDroneLeftActionPerformed
 
     private void jButtonDroneTakeoffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneTakeoffActionPerformed
-        commandManager.sendCommand(Commands.TAKEOFF);
+        timeoutThread.execute(new SendTask(commandManager, Commands.TAKEOFF));
     }//GEN-LAST:event_jButtonDroneTakeoffActionPerformed
 
     private void jButtonDroneLandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDroneLandActionPerformed
-        commandManager.sendCommand(Commands.LAND);
+        timeoutThread.execute(new SendTask(commandManager, Commands.LAND));
     }//GEN-LAST:event_jButtonDroneLandActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        commandManager.sendCommand(Commands.up(stepValue));
+        timeoutThread.execute(new SendTask(commandManager, Commands.up(stepValue)));
     }//GEN-LAST:event_upButtonActionPerformed
 
     private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
         int stepValue = (Integer) jSpinnerDroneMovementStep.getValue();
-        commandManager.sendCommand(Commands.down(stepValue));
+        timeoutThread.execute(new SendTask(commandManager, Commands.down(stepValue)));
     }//GEN-LAST:event_downButtonActionPerformed
 
     private void jButtonStartRecordingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartRecordingActionPerformed
@@ -808,13 +826,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JLabel heightThresholdLabel;
     private javax.swing.JButton jButtonAbortFlight;
     private javax.swing.JButton jButtonApplySettings;
-    private javax.swing.JButton jButtonDroneDown;
+    private javax.swing.JButton jButtonDroneBack;
     private javax.swing.JButton jButtonDroneFlip;
+    private javax.swing.JButton jButtonDroneForward;
     private javax.swing.JButton jButtonDroneLand;
     private javax.swing.JButton jButtonDroneLeft;
     private javax.swing.JButton jButtonDroneRight;
     private javax.swing.JButton jButtonDroneTakeoff;
-    private javax.swing.JButton jButtonDroneUp;
     private javax.swing.JButton jButtonRefreshSettings;
     private javax.swing.JButton jButtonStartRecording;
     private javax.swing.JButton jButtonStartSelectedFlight;
