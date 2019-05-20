@@ -182,21 +182,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         this.degreesSensibilityValue.setText(options.get("degreesSensibility"));
         this.heightThreasholdValueTextBox.setText(options.get("heightThreshold"));
     }
-    
-    /**
-     * This method is used to send a command in a different thread to avoid 
-     * the gui to bricks if the drone doesn't respond to the command.
-     * @param command Command to send to the drone.
-     */
-    private void sendThreaded(String command){
-        System.out.println(String.format("[Threading] Send %s to drone in another thread.", command));
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                commandManager.sendCommand(command);
-            }
-        }).start();
-    }
     // </editor-fold>
 
     @SuppressWarnings("unchecked")
