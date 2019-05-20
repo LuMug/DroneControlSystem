@@ -5,5 +5,8 @@ package settings;
  * @author Luca Di Bello
  */
 public interface SettingsListener {
+    /**
+     * Method that notifies the listener that the settings have been modified.
+     */
     void settingsChanged();
 }

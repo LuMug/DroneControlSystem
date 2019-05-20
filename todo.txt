@@ -6,7 +6,7 @@ Da fare:
 		-> FlightRecord.java
 		-> ControllerSettings.java
 		-> FlipCommand.java
-		-> SettingsListener.java
+
 
 
 PS: Fadil tieni questo file aggiornato plz
