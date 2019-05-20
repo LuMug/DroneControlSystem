@@ -26,10 +26,10 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     private final CommandManager COMMAND_MANAGER;
     /**
-     * This constant is the settings manager used to load variable values form
-     * the config.dcs configuration file.
+     * This constant is a ControllerSettings object used to load variable values 
+     * saved on the config file to the local variables in this class.
      */
-    private final SettingsManager SETTINGS_MANAGER = new SettingsManager();
+    private final ControllerSettings CONTROLLER_SETTINGS = new ControllerSettings();
     /**
      * This constant is the frame helper containing useful methods to obtain
      * information from a frame read by the LeapMotion.
@@ -68,21 +68,24 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private boolean isLeapMotionEnabled = true;
     
     
-    ControllerSettings settings = new ControllerSettings();
+    
 
     /**
      * Drone controller constructor that adds this object as the LeapMotion
      * controller listener.
+     * 
+     * @param listener Listener used to display useful logs to the GUI.
+     * @throws SocketException thrown when the server port 
+     * it's already used.
      */
     public DroneController(CommandListener listener) throws SocketException {
         COMMAND_MANAGER = new CommandManager(this);
         
-        //Cross-set controller listener for cross comunication between threads
+        // Cross-set controller listener for cross comunication between threads
         CONTROLLER.addListener(this);
         this.listener = listener;
         
         loadVariables();
-
     }
 
     /**
@@ -138,15 +141,6 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     /**
-     * Getter method for the SETTINGS_MANAGER field.
-     *
-     * @return the SETTINGS_MANAGER object.
-     */
-    public SettingsManager getSettingsManager() {
-        return SETTINGS_MANAGER;
-    }
-
-    /**
      * Getter method for the COMMAND_MANAGER field.
      *
      * @return the command manager object.
@@ -180,14 +174,17 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     private void loadVariables() {
         System.out.println("loading variables");
         
-        this.heightThreshold = settings.getHeightThreshold();
-        this.controllerDegreesSensibility = settings.getControllerDegreesSensibility();
+        this.heightThreshold = CONTROLLER_SETTINGS.getHeightThreshold();
+        this.controllerDegreesSensibility = CONTROLLER_SETTINGS.getControllerDegreesSensibility();
         
         listener.controllerMessage("Settings updated\n");
         listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
         listener.controllerMessage("height threshold: " + heightThreshold + "\n");
     }
-    
+   
+    /**
+     * 
+     */
     private void loadDefaultVariables(){
         final float HEIGHT_THRESHOLD = 4;
         final float DEGREES_SENSIBILITY = 10;
@@ -292,7 +289,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
         System.out.println("[Info] Settings updated, reload settings variables.");
         try{
             //Reload all the settings
-            settings.updateSettings();
+            CONTROLLER_SETTINGS.updateSettings();
             
             //Reload local settings
             loadVariables();

@@ -80,7 +80,7 @@ public class CommandManager {
      * The constructor of the CommandManager that creates a new DatagramSocket.
      *
      * @param listener the listener of the CommandManager class.
-     * @throws SocketException SocketException thrown when the server port 
+     * @throws SocketException thrown when the server port 
      * it's already used.
      */
     public CommandManager(CommandManagerListener listener) throws SocketException {
