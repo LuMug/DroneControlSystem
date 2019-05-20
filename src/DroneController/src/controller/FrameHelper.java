@@ -149,15 +149,6 @@ public class FrameHelper {
         }
     }
 
-    /**
-     * This method calculates the delta value between the height of the left
-     * hand from the current frame and the previous one
-     *
-     * @return the delta of the Y value between the current and the last frame
-     */
-    public float getDeltaY() {
-        return getHandY(getLeftHand(currentFrame)) - getHandY(getLeftHand(lastFrame));
-    }
 
     /**
      * Setter method for the currentFrame variable

@@ -2,14 +2,12 @@ package controller;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
 import java.net.SocketException;
 import settings.ControllerSettings;
 import settings.SettingsListener;
-import settings.SettingsManager;
 
 /**
  * This class reads the input from the LeapMotion and sends the commands to the

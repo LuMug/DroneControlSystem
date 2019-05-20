@@ -45,13 +45,6 @@ public class CommandManager {
      */
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
 
-    /**
-     * This constant contains the tello communication port to which we send
-     * commands about the state of the drone. Using this port we can query the
-     * drone about it's battery status, it's velocity, altitude and other
-     * parameters.
-     */
-    private final int TELLO_STATE_SEND_PORT = settings.getTelloStatePort();
 
     /**
      * This field contains information whether the flight commands are being
@@ -136,23 +129,6 @@ public class CommandManager {
         }
     }
 
-    /**
-     * This command sends the command without waiting for the drone's response.
-     *
-     * @param command the command to send to the drone.
-     */
-    public void sendCommandAsync(String command) {
-
-        System.out.println("sending command async: " + command);
-
-        try {
-            this.createPacket(command);
-        } catch (UnknownHostException uhe) {
-            System.out.println("Cannot resolve hostname: " + uhe.getMessage());
-        } catch (IOException ioex) {
-            System.out.println("Cannot send packet: " + ioex.getMessage());
-        }
-    }
 
     /**
      * This method creates a DatagramPacket based on the command that comes as
