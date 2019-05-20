@@ -32,19 +32,19 @@ public class CommandManager {
      * This constant contains the IP address of the tello drone.
      */
     private final String TELLO_ADDRESS = settings.getCommunicationTelloAddress();
-    
+
     /**
      * This constant contains the tello communication port to which the tello
      * will send the responses to the commands sent.
      */
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
-    
+
     /**
      * This constant contains the tello communication port to which the commands
      * will be sent to.
      */
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
-    
+
     /**
      * This constant contains the tello communication port to which we send
      * commands about the state of the drone. Using this port we can query the
@@ -52,24 +52,24 @@ public class CommandManager {
      * parameters.
      */
     private final int TELLO_STATE_SEND_PORT = settings.getTelloStatePort();
-    
+
     /**
      * This field contains information whether the flight commands are being
      * recorded or not.
      */
     private boolean isRecordingFlight = false;
-    
+
     /**
      * This field is a FlightRecorder object used to record.
      */
     private final FlightRecorder RECORDER = new FlightRecorder();
-    
+
     /**
      * This field contains the buffer of commands that will be written to the
      * recording file.
      */
     private FlightBuffer recordBuffer = new FlightBuffer();
-    
+
     /**
      * This field contains the listener of the Command manager class. This
      * listener gets notified when a command is executed.
@@ -98,13 +98,13 @@ public class CommandManager {
      */
     public void sendCommand(String command) {
         System.out.println("sending command: " + command);
-        
+
         //Add commands to recorder
-        if(isRecordingFlight){
+        if (isRecordingFlight) {
             System.out.println("Add command: " + command);
             recordBuffer.addCommand(command);
         }
-                    
+
         try {
             DatagramPacket packet;
 
@@ -119,16 +119,12 @@ public class CommandManager {
 
             String response = new String(packet.getData()).trim();
 
-            LISTENER.doneExecuting(); // notifies the listener that the drone has executed the command, no matter if it is postitive or negative
+            LISTENER.doneExecuting(); // notifies the listener that the drone has executed the command, no matter if the response is postitive or negative
 
-            if (command.contains("?")) {
-                System.out.println("Response: " + response);
+            if (response.equalsIgnoreCase("OK")) {
+                System.out.println("--> " + command + " is ok");
             } else {
-                if (response.equalsIgnoreCase("OK")) {
-                    System.out.println("--> " + command + " is ok");
-                } else {
-                    System.err.println("--> " + command + " ERROR");
-                }
+                System.err.println("--> " + command + " ERROR");
             }
 
         } catch (UnknownHostException uhe) {
@@ -171,23 +167,12 @@ public class CommandManager {
 
         byte[] commandData = command.getBytes();
         DatagramPacket packet;
-        if (command.contains("?")) {
-            System.out.println("Contains state command");
-            packet = new DatagramPacket(
-                    commandData,
-                    commandData.length,
-                    InetAddress.getByName(this.TELLO_ADDRESS),
-                    this.TELLO_STATE_SEND_PORT
-            );
-        } else {
-            packet = new DatagramPacket(
-                    commandData,
-                    commandData.length,
-                    InetAddress.getByName(this.TELLO_ADDRESS),
-                    TELLO_COMMAND_SEND_PORT
-            );
-
-        }
+        packet = new DatagramPacket(
+                commandData,
+                commandData.length,
+                InetAddress.getByName(this.TELLO_ADDRESS),
+                this.TELLO_COMMAND_SEND_PORT
+        );
 
         return packet;
     }
@@ -207,7 +192,7 @@ public class CommandManager {
             }
         }
     }
-    
+
     public void startRecording() {
         this.recordBuffer.clear();
         this.isRecordingFlight = true;
@@ -216,24 +201,22 @@ public class CommandManager {
     }
 
     public void stopRecording() {
-        if(isRecordingFlight){
+        if (isRecordingFlight) {
             this.isRecordingFlight = false;
-            try{
-                if(recordBuffer.length() > 0){
+            try {
+                if (recordBuffer.length() > 0) {
                     RECORDER.createBase();
                     FlightRecord record = RECORDER.generateRecordFile();
                     System.out.println("Generated file: " + record.getSaveLocation());
                     RECORDER.saveFlightPattern(this.recordBuffer, record);
                     System.out.println("[Info] File saved to path: " + record.getSaveLocation());
-                }
-                else{
+                } else {
                     System.err.println("[Recorder] Empty file detected, the buffer is empty...");
                 }
             } catch (IOException ex) {
                 System.out.println("[Info] Can't save the flight. *SAD SMILE*");
             }
-        }
-        else{
+        } else {
             System.err.println("[Recorder] I was not recording!");
         }
 

@@ -72,11 +72,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     public DroneController(CommandListener listener) throws SocketException {
         COMMAND_MANAGER = new CommandManager(this);
-        
+
         //Cross-set controller listener for cross comunication between threads
         CONTROLLER.addListener(this);
         this.listener = listener;
-        
+
         loadVariables();
 
     }
@@ -159,14 +159,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     @Override
     public void onConnect(Controller controller) {
-        if (listener != null) {
-            listener.controllerMessage("Controller connected\n");
-        } else {
-            System.out.println("Controller connected");
-        }
-
-        System.out.println("enabled gestures");
-        controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
+        listener.controllerMessage("Controller connected\n");
+        System.out.println("Controller connected");
     }
 
     /**
