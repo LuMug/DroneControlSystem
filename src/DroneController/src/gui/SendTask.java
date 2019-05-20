@@ -4,7 +4,8 @@ import communication.CommandManager;
 import java.util.concurrent.Callable;
 
 /**
- *
+ * This class describes a task which sends a command to the drone 
+ * using a CommandManager object.
  * @author Luca Di Bello
  */
 public class SendTask implements Callable<String>{
