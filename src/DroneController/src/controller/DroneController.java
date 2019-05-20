@@ -7,6 +7,7 @@ import com.leapmotion.leap.Listener;
 import communication.*;
 import gui.CommandListener;
 import java.net.SocketException;
+import settings.ControllerSettings;
 import settings.SettingsListener;
 import settings.SettingsManager;
 
@@ -65,6 +66,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      * read new commands from the LeapMotion or not.
      */
     private boolean isLeapMotionEnabled = true;
+    
+    
+    ControllerSettings settings = new ControllerSettings();
 
     /**
      * Drone controller constructor that adds this object as the LeapMotion
@@ -175,16 +179,21 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     private void loadVariables() {
         System.out.println("loading variables");
-        final float HEIGHT_THRESHOLD = 4;
-        final float DEGREES_SENSIBILITY = 10;
-
-        this.heightThreshold = getFloatValueFromSetting("heightThreshold", HEIGHT_THRESHOLD);
-        this.controllerDegreesSensibility = getFloatValueFromSetting("degreesSensibility", DEGREES_SENSIBILITY);
-
+        
+        this.heightThreshold = settings.getHeightThreshold();
+        this.controllerDegreesSensibility = settings.getControllerDegreesSensibility();
+        
         listener.controllerMessage("Settings updated\n");
         listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
         listener.controllerMessage("height threshold: " + heightThreshold + "\n");
-
+    }
+    
+    private void loadDefaultVariables(){
+        final float HEIGHT_THRESHOLD = 4;
+        final float DEGREES_SENSIBILITY = 10;
+        
+        this.heightThreshold = HEIGHT_THRESHOLD;
+        this.controllerDegreesSensibility = DEGREES_SENSIBILITY;
     }
 
     /**
@@ -276,32 +285,22 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     }
 
     /**
-     * This method uses the SETTINGS_MANAGER in order to read the settings
-     * values from the config file
-     *
-     * @param settingName The name of the setting to search
-     * @param defaultValue The default value of that setting
-     * @return the value read from the file
-     */
-    private float getFloatValueFromSetting(String settingName, float defaultValue) {
-        try {
-            return Float.parseFloat(SETTINGS_MANAGER.getSetting(settingName));
-        } catch (NumberFormatException ex) {
-            System.err.println("[Parse error] Can't parse '" + settingName + "' value from settings, set the default one.");
-            return defaultValue;
-        } catch (IllegalArgumentException ex) {
-            System.err.println("[Settings name error] Can't get setting value with name: '" + settingName + "'");
-            return defaultValue;
-        }
-    }
-
-    /**
      * Method called when the user updates the settings from the GUI
      */
     @Override
     public void settingsChanged() {
-        System.out.println("Settings updated");
-        loadVariables();
+        System.out.println("[Info] Settings updated, reload settings variables.");
+        try{
+            //Reload all the settings
+            settings.updateSettings();
+            
+            //Reload local settings
+            loadVariables();
+        }
+        catch(IllegalArgumentException ex){
+            System.err.println("[Error] Error while loading settings. Set the default ones.");
+            loadDefaultVariables();
+        }
     }
 
     /**

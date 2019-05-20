@@ -5,7 +5,6 @@ Da fare:
 		-> FlightBuffer.java
 		-> FlightRecord.java
 		-> ControllerSettings.java
-		-> FlipCommand.java
 
 
 
