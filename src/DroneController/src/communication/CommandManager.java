@@ -40,11 +40,16 @@ public class CommandManager {
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
 
     /**
+     * This constant contains the tello state port to which the tello will
+     * respond on the state commands.
+     */
+    private final int TELLO_STATE_PORT = settings.getTelloStatePort();
+
+    /**
      * This constant contains the tello communication port to which the commands
      * will be sent to.
      */
     private final int TELLO_COMMAND_SEND_PORT = settings.getCommunicationSendPortCommand();
-
 
     /**
      * This field contains information whether the flight commands are being
@@ -70,15 +75,20 @@ public class CommandManager {
     private final CommandManagerListener LISTENER;
 
     /**
+     *
+     */
+    private final DatagramSocket stateSocket;
+
+    /**
      * The constructor of the CommandManager that creates a new DatagramSocket.
      *
      * @param listener the listener of the CommandManager class.
-     * @throws SocketException thrown when the server port 
-     * it's already used.
+     * @throws SocketException thrown when the server port it's already used.
      */
     public CommandManager(CommandManagerListener listener) throws SocketException {
         try {
             commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
+            stateSocket = new DatagramSocket(TELLO_STATE_PORT);
             System.out.println("[SUCCESS] Listening on port " + this.TELLO_COMMAND_LISTEN_PORT);
             this.LISTENER = listener;
         } catch (SocketException ex) {
@@ -109,12 +119,22 @@ public class CommandManager {
             commandSocket.send(packet);
 
             System.out.println("Wait for response from drone");
-            packet.setData(new byte[255]);
-            commandSocket.receive(packet);
 
-            String response = new String(packet.getData()).trim();
+            String response = "";
 
-            LISTENER.doneExecuting(); // notifies the listener that the drone has executed the command, no matter if the response is postitive or negative
+            if (command.contains("?")) {
+                System.out.println("Response: " + response);
+                packet.setData(new byte[255]);
+                stateSocket.receive(packet);
+                response = new String(packet.getData()).trim();
+
+            } else {
+                packet.setData(new byte[255]);
+                commandSocket.receive(packet);
+                response = new String(packet.getData()).trim();
+            }
+
+            LISTENER.droneResponse(response);
 
             if (response.equalsIgnoreCase("OK")) {
                 System.out.println("--> " + command + " is ok");
@@ -122,13 +142,14 @@ public class CommandManager {
                 System.err.println("--> " + command + " ERROR");
             }
 
+            LISTENER.doneExecuting();
+
         } catch (UnknownHostException uhe) {
             System.out.println("Cannot resolve hostname: " + uhe.getMessage());
         } catch (IOException ioex) {
             System.out.println("Cannot send packet: " + ioex.getMessage());
         }
     }
-
 
     /**
      * This method creates a DatagramPacket based on the command that comes as
@@ -151,7 +172,6 @@ public class CommandManager {
                 InetAddress.getByName(this.TELLO_ADDRESS),
                 this.TELLO_COMMAND_SEND_PORT
         );
-
         return packet;
     }
 
@@ -170,9 +190,10 @@ public class CommandManager {
             }
         }
     }
-    
+
     /**
-     * This method is used for start the flight recording process using the FlightRecoder class.
+     * This method is used for start the flight recording process using the
+     * FlightRecoder class.
      */
     public void startRecording() {
         this.recordBuffer.clear();
@@ -180,9 +201,9 @@ public class CommandManager {
 
         System.out.println("[Info] Start recording");
     }
-    
+
     /**
-     * This method is used for stop the recording process and save the file 
+     * This method is used for stop the recording process and save the file
      * containing all the commands sent to the drone.
      */
     public void stopRecording() {
