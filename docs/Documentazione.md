@@ -215,7 +215,7 @@ Per poter realizzare questo progetto abbiamo usato il seguente materiale:
 
 - Asus ROG GL702VM con Windows 10.
 
-- HP Pavilion CS-0800 con Linux Ubuntu 19.04.
+- HP Pavilion CS-0800NZ con Linux Ubuntu 19.04.
 
 ## 2 Progettazione
 
@@ -492,6 +492,77 @@ La *Recording* tab contiene due bottoni che abilitano e disabiltiano la registra
 
 La *Settings* tab contiene i campi che si trovano nel file di config, tramite questa tab si possono impostare nuovi valori di sensibilità del controller che vengono applicati subito durante l'esecuzione del programma.
 
+### 3.1.3 CommandManager
+
+Command manager è la classe usata dal DroneController e da DroneControllerMonitor per l'invio dei comandi e per la ricezione delle rispose dal drone.
+
+Il metodo principale è sendCommand:
+
+```java
+/**
+ * This method sends a command to DJI Tello.
+ *
+ * @param command Command to send to the drone.
+ */
+public void sendCommand(String command) {
+
+    try {
+        DatagramPacket packet = this.createPacket(command);
+
+        commandSocket.send(packet);
+
+        String response = "";
+        packet.setData(new byte[255]);
+
+        System.out.println("Wait for response from drone");
+        if (command.contains("?")) {
+            stateSocket.receive(packet);
+            response = new String(packet.getData()).trim();
+
+            LISTENER.droneResponse(response);
+            System.out.println("Drone response: " + response);
+
+        } else {
+            commandSocket.receive(packet);
+            response = new String(packet.getData()).trim();
+
+            if (response.equalsIgnoreCase("OK")) {
+                //Add commands to recorder
+                if (isRecordingFlight) {
+                    recordBuffer.addCommand(command);
+                }
+                System.out.println("--> " + command + " is ok");
+            } else {
+                System.err.println("--> " + command + " ERROR");
+            }
+        }
+
+        LISTENER.doneExecuting();
+
+    } catch (UnknownHostException uhe) {
+        System.out.println("Cannot resolve hostname: " + uhe.getMessage());
+    } catch (IOException ioex) {
+        System.out.println("Cannot send packet: " + ioex.getMessage());
+    }
+}
+```
+Questo metodo crea un nuovo DatagramPacket usando il metodo `createPacket(command)` che non fa altro che creare il DatagramPacket usando con la porta definita nella SDK del drone che è *8889*.
+
+Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta. La risposta viene interpretata in modi diversi a dipendenza se il comando contiene il carattere ?, significa che è una richiesta sullo stato del drone, oppure se è un commando normale, commando di movimento.
+
+Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato. 
+
+Il seguente pezzo di codice salva i commandi eseguiti con successo nel recordBuffer se la registrazione del volo è abilitata.
+
+```java
+if (isRecordingFlight) {
+    recordBuffer.addCommand(command);
+}
+```
+
+
+### 3.1.4 CommandManager
+
 ### 3.2 Drone Simulator
 
 #### 3.2.1 TelloChartFrame
@@ -612,7 +683,7 @@ public class PacketReceivingCheckerThread extends Thread{
 ### 4.3 Mancanze/limitazioni conosciute
 
 Il nostro prodotto ha delle limitazioni soltanto dalla parte del controller.
-Esso infatti non permette ricevere i dati dello stream video del drone e quindi non permette all'utente di visionare ciò che vede Tello con la sua telecamera.
+Esso infatti non permette di ricevere i dati dello stream video del drone e quindi non permette all'utente di visionare ciò che vede Tello con la sua telecamera.
 La seconda mancanza è la pagina web con le statistiche relative allo stato del drone.
 
 ## 5 Consuntivo
