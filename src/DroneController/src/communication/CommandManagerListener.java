@@ -9,4 +9,10 @@ public interface CommandManagerListener {
      * Method that notifies the listener that a command has been executed.
      */
     public void doneExecuting();
+    
+    
+    /**
+     * Method that notifies the listener of the commands response.
+     */
+    public void droneResponse(String response);
 }
