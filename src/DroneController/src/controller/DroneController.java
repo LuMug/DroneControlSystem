@@ -27,7 +27,7 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     private final CommandManager COMMAND_MANAGER;
     /**
-     * This constant is a ControllerSettings object used to load variable values 
+     * This constant is a ControllerSettings object used to load variable values
      * saved on the config file to the local variables in this class.
      */
     private final ControllerSettings CONTROLLER_SETTINGS = new ControllerSettings();
@@ -67,19 +67,15 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      * read new commands from the LeapMotion or not.
      */
     private boolean isLeapMotionEnabled = true;
-    
-    
+
     private TimeoutThread executor = new TimeoutThread(2, TimeUnit.SECONDS);
-    
-    
 
     /**
      * Drone controller constructor that adds this object as the LeapMotion
      * controller listener.
-     * 
+     *
      * @param listener Listener used to display useful logs to the GUI.
-     * @throws SocketException thrown when the server port 
-     * it's already used.
+     * @throws SocketException thrown when the server port it's already used.
      */
     public DroneController(CommandListener listener) throws SocketException {
         COMMAND_MANAGER = new CommandManager(this);
@@ -100,9 +96,9 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     public void run() {
 
         listener.controllerMessage("DroneController started\n");
-        
+
         executor.execute(new SendTask(COMMAND_MANAGER, Commands.ENABLE_COMMANDS));
-        
+
         listener.controllerMessage("Sending commands\n");
 
         while (CONTROLLER.isConnected()) {
@@ -171,22 +167,22 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     private void loadVariables() {
         System.out.println("loading variables");
-        
+
         this.heightThreshold = CONTROLLER_SETTINGS.getHeightThreshold();
         this.controllerDegreesSensibility = CONTROLLER_SETTINGS.getControllerDegreesSensibility();
-        
+
         listener.controllerMessage("Settings updated\n");
         listener.controllerMessage("degrees sensibility: " + controllerDegreesSensibility + "\n");
         listener.controllerMessage("height threshold: " + heightThreshold + "\n");
     }
-   
+
     /**
-     * 
+     *
      */
-    private void loadDefaultVariables(){
+    private void loadDefaultVariables() {
         final float HEIGHT_THRESHOLD = 4;
         final float DEGREES_SENSIBILITY = 10;
-        
+
         this.heightThreshold = HEIGHT_THRESHOLD;
         this.controllerDegreesSensibility = DEGREES_SENSIBILITY;
     }
@@ -286,14 +282,13 @@ public class DroneController extends Listener implements Runnable, SettingsListe
     @Override
     public void settingsChanged() {
         System.out.println("[Info] Settings updated, reload settings variables.");
-        try{
+        try {
             //Reload all the settings
             CONTROLLER_SETTINGS.updateSettings();
-            
+
             //Reload local settings
             loadVariables();
-        }
-        catch(IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             System.err.println("[Error] Error while loading settings. Set the default ones.");
             loadDefaultVariables();
         }
@@ -317,6 +312,11 @@ public class DroneController extends Listener implements Runnable, SettingsListe
      */
     public synchronized void setExecutingCommand(boolean executingCommand) {
         this.executingCommand = executingCommand;
+    }
+
+    @Override
+    public void droneResponse(String response) {
+        System.out.println("Drone rsponse " + response);
     }
 
     @Override
