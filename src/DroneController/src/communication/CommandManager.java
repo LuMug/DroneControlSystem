@@ -102,18 +102,10 @@ public class CommandManager {
      * @param command Command to send to the drone.
      */
     public void sendCommand(String command) {
-        System.out.println("sending command: " + command);
-
-        //Add commands to recorder
-        if (isRecordingFlight) {
-            System.out.println("Add command: " + command);
-            recordBuffer.addCommand(command);
-        }
 
         try {
             DatagramPacket packet;
 
-            // Identifies the command in order to use the right method
             packet = this.createPacket(command);
 
             commandSocket.send(packet);
@@ -128,18 +120,23 @@ public class CommandManager {
                 stateSocket.receive(packet);
                 response = new String(packet.getData()).trim();
 
+                LISTENER.droneResponse(response);
+                System.out.println("Drone response: " + response);
+
             } else {
                 packet.setData(new byte[255]);
                 commandSocket.receive(packet);
                 response = new String(packet.getData()).trim();
-            }
 
-            LISTENER.droneResponse(response);
-
-            if (response.equalsIgnoreCase("OK")) {
-                System.out.println("--> " + command + " is ok");
-            } else {
-                System.err.println("--> " + command + " ERROR");
+                if (response.equalsIgnoreCase("OK")) {
+                    //Add commands to recorder
+                    if (isRecordingFlight) {
+                        recordBuffer.addCommand(command);
+                    }
+                    System.out.println("--> " + command + " is ok");
+                } else {
+                    System.err.println("--> " + command + " ERROR");
+                }
             }
 
             LISTENER.doneExecuting();
