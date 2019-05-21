@@ -104,19 +104,15 @@ public class CommandManager {
     public void sendCommand(String command) {
 
         try {
-            DatagramPacket packet;
-
-            packet = this.createPacket(command);
+            DatagramPacket packet = this.createPacket(command);
 
             commandSocket.send(packet);
 
-            System.out.println("Wait for response from drone");
-
             String response = "";
+            packet.setData(new byte[255]);
 
+            System.out.println("Wait for response from drone");
             if (command.contains("?")) {
-                System.out.println("Response: " + response);
-                packet.setData(new byte[255]);
                 stateSocket.receive(packet);
                 response = new String(packet.getData()).trim();
 
@@ -124,7 +120,6 @@ public class CommandManager {
                 System.out.println("Drone response: " + response);
 
             } else {
-                packet.setData(new byte[255]);
                 commandSocket.receive(packet);
                 response = new String(packet.getData()).trim();
 
