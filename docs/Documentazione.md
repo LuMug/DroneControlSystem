@@ -1,8 +1,6 @@
 # Drone Control System
 
 #### Da Fare:
-- 1.5: Aggiungere eventuali requisiti
-- 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
 - 6.2: Da completare
 - Sommario: aggiornarlo
@@ -198,6 +196,8 @@ risolvere conflitti.
 - VisualStudio Code 1.33.1: Editore di testo usato in tutti i contesti.
 
 - SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere i vari movimenti delle mani dal sensore LeapMotion.
+
+- JFreeChart 1.5.0: Libreria sviluppata in Java per la creazione di grafici quali diagrammi cartesiani, diagrammi a barre, ecc...
 
 - GanttProject 2.8.9: Software per creare una progettazione delle tempistiche per il progetto.
 
@@ -473,12 +473,12 @@ private void checkHeightControl() {
             }
         }
 
-        if (Math.abs(lastY) > heightThreshold && lastY != 0.0 
-            && Math.abs(lastY) > 20 
+        if (Math.abs(lastY) > heightThreshold && lastY != 0.0
+            && Math.abs(lastY) > 20
             && Math.abs(lastY) < 500) {
 
             if (lastY != 0.0) {
-                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : 
+                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) :
                 Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                 commands[1] = message;
                 listener.commandSent(message + "\n");
@@ -564,22 +564,25 @@ Math.toDegrees(Math.atan2(Y1 - Y2, X1 - X2));`
 
 ```java
 /**
-     * This method returns the roll angle of the hand
-     *
-     * @param hand the hand from which it needs to read the roll angle
-     * @return the roll angle in degrees
-     */
-    public float getRoll(Hand hand) {
-        try {
-            Vector lVector = hand.fingers().leftmost().tipPosition();
-            Vector rVector = hand.fingers().rightmost().tipPosition();
-            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(),
-                                          rVector.getX() - lVector.getX()));
-
-        } catch (NullPointerException npe) {
-            return 0;
-        }
+* This method returns the roll angle of the hand
+*
+* @param hand the hand from which it needs to read the roll angle
+* @return the roll angle in degrees
+*/
+public float getRoll(Hand hand) {
+    try {
+        Vector lVector = hand.fingers().leftmost().tipPosition();
+        Vector rVector = hand.fingers().rightmost().tipPosition();
+        return (float) Math.toDegrees(
+            Math.atan2(
+                rVector.getY() - lVector.getY(),
+                rVector.getX() - lVector.getX()
+            )
+        );
+    } catch (NullPointerException npe) {
+        return 0;
     }
+}
 ```
 
 ### 3.1.2 DroneControllerMonitor
@@ -702,6 +705,58 @@ La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltr
 #### 3.2.3 CommandReader
 
 La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone modificando le tre variabili che rappresentano le tre assi X, Y e Z.
+Questo viene fatto ad esempio nel seguente modo:
+```Java
+/**
+* All getter commands.
+*/
+private final String[] GET_COMMANDS = {
+    "speed?",
+    "battery?",
+    "time?",
+    "height?",
+    "temp?",
+    "attitude?",
+    "baro?",
+    "acceleration?",
+    "tof?",
+    "wifi?"
+};
+
+...
+
+/**
+* Method that checks if the passed method exists and is a getter type.
+* @param command Method to check.
+* @return Respective value of get request.
+*/
+public int getterCommandExists(String command){
+    for(String s:GET_COMMANDS){
+        if(command.equals(s)){
+            switch(s){
+                case "speed?":
+                    return getSpeed();
+                case "battery?":
+                    return getBattery();
+                case "time?":
+                    return getTime();
+                case "height?":
+                    return getHeight();
+                case "temp?":
+                    return getTemperature();
+                case "baro?":
+                    return getBarometer();
+                case "tof?":
+                    return getTof();
+                case "wifi?":
+                    return getWifi();
+            }
+        }
+    }
+    return Integer.MIN_VALUE;
+}
+
+```
 
 #### 3.2.4 BatteryThread
 
@@ -841,9 +896,14 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della communicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
 
 ### 6.2.3 Jari
-# DA COMPLETARE
 
-### 6.2.4 Rausone
+Attraverso questo progetto ho potuto consolidare e mettere in pratica quanto appreso sui socket, i loro vantaggi e svantaggi.
+Inoltre ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni. 
+
+### 6.2.4 Andrea
+
+Con questo progetto ho imparando a fare dei grafici in Java attraverso la libreria JFreeChart.
+
 # DA COMPLETARE
 
 ## 7 Bibliografia

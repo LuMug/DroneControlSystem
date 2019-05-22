@@ -14,7 +14,7 @@ Luca:
 Problemi con le librerie di Leap Motion. Risolto con l'aiuto di Fadil.
 
 Andrea:
--
+Ho corretto l'UML del DroneSimulator aggiungendo classi, metodi e/o attributi mancanti.
 
 ## Problemi riscontrati e soluzioni adottate
 

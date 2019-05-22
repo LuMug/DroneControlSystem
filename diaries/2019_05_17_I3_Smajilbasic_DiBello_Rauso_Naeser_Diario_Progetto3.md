@@ -1,6 +1,6 @@
-# PROGETTO Drone Control System | Diario di lavoro - 15.05.2019
+# PROGETTO Drone Control System | Diario di lavoro - 17.05.2019
 ##### Luca Di Bello, Fadil Smajilbasic, Andrea Rauso, Jari Näser
-### Canobbio, 15.05.2019
+### Canobbio, 17.05.2019
 
 ## Lavori svolti
 
@@ -14,7 +14,8 @@ Luca:
 Durante questa lezione ho aggiunto tutti i mockup della GUI del controller alla documentazione. Abbiamo anche deciso di non fare la registrazione dei video per mancanza di tempo.
 
 Andrea:
-
+Ho creato la presentazione cominciando ad aggiungere tutte le immagini relative all'analisi
+e alla progettazione.
 
 
 ## Problemi riscontrati e soluzioni adottate

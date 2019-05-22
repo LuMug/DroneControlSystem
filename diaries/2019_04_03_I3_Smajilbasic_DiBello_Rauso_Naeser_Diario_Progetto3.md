@@ -15,7 +15,7 @@ Luca:
 Ho finito la classe che gestisce le impostazioni sul file di config (SettingManager) ed ho implementato il pannello per gestire i config dalla GUI.
 
 Andrea:
--
+Ho lavorato sulla classe TelloChartFrame riducendo il codice necessario per mostrare i grafici di posizione e rotazione.
 
 ## Problemi riscontrati e soluzioni adottate
 Un calcolo preciso dei angoli della mano destra
