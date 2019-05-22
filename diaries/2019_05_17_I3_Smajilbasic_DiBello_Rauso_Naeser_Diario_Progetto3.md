@@ -5,6 +5,8 @@
 ## Lavori svolti
 
 Jari:
+Ho continuato con lo sviluppo della documentazione raffinando i vari capitoli e
+sottocapitoli, inoltre ho completato in parte quelli mancanti.
 
 Fadil:
 
