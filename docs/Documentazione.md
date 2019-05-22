@@ -385,12 +385,12 @@ private void checkHeightControl() {
             }
         }
 
-        if (Math.abs(lastY) > heightThreshold && lastY != 0.0 
-            && Math.abs(lastY) > 20 
+        if (Math.abs(lastY) > heightThreshold && lastY != 0.0
+            && Math.abs(lastY) > 20
             && Math.abs(lastY) < 500) {
 
             if (lastY != 0.0) {
-                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : 
+                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) :
                 Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                 commands[1] = message;
                 listener.commandSent(message + "\n");
@@ -404,7 +404,7 @@ private void checkHeightControl() {
 
 ##### checkMovementControl
 
-Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*. 
+Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*.
 *controllerDegreesSensibility* è la soglia minima dell'incl.inazione della mano definita nel file di config e letta usando la classe *SettingsManager*
 
 ```java
@@ -474,27 +474,30 @@ Codice:
 
 ```java
 /**
-     * This method returns the roll angle of the hand
-     *
-     * @param hand the hand from which it needs to read the roll angle
-     * @return the roll angle in degrees
-     */
-    public float getRoll(Hand hand) {
-        try {
-            Vector lVector = hand.fingers().leftmost().tipPosition();
-            Vector rVector = hand.fingers().rightmost().tipPosition();
-            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(),
-                                          rVector.getX() - lVector.getX()));
-
-        } catch (NullPointerException npe) {
-            return 0;
-        }
+* This method returns the roll angle of the hand
+*
+* @param hand the hand from which it needs to read the roll angle
+* @return the roll angle in degrees
+*/
+public float getRoll(Hand hand) {
+    try {
+        Vector lVector = hand.fingers().leftmost().tipPosition();
+        Vector rVector = hand.fingers().rightmost().tipPosition();
+        return (float) Math.toDegrees(
+            Math.atan2(
+              rVector.getY() - lVector.getY(),
+              rVector.getX() - lVector.getX()
+            )
+        );
+    } catch (NullPointerException npe) {
+        return 0;
     }
+}
 ```
 
 ### 3.1.2 DroneControllerMonitor
 
-Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo. 
+Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo.
 
 #### Log tab
 
@@ -584,7 +587,7 @@ Questo metodo crea un nuovo DatagramPacket usando il metodo `createPacket(comman
 
 Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta. La risposta viene interpretata in modi diversi a dipendenza se il comando contiene il carattere ?, significa che è una richiesta sullo stato del drone, oppure se è un commando normale, commando di movimento.
 
-Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato. 
+Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato.
 
 Il seguente pezzo di codice salva i commandi eseguiti con successo nel recordBuffer se la registrazione del volo è abilitata.
 
