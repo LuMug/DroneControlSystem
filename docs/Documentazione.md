@@ -839,15 +839,13 @@ public class PacketReceivingCheckerThread extends Thread{
 |**Prerequisiti**| Aver scaricato la sdk e impostato il percorso giusto del sdk nelle impostazioni del progetto. |
 |**Procedura**     | Bisogna creare una classe che estende *com.leapmotion.leap.Listener* così da poter leggere i frame letti dal sensore. Una volta letti i dati vengono mandati al drone /simulatore grazie ad un DatagramSocket |
 
-
 |Test Case      | TC-002                               |
 |---------------|--------------------------------------|
 |**Nome**       | Movimento del drone attraverso la ricezione di comandi |
 |**Riferimento**|REQ-002                             |
 |**Descrizione**| Controllare che la formattazione dei comandi è fatta in un modo giusto e che il drone riconosce i comandi |
-|**Prerequisiti**| Collegare il pc al wifi del drone |
+|**Prerequisiti**| Collegare il pc alla rete WiFi del drone |
 |**Procedura**     | Mandare un commando letto dal leapmotion formattato tramite la classe *Commands* in modo da spostare il drone in qualsiasi direzione. Mandare il comando tramite il DatagramSocket all'indirizzo del drone (definito nella SDK) e sulla porta giusta (definita nella SDK). Aspettare una risposta da parte del drone. |
-
 
 |Test Case       | TC-003                               |
 |----------------|--------------------------------------|
@@ -861,9 +859,9 @@ public class PacketReceivingCheckerThread extends Thread{
 |----------------|--------------------------------------|
 |**Nome**        | Registrazione sequenza comandi del volo         |
 |**Riferimento** | REQ-004                              |
-|**Descrizione** | Avere la possibilità di registrare un percorso usando le mani e leapmotion e poi salvare i commandi eseguiti su un file, usando quel file si può rifare il percorso  |
+|**Descrizione** | Avere la possibilità di registrare un percorso usando le mani e leapmotion e poi salvare i comandi eseguiti su un file, usando quel file si può rifare il percorso  |
 |**Prerequisiti**| Collegare il pc al wifi del drone e iniziare il test mentre il drone è in volo  |
-|**Procedura**   | Cambaire la visualizzazione della gui sul tab *recording* dove schiacciando il bottone *"start recording"* inizia la registrazione dei commandi eseguiti e schiacciano il bottone *"stop recording"* si ferma la registrazione. Scegliendo un file e cliccando su *Start flight* il programma inizia a eseguire un commando alla volta dal file. Si può anche fermare l'esecuzione del file |
+|**Procedura**   | Cambiare la visualizzazione della gui sul tab *recording* dove schiacciando il bottone *"start recording"* inizia la registrazione dei comandi eseguiti e schiacciano il bottone *"stop recording"* si ferma la registrazione. Scegliendo un file e cliccando su *Start flight* il programma inizia a eseguire un commando alla volta dal file. Si può anche fermare l'esecuzione del file |
 
 |Test Case       | TC-005                               |
 |----------------|--------------------------------------|
@@ -871,7 +869,7 @@ public class PacketReceivingCheckerThread extends Thread{
 |**Riferimento** | REQ-005                             |
 |**Descrizione** | La visualizzazione dello stato del drone (livello batteria, altezza drone, velocità drone,...) su un sito web come. |
 |**Prerequisiti**| Collegare il pc al wifi del drone |
-|**Procedura**   | Non siamo riusciti a sviluppare questa parte del programma per questioni di tempistiche e complesità del lavoro. |
+|**Procedura**   | Non siamo riusciti a sviluppare questa parte del programma per questioni di tempistiche e complessità del lavoro. |
 
 |Test Case       | TC-006                               |
 |----------------|--------------------------------------|
@@ -879,16 +877,15 @@ public class PacketReceivingCheckerThread extends Thread{
 |**Riferimento** | REQ-006                             |
 |**Descrizione** | Implementare in una classe tutti i comandi presenti nella SDK del drone e metodi utili per la loro formattazione. |
 |**Prerequisiti**| Leggere attentamente la SDK |
-|**Procedura**   | Questo requisito è stato svolto da Luca Di Bello nella classe Commands.java |
+|**Procedura**   | Questo requisito è stato svolto da Luca Di Bello nella classe Commands |
 
 |Test Case       | TC-007                               |
 |----------------|--------------------------------------|
 |**Nome**        | Simulazione grafica del drone attraverso 4 Frame |
 |**Riferimento** | REQ-007                             |
-|**Descrizione** | Simulazione  |
+|**Descrizione** | Simulazione |
 |**Prerequisiti**| Nessuno |
-|**Procedura**   | Far partire il DroneSimulator e il DroneController, mandare i commandi dal DroneController e guardare i cambiamenti dalla parte del drone simulator |
-
+|**Procedura**   | Far partire il DroneSimulator e il DroneController, mandare i comandi dal DroneController e guardare i cambiamenti dalla parte del drone simulator |
 
 ### 4.2 Risultati test
 
@@ -897,7 +894,6 @@ public class PacketReceivingCheckerThread extends Thread{
 |TC-001      | Passato ✔                            |
 |TC-003      | Non passato ❌                               |
 |ECCETERA      | ECCETERA                               |
-
 
 ### 4.3 Mancanze/limitazioni conosciute
 
@@ -933,18 +929,16 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 
 ### 6.2.2 Fadil
 
-Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della communicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
+Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della comunicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
 
 ### 6.2.3 Jari
 
 Attraverso questo progetto ho potuto consolidare e mettere in pratica quanto appreso sui socket, i loro vantaggi e svantaggi.
-Inoltre ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni. 
+Inoltre, ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni.
 
 ### 6.2.4 Andrea
 
 Con questo progetto ho imparando a fare dei grafici in Java attraverso la libreria JFreeChart.
-
-# DA COMPLETARE
 
 ## 7 Bibliografia
 
