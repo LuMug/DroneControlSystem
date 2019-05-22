@@ -7,7 +7,7 @@
 Jari:
 
 Fadil:
-Ho continuato ad aiutare luca a implementare il flight recording e l'abbiamo portato a termine. Inoltre ho c
+Ho continuato ad aiutare luca a implementare il flight recording e l'abbiamo portato a termine. Inoltre ho cambiato la gui e aggiornato parte della documentazione.
 
 Luca:
 Ho fixato tutti gli errori/bug che rendevano il "flight recorder" (registratore/esecutore di voli). Ora il programma è in grado di 
