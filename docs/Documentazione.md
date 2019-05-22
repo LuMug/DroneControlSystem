@@ -1,10 +1,5 @@
 # Drone Control System
 
-#### Da Fare:
-- 4.1: Fare test-case
-- 6.2: Da completare
-- Sommario: aggiornarlo
-
 ---
 
 * [1. Introduzione](#1-introduzione)
@@ -62,9 +57,7 @@
 + [6.2.1 Luca](#621-luca)
 + [6.2.2 Fadil](#622-fadil)
 + [6.2.3 Jari](#623-jari)
-- [DA COMPLETARE](#da-completare)
 + [6.2.4 Rausone](#624-rausone)
-- [DA COMPLETARE](#da-completare-1)
 
 * [7 Bibliografia](#7-bibliografia)
 + [7.1 Sitografia](#71-sitografia)
@@ -387,11 +380,11 @@ Invece tramite il metodo ```setSetting(nome, valore)``` si può impostare un val
 /**
  * This method allows you to set/modify a value of a specific setting just using
  * it's name.
- * 
+ *
  * @param settingName Name of the setting.
  * @param value Value which will be set as setting value.
  * @throws IllegalArgumentException throwed when a
- * setting is without value or non-existent 
+ * setting is without value or non-existent
  */
 public void setSetting(String settingName, String value) throws IllegalArgumentException {
     //Legge tutte le linee del file
@@ -664,7 +657,7 @@ public void sendCommand(String command) {
 
 Questo metodo crea un nuovo DatagramPacket usando il metodo `createPacket(command)` che non fa altro che creare il DatagramPacket usando con la porta definita nella SDK del drone che è *8889*.
 
-Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta. 
+Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta.
 
 Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato.
 
