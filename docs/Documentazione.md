@@ -632,7 +632,6 @@ Il metodo principale è sendCommand:
  * @param command Command to send to the drone.
  */
 public void sendCommand(String command) {
-
     try {
         DatagramPacket packet = this.createPacket(command);
 
@@ -641,27 +640,17 @@ public void sendCommand(String command) {
         String response = "";
         packet.setData(new byte[255]);
 
-        System.out.println("Wait for response from drone");
-        if (command.contains("?")) {
-            stateSocket.receive(packet);
-            response = new String(packet.getData()).trim();
+        commandSocket.receive(packet);
+        response = new String(packet.getData()).trim();
 
-            LISTENER.droneResponse(response);
-            System.out.println("Drone response: " + response);
-
-        } else {
-            commandSocket.receive(packet);
-            response = new String(packet.getData()).trim();
-
-            if (response.equalsIgnoreCase("OK")) {
-                //Add commands to recorder
-                if (isRecordingFlight) {
-                    recordBuffer.addCommand(command);
-                }
-                System.out.println("--> " + command + " is ok");
-            } else {
-                System.err.println("--> " + command + " ERROR");
+        if (response.equalsIgnoreCase("OK")) {
+            //Add commands to recorder
+            if (isRecordingFlight) {
+                recordBuffer.addCommand(command);
             }
+            System.out.println("--> " + command + " is ok");
+        } else {
+            System.err.println("--> " + command + " ERROR");
         }
 
         LISTENER.doneExecuting();
@@ -676,7 +665,7 @@ public void sendCommand(String command) {
 
 Questo metodo crea un nuovo DatagramPacket usando il metodo `createPacket(command)` che non fa altro che creare il DatagramPacket usando con la porta definita nella SDK del drone che è *8889*.
 
-Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta. La risposta viene interpretata in modi diversi a dipendenza se il comando contiene il carattere ?, significa che è una richiesta sullo stato del drone, oppure se è un commando normale, commando di movimento.
+Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta. 
 
 Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato.
 
@@ -844,12 +833,62 @@ public class PacketReceivingCheckerThread extends Thread{
 
 |Test Case      | TC-001                               |
 |---------------|--------------------------------------|
-|**Nome**       |Import a card, but not shown with the GUI |
-|**Riferimento**|REQ-012                               |
-|**Descrizione**|Import a card with KIC, KID and KIK keys with no obfuscation, but not shown with the GUI |
-|**Prerequisiti**|Store on local PC: Profile\_1.2.001.xml (appendix n\_n) and Cards\_1.2.001.txt (appendix n\_n) |
-|**Procedura**     | - Go to “Cards manager” menu, in main page click “Import Profiles” link, Select the “1.2.001.xml” file, Import the Profile - Go to “Cards manager” menu, in main page click “Import Cards” link, Select the “1.2.001.txt” file, Delete the cards, Select the “1.2.001.txt” file, Import the cards |
-|**Risultati attesi** |Keys visible in the DB (OtaCardKey) but not visible in the GUI (Card details) |
+|**Nome**       |Traduzione dei movimenti delle mani in comandi|
+|**Riferimento**|REQ-001                             |
+|**Descrizione**| Usando la sdk fornita dalla pagina principale del LeapMotion, riuscire a leggere la posizione della mano e inviarla al drone / simulatore |
+|**Prerequisiti**| Aver scaricato la sdk e impostato il percorso giusto del sdk nelle impostazioni del progetto. |
+|**Procedura**     | Bisogna creare una classe che estende *com.leapmotion.leap.Listener* così da poter leggere i frame letti dal sensore. Una volta letti i dati vengono mandati al drone /simulatore grazie ad un DatagramSocket |
+
+
+|Test Case      | TC-002                               |
+|---------------|--------------------------------------|
+|**Nome**       | Movimento del drone attraverso la ricezione di comandi |
+|**Riferimento**|REQ-002                             |
+|**Descrizione**| Controllare che la formattazione dei comandi è fatta in un modo giusto e che il drone riconosce i comandi |
+|**Prerequisiti**| Collegare il pc al wifi del drone |
+|**Procedura**     | Mandare un commando letto dal leapmotion formattato tramite la classe *Commands* in modo da spostare il drone in qualsiasi direzione. Mandare il comando tramite il DatagramSocket all'indirizzo del drone (definito nella SDK) e sulla porta giusta (definita nella SDK). Aspettare una risposta da parte del drone. |
+
+
+|Test Case       | TC-003                               |
+|----------------|--------------------------------------|
+|**Nome**        | Pagina Web con stream video dal Drone |
+|**Riferimento** | REQ-003                             |
+|**Descrizione** | La corretta ricezione del stream video e la sua rappresentazione al utente . |
+|**Prerequisiti**| Collegare il pc al wifi del drone |
+|**Procedura**   | Non siamo riusciti a sviluppare questa parte del programma, poichè non siamo riusciti a decodificare il stream video usando java. |
+
+|Test Case       | TC-004                               |
+|----------------|--------------------------------------|
+|**Nome**        | Registrazione sequenza comandi del volo         |
+|**Riferimento** | REQ-004                              |
+|**Descrizione** | Avere la possibilità di registrare un percorso usando le mani e leapmotion e poi salvare i commandi eseguiti su un file, usando quel file si può rifare il percorso  |
+|**Prerequisiti**| Collegare il pc al wifi del drone e iniziare il test mentre il drone è in volo  |
+|**Procedura**   | Cambaire la visualizzazione della gui sul tab *recording* dove schiacciando il bottone *"start recording"* inizia la registrazione dei commandi eseguiti e schiacciano il bottone *"stop recording"* si ferma la registrazione. Scegliendo un file e cliccando su *Start flight* il programma inizia a eseguire un commando alla volta dal file. Si può anche fermare l'esecuzione del file |
+
+|Test Case       | TC-005                               |
+|----------------|--------------------------------------|
+|**Nome**        | Pagina Web con statistiche del volo |
+|**Riferimento** | REQ-005                             |
+|**Descrizione** | La visualizzazione dello stato del drone (livello batteria, altezza drone, velocità drone,...) su un sito web come. |
+|**Prerequisiti**| Collegare il pc al wifi del drone |
+|**Procedura**   | Non siamo riusciti a sviluppare questa parte del programma per questioni di tempistiche e complesità del lavoro. |
+
+|Test Case       | TC-006                               |
+|----------------|--------------------------------------|
+|**Nome**        | Implementazione di ogni comando presente nella SDK del Drone |
+|**Riferimento** | REQ-006                             |
+|**Descrizione** | Implementare in una classe tutti i comandi presenti nella SDK del drone e metodi utili per la loro formattazione. |
+|**Prerequisiti**| Leggere attentamente la SDK |
+|**Procedura**   | Questo requisito è stato svolto da Luca Di Bello nella classe Commands.java |
+
+|Test Case       | TC-007                               |
+|----------------|--------------------------------------|
+|**Nome**        | Simulazione grafica del drone attraverso 4 Frame |
+|**Riferimento** | REQ-007                             |
+|**Descrizione** | Simulazione  |
+|**Prerequisiti**| Nessuno |
+|**Procedura**   | Far partire il DroneSimulator e il DroneController, mandare i commandi dal DroneController e guardare i cambiamenti dalla parte del drone simulator |
+
 
 ### 4.2 Risultati test
 

@@ -10,6 +10,8 @@ sottocapitoli, inoltre ho completato in parte quelli mancanti.
 
 Fadil:
 
+Ho completato e inserito 2 capitoli nella documentazione, e ho implementato la gestione del controllo del beccheggio.
+
 Luca:
 Durante questa lezione ho aggiunto tutti i mockup della GUI del controller alla documentazione. Abbiamo anche deciso di non fare la registrazione dei video per mancanza di tempo.
 
