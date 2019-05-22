@@ -10,6 +10,8 @@ tutti i diari messi assieme e finito la documentazione.
 
 Fadil:
 
+Ho completato il capitolo Test case della documentazione e ho migliorato il controllo dell'imbardata
+
 Luca:
 
 Andrea:

@@ -10,6 +10,8 @@ sottocapitoli, inoltre ho completato in parte quelli mancanti.
 
 Fadil:
 
+Ho completato e inserito 2 capitoli nella documentazione, e ho implementato la gestione del controllo del beccheggio.
+
 Luca:
 
 Andrea:
