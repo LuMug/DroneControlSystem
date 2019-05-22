@@ -5,6 +5,8 @@
 ## Lavori svolti
 
 Jari:
+Assieme al resto del team ho concluso la documentazione, ho creato il PDF contenente
+tutti i diari messi assieme e finito la documentazione.
 
 Fadil:
 
