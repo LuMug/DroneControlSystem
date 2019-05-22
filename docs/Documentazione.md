@@ -171,7 +171,6 @@
   |**002**      | Traduzione comandi ed esecuzione modificando gli attributi di posizionamento |
   |**003**      | Lettura degli attributi di posizionamento e modifica dei grafici |
 
-
 ### 1.6 Pianificazione
 
 Questa è la pianificazione e struttura che abbiamo cercato di rispettare per
