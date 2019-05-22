@@ -11,7 +11,7 @@ Fadil:
 Ho corretto vari errori nella classe DroneController e ho migliorato il modo in cui scopo il movimento della mano.
 
 Luca:
--
+Svolto delle piccole modifiche alla classe Commands ed alla classe DroneController 
 
 Andrea:
 Ho finito di creare le interfaccie in cui verranno mostrati i dati di posizione e di rotazione del drone.

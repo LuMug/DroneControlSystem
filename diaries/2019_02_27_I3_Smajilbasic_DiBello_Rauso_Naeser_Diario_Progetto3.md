@@ -15,7 +15,7 @@ Ho continuato con lo sviluppo della classe CommandReader nella quale ho ristrutt
 Inoltre ho anche creato la struttura delle variabili assieme ad Andrea per poter lavorare su di esse e per semplificare la simulazione disegnata del drone attraverso il loro utilizzo.
 
 Luca:
-sdwdw
+Aiutato fadil modificando la classe DroneController 
 
 ##  Problemi riscontrati e soluzioni adottate
 

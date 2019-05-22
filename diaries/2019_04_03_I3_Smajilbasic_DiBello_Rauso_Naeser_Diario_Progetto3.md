@@ -12,7 +12,7 @@ Ho implementato il controllo completo del drone usando le estremità della mano 
 Ho fatto un paio di test insieme a Jari per controllare il giusto funzionamento della classe DroneController avendo implementato questi nuovi metodi.
 
 Luca:
-Ho finito la classe che gestisce le impostazioni sul file di config (SettingManager) ed ho implementato il pannello per gestire i config dalla GUI.
+Ho fatto delle piccole modifiche alla classe SettingManager ed ho implementato il pannello per gestire i config dalla GUI.
 
 Andrea:
 Ho lavorato sulla classe TelloChartFrame riducendo il codice necessario per mostrare i grafici di posizione e rotazione.
