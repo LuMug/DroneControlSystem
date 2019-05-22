@@ -16,7 +16,7 @@ Ho continuato a fare la GUI del controller del drone utile per poterlo controlla
 
 Andrea:
 Ho creato il gantt consuntivo del progetto e ho aggiornato la javadoc della
-classe TelloChartFrame per rispettare le convenzioni 
+classe TelloChartFrame per rispettare le convenzioni
 
 ## Problemi riscontrati e soluzioni adottate
 -
