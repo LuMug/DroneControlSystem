@@ -891,11 +891,15 @@ public class PacketReceivingCheckerThread extends Thread{
 
 ### 4.2 Risultati test
 
-|Test      | Risultato test                               |
-|---------------|--------------------------------------|
-|TC-001      | Passato ✔                            |
-|TC-003      | Non passato ❌                               |
-|ECCETERA      | ECCETERA                               |
+|Test        | Risultato test                               |
+|------------|--------------------------------------------|
+|TC-001      | Passato ✔                                  |
+|TC-002      | Passato ✔                                  |
+|TC-003      | Non passato ❌                             |
+|TC-004      | Passato ✔                                  |
+|TC-005      | Non passato ❌                             |
+|TC-006      | Passato ✔                                  |
+|TC-007      | Passato ✔                                  |
 
 
 ### 4.3 Mancanze/limitazioni conosciute
