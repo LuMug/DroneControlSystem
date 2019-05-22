@@ -17,7 +17,7 @@ Luca:
 Aggiunto un menù nella GUI utile per la registrazione e l'esecuzione dei voli già registrati.
 
 Andrea:
-
+Ho continuato a lavorare sulla documentazione
 
 
 ## Problemi riscontrati e soluzioni adottate

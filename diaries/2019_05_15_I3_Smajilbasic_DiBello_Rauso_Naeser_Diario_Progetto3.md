@@ -14,7 +14,7 @@ Ho fixato tutti gli errori/bug che rendevano il "flight recorder" (registratore/
 registrare tutti i comandi inviati al drone e salvarli in un file per poi poter eseguire nuovamente lo stesso identico volo.
 
 Andrea:
-
+Ho continuato a lavorare sulla documentazione.
 
 
 ## Problemi riscontrati e soluzioni adottate

@@ -306,15 +306,47 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 ## 3 Implementazione
 
 ---
+
 ### 3.1 Drone Controller
 
-### 3.1.1 DroneController
+#### 3.1.1 Recording
+
+Per eseguire il recording dei voli vengono utilizzate le 3 classi presenti nel package "recorder":
+
+- FlightBuffer
+- FlightRecord
+- FlightRecorder
+
+#### FlightBuffer
+
+Questa classe descrive, come dice già il nome, un buffer che verrà utilizzato per la registrazione dei voli. Questa classe infatti presenta dei metodi utili per aggiungere, rimuovere e ricevere comandi dal buffer.
+Abbiamo deciso di utilizzare una linked list perchè il controller Leap Motion genera una grande mole di comandi. La Linked List oltre ad offrire una performance maggiore all'aggiunta e rimozione dei dati rispetto ad una Array List presenta dei metodi aggiuntivi molto utili come ```poll()``` e ```pick()```.
+
+#### FlightRecord
+
+Questa classe descrive invece il file di recording (file generato dopo il salvataggio di una registrazione). Esso presenta un attributo che tiene in memoria la path del file ed un metodo che permette di ricavare tutti i comandi di volo salvati nel file ritornando un buffer di tipo ```FlightBuffer``` con già salvati al suo interno tutti i comandi da eseguire.
+
+#### FlightRecorder
+
+Questa è la classe principale del package *recording*, essa infatti utilizza sia la classe ```FlightRecord``` e ```FlightBuffer``` per il salvataggio dei dati su file.
+
+Utilizzando il metodo sottostante si possono salvare tutti i comandi contenuti nel buffer in un file, la quale path è contenuta nell'oggetto FlightRecord:
+
+```java
+saveFlightPattern(FlightBuffer buffer, FlightRecord flightSaveLocation)
+```
+
+Questa classe ha un metodo utilizzato per la creazione dei file di recording. Il pattern utilizzato per il nome dei file di recording è il seguente: ```dcs-flight-yyyyMMdd-HHmmss.dcs```. Come si può vedere nel nome del file viene specificato il datetime (data e ora) di quando è avvenuta la registrazione.
+
+Il metodo ```createBase()``` invece è utilizzato per creare automaticamente la cartella di base dove alloggeranno i file di registrazione.
+
+#### 3.1.2 DroneController
 
 Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe *FrameHelper*, che contiene i metodi utili per ricavare tutte le informazioni dal *Frame* letto dal *LeapMotion*, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone. Una volta tradotti i valori vengono mandati al drone, grazie alla classe *CommandManager*,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
 
 La parte principale della classe sono i seguenti due metodi:
 
-##### CheckHeightControl
+#### CheckHeightControl
 
 Si occupa di leggere il valore Y della mano sinistra rispetto al punto d'origine (Il sensore LeapMotion). Per leggere i dati da interpretare si usa la classe *FrameHelper* che contine tutte le informationi catturate dal LeapMOtion nel istante corrente e di quello precedente.
 Se il valore Y (l'altezza della mano) è superiore al minimo definito in un file di config, allora il commando viene formattato usando la classe *Commands* e viene aggiunto all'array commands. Alla fine del metodo viene usato il metodo *sendCommands* della classe *CommandsManager* per mandare al drone il commando. Per leggere il valore della soglia minima dell'altezza dal file di config si usa la classe *SettingsManager* nel costruttore della classe *DroneController*.
@@ -426,13 +458,13 @@ private void checkMovementControl() {
 
 Questo metodo calcola l'angolo di rollio dell'oggetto mano passato come parametro. L'angolo è calcolato rispetto al piano trasversale del LeapMotion. Prima vengono estratti i Vettori delle dita agli estremi della mano e poi vengono svolti i calcoli usando la classe di java *Math*
 
---- 
+---
 Per il calcolo preciso dell angolo della mano.
 
 Soluzione trovata su due siti:
 
-- https://stackoverflow.com/questions/2676719/Calculating-the-angle-between-the-line-defined-by-two-points
-- https://math.stackexchange.com/questions/1201337/finding-the-angle-between-two-points
+- <https://stackoverflow.com/questions/2676719/Calculating-the-angle-between-the-line-defined-by-two-points>
+- <https://math.stackexchange.com/questions/1201337/finding-the-angle-between-two-points>
 
 Codice:
 `Math.toDegrees(Math.atan2(Y1 - Y2, X1 - X2));`
@@ -471,6 +503,7 @@ La tab di *Log* contiene una *JTextArea* sulla quale vengono mostrati i comandi 
 #### Fast Commands tab
 
 La *Fast Commands* tab contiene i commandi che si possono inviare singolarmente, i commandi disponibili:
+
 - up
 - down
 - forward
@@ -486,7 +519,8 @@ Per il comando flip si può impostare in quale direzione.
 
 #### Recording tab
 
-La *Recording* tab contiene due bottoni che abilitano e disabiltiano la registrazione dei comandi eseguitid al drone, permette l'esecuzione dei percorsi già registrati e si può fermare l'esecuzione del percorso già salvato.
+La *Recording* tab contiene due bottoni che abilitano e disabilitano la registrazione dei comandi eseguitid al drone, permette l'esecuzione dei percorsi già registrati e si può fermare l'esecuzione del percorso già salvato. Si può selezionare il volo da eseguire tramite un dropdown menu che carica automaticamente tutti i voli salvati.
+Tutti i voli vengono salvati nella cartella "records".
 
 #### Settings tab
 
