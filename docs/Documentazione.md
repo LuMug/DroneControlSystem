@@ -485,8 +485,8 @@ public float getRoll(Hand hand) {
         Vector rVector = hand.fingers().rightmost().tipPosition();
         return (float) Math.toDegrees(
             Math.atan2(
-              rVector.getY() - lVector.getY(),
-              rVector.getX() - lVector.getX()
+                rVector.getY() - lVector.getY(),
+                rVector.getX() - lVector.getX()
             )
         );
     } catch (NullPointerException npe) {
@@ -615,6 +615,58 @@ La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltr
 #### 3.2.3 CommandReader
 
 La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone modificando le tre variabili che rappresentano le tre assi X, Y e Z.
+Questo viene fatto ad esempio nel seguente modo:
+```Java
+/**
+* All getter commands.
+*/
+private final String[] GET_COMMANDS = {
+    "speed?",
+    "battery?",
+    "time?",
+    "height?",
+    "temp?",
+    "attitude?",
+    "baro?",
+    "acceleration?",
+    "tof?",
+    "wifi?"
+};
+
+...
+
+/**
+* Method that checks if the passed method exists and is a getter type.
+* @param command Method to check.
+* @return Respective value of get request.
+*/
+public int getterCommandExists(String command){
+    for(String s:GET_COMMANDS){
+        if(command.equals(s)){
+            switch(s){
+                case "speed?":
+                    return getSpeed();
+                case "battery?":
+                    return getBattery();
+                case "time?":
+                    return getTime();
+                case "height?":
+                    return getHeight();
+                case "temp?":
+                    return getTemperature();
+                case "baro?":
+                    return getBarometer();
+                case "tof?":
+                    return getTof();
+                case "wifi?":
+                    return getWifi();
+            }
+        }
+    }
+    return Integer.MIN_VALUE;
+}
+
+```
 
 #### 3.2.4 BatteryThread
 
