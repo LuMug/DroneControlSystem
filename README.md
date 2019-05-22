@@ -6,7 +6,7 @@
 
 Iniziato il: 13.02.19
 
-Data di consegna: 17.05.2019
+Data di consegna: 22.05.2019
 
 - [Quaderno dei compiti](Documentazione/Extra/muggiasca_qdc_pilotaggioDrone.pdf)
 
