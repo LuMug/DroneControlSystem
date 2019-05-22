@@ -40,12 +40,6 @@ public class CommandManager {
     private final int TELLO_COMMAND_LISTEN_PORT = settings.getCommunicationListenPortCommand();
 
     /**
-     * This constant contains the tello state port to which the tello will
-     * respond on the state commands.
-     */
-    private final int TELLO_STATE_PORT = settings.getTelloStatePort();
-
-    /**
      * This constant contains the tello communication port to which the commands
      * will be sent to.
      */
@@ -75,11 +69,6 @@ public class CommandManager {
     private final CommandManagerListener LISTENER;
 
     /**
-     *
-     */
-    private final DatagramSocket stateSocket;
-
-    /**
      * The constructor of the CommandManager that creates a new DatagramSocket.
      *
      * @param listener the listener of the CommandManager class.
@@ -88,7 +77,6 @@ public class CommandManager {
     public CommandManager(CommandManagerListener listener) throws SocketException {
         try {
             commandSocket = new DatagramSocket(TELLO_COMMAND_LISTEN_PORT);
-            stateSocket = new DatagramSocket(TELLO_STATE_PORT);
             System.out.println("[SUCCESS] Listening on port " + this.TELLO_COMMAND_LISTEN_PORT);
             this.LISTENER = listener;
         } catch (SocketException ex) {
@@ -111,27 +99,17 @@ public class CommandManager {
             String response = "";
             packet.setData(new byte[255]);
 
-            System.out.println("Wait for response from drone");
-            if (command.contains("?")) {
-                stateSocket.receive(packet);
-                response = new String(packet.getData()).trim();
+            commandSocket.receive(packet);
+            response = new String(packet.getData()).trim();
 
-                LISTENER.droneResponse(response);
-                System.out.println("Drone response: " + response);
-
-            } else {
-                commandSocket.receive(packet);
-                response = new String(packet.getData()).trim();
-
-                if (response.equalsIgnoreCase("OK")) {
-                    //Add commands to recorder
-                    if (isRecordingFlight) {
-                        recordBuffer.addCommand(command);
-                    }
-                    System.out.println("--> " + command + " is ok");
-                } else {
-                    System.err.println("--> " + command + " ERROR");
+            if (response.equalsIgnoreCase("OK")) {
+                //Add commands to recorder
+                if (isRecordingFlight) {
+                    recordBuffer.addCommand(command);
                 }
+                System.out.println("--> " + command + " is ok");
+            } else {
+                System.err.println("--> " + command + " ERROR");
             }
 
             LISTENER.doneExecuting();

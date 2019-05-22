@@ -256,9 +256,8 @@ public class DroneController extends Listener implements Runnable, SettingsListe
                 }
             }
 
-            if (Math.abs(pitchValue) > controllerDegreesSensibility) {
+            if (Math.abs(pitchValue) > controllerDegreesSensibility / 2) {
                 int pitchRelative = (int) (Math.abs((int) pitchValue) - controllerDegreesSensibility);
-
                 if (pitchRelative != 0) {
                     String message = pitchValue > 0
                             ? Commands.back(pitchRelative)

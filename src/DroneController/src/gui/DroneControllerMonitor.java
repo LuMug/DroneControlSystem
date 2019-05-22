@@ -30,20 +30,20 @@ import settings.SettingsListener;
  * @author Luca Di Bello
  */
 public class DroneControllerMonitor extends javax.swing.JFrame implements CommandListener, CommandManagerListener, MouseListener {
-    
+
     private SettingsManager manager = new SettingsManager();
     private SettingsListener listener;
     private DroneController controller;
     private final Path recordFolderPath = Paths.get("records");
     private List<FlightRecord> flightRecords = new ArrayList<>();
     private CommandManager commandManager;
-    
+
     private final String BASE_STATUS = "Current status:";
     private final String RECORDING_DISABLED = BASE_STATUS + " DISABLED";
     private final String RECORDING_ENABLED = BASE_STATUS + " ENABLED";
     private Thread recordingExecutionThread;
     private final TimeoutThread timeoutThread = new TimeoutThread(2, TimeUnit.SECONDS);
-    
+
     private final int FORWARD = 0;
     private final int RIGHT = 1;
     private final int BACK = 2;
@@ -55,9 +55,9 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     public DroneControllerMonitor() {
         //Prepare GUI components
         initComponents();
-        
+
         try {
-            
+
             controller = new DroneController(this);
             this.setListener(controller);
         } catch (SocketException se) {
@@ -80,7 +80,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         //Insert in the selector all the recorded flights
         insertRecordsInSelector();
-        
+
     }
 
     /**
@@ -89,7 +89,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         final DroneControllerMonitor dcm = new DroneControllerMonitor();
 
         /* Set the Nimbus look and feel */
@@ -131,10 +131,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     public final void insertRecordsInSelector() {
         // read all files in 'records'
         this.jComboBoxSelectRecord.removeAllItems();
-        
+
         File folder = new File(recordFolderPath.toString());
         File[] files = folder.listFiles();
-        
+
         if (files != null && files.length != 0) {
             for (File file : files) {
                 System.out.println("Found recording: " + file.getAbsolutePath());
@@ -142,7 +142,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
                 //Create FlightRecord object
                 FlightRecord record = new FlightRecord(Paths.get(file.getAbsolutePath()));
                 flightRecords.add(record);
-                
+
                 this.jComboBoxSelectRecord.addItem(file.getName());
             }
         } else {
@@ -164,10 +164,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
 
         //Time [20 - 16]
         String time = filename.substring(20, 26);
-        
+
         String formatted_date = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6, 8);
         String formatted_time = time.substring(0, 2) + ":" + time.substring(2, 4) + ":" + time.substring(4, 6);
-        
+
         return formatted_date + " " + formatted_time;
     }
 
@@ -178,7 +178,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
      */
     private void updateSettingsValues(SettingsManager manager) {
         Map<String, String> options = manager.getSettings();
-        
+
         this.degreesSensibilityValue.setText(options.get("degreesSensibility"));
         this.heightThreasholdValueTextBox.setText(options.get("heightThreshold"));
     }
@@ -213,7 +213,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         jButtonDroneLand = new javax.swing.JButton();
         flipJPanel = new javax.swing.JPanel();
         jButtonDroneFlip = new javax.swing.JButton();
-        jButtonBattery = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jComboBoxFlip = new javax.swing.JComboBox<>();
         jPanelRecording = new javax.swing.JPanel();
@@ -389,14 +388,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         });
         flipJPanel.add(jButtonDroneFlip);
 
-        jButtonBattery.setText("Battery");
-        jButtonBattery.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBatteryActionPerformed(evt);
-            }
-        });
-        flipJPanel.add(jButtonBattery);
-
         jPanelExtraCommands.add(flipJPanel);
 
         jPanel4.setLayout(new java.awt.GridLayout(2, 0));
@@ -565,13 +556,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void jButtonApplySettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApplySettingsActionPerformed
         int userAnswer = JOptionPane.showConfirmDialog(null,
                 "Do you wanna apply this settings?", "DCS Controller - Settings", JOptionPane.YES_NO_OPTION);
-        
+
         if (userAnswer == JOptionPane.YES_OPTION) {
             manager.setSetting("degreesSensibility", this.degreesSensibilityValue.getText());
             manager.setSetting("heightThreshold", this.heightThreasholdValueTextBox.getText());
-            
+
             System.out.println("[Success] Settings applied successfully");
-            
+
             notifyChangeSettings();
         } else if (userAnswer == JOptionPane.NO_OPTION) {
             this.updateSettingsValues(manager);
@@ -593,7 +584,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         //Send flip commands
         int chosenFlipOption = jComboBoxFlip.getSelectedIndex();
         String command = "";
-        
+
         switch (chosenFlipOption) {
             case FORWARD:
                 command = Commands.flip(FlipCommand.FORWARD);
@@ -610,7 +601,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             default:
                 break;
         }
-        
+
         timeoutThread.execute(new SendTask(commandManager, command));
     }//GEN-LAST:event_jButtonDroneFlipActionPerformed
 
@@ -668,12 +659,12 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private void jComboBoxSelectRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSelectRecordActionPerformed
         //Read filename and parse
         String filename = (String) jComboBoxSelectRecord.getSelectedItem();
-        
+
         if (filename != null && filename.length() == 32) {
             jTextFieldRecordedOn.setText(getDateFromRecordFilename(filename));
-            
+
             FlightRecord record = flightRecords.get(jComboBoxSelectRecord.getSelectedIndex());
-            
+
             try {
                 FlightBuffer commands = record.getFlightCommands();
                 jTextFieldTotalCommands.setText("" + commands.length());
@@ -681,7 +672,7 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             } catch (IOException ex) {
                 jTextFieldTotalCommands.setText("Unknown");
                 jTextFieldEstimatedExecutionTime.setText("Unknown");
-                
+
                 System.err.println("Error: " + ex.getMessage());
             }
         }
@@ -691,11 +682,11 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         //Cut out the leapmotion controller
         System.err.println("[Info] Trying to disable the leapmotion...");
         controller.DisableLeapMotionController();
-        
+
         System.out.println("[Recorder] Setting recording status");
         jLabelRecordingStatusMessage.setText(this.RECORDING_ENABLED);
         jLabelRecordSelectorMessage.repaint();
-        
+
         try {
             //Get the commands of the selected flight
             FlightBuffer commands = flightRecords.get(jComboBoxSelectRecord.getSelectedIndex()).getFlightCommands();
@@ -719,10 +710,10 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
         } catch (IOException ex) {
             System.err.println("[Info] Error while getting the recording commands. Stop pre-configured flight and re-enable the leapmotion controller.");
         }
-        
+
         jLabelRecordingStatusMessage.setText(RECORDING_DISABLED);
     }//GEN-LAST:event_jButtonStartSelectedFlightActionPerformed
-    
+
 
     private void jButtonStopSelectedFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStopSelectedFlightActionPerformed
         //Cut out the leapmotion controller
@@ -731,13 +722,13 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
                 //Interrupt the code execution in recordingExecutionThread
                 System.err.println("[Info] Interrupting recording execution...");
                 recordingExecutionThread.interrupt();
-                
+
                 System.err.println("[Info] Trying to re-enable the leapmotion...");
                 controller.EnableLeapMotionController();
-                
+
                 jLabelRecordingStatusMessage.setText(this.RECORDING_DISABLED);
                 jLabelRecordingStatusMessage.repaint();
-                
+
                 JOptionPane.showMessageDialog(this,
                         "LeapMotion controller enabled successfully.",
                         "Information",
@@ -758,10 +749,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
             );
         }
     }//GEN-LAST:event_jButtonStopSelectedFlightActionPerformed
-
-    private void jButtonBatteryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBatteryActionPerformed
-        commandManager.sendCommand(Commands.getBattery());
-    }//GEN-LAST:event_jButtonBatteryActionPerformed
     // </editor-fold>
 
     // <editor-fold desc="Custom events" defaultstate="collapsed">
@@ -769,45 +756,45 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     public void messageReceived(String message) {
         logTextArea.append("Recieved: " + message);
     }
-    
+
     @Override
     public void controllerMessage(String message) {
         logTextArea.append("Controller message: " + message);
     }
-    
+
     @Override
     public void commandSent(String command) {
         logTextArea.append("Sent: " + command);
     }
-    
+
     @Override
     public void doneExecuting() {
         logTextArea.append("Command manager has sent the command ");
     }
-    
+
     @Override
     public void droneResponse(String response) {
         logTextArea.append("Drone response: " + response);
     }
-    
+
     @Override
     public void mouseClicked(MouseEvent e) {
         logTextArea.requestFocus();
     }
-    
+
     @Override
     public void mousePressed(MouseEvent e) {
     }
-    
+
     @Override
     public void mouseReleased(MouseEvent e) {
     }
-    
+
     @Override
     public void mouseEntered(MouseEvent e) {
         logTextArea.requestFocus();
     }
-    
+
     @Override
     public void mouseExited(MouseEvent e) {
     }
@@ -836,7 +823,6 @@ public class DroneControllerMonitor extends javax.swing.JFrame implements Comman
     private javax.swing.JLabel heightThresholdLabel;
     private javax.swing.JButton jButtonAbortFlight;
     private javax.swing.JButton jButtonApplySettings;
-    private javax.swing.JButton jButtonBattery;
     private javax.swing.JButton jButtonDroneBack;
     private javax.swing.JButton jButtonDroneFlip;
     private javax.swing.JButton jButtonDroneForward;
