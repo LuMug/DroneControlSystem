@@ -197,6 +197,8 @@ risolvere conflitti.
 
 - SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere i vari movimenti delle mani dal sensore LeapMotion.
 
+- JFreeChart 1.5.0: Libreria sviluppata in Java per la creazione di grafici quali diagrammi cartesiani, diagrammi a barre, ecc...
+
 - GanttProject 2.8.9: Software per creare una progettazione delle tempistiche per il progetto.
 
 ### 1.7.2 Hardware
@@ -809,6 +811,9 @@ Attraverso questo progetto ho potuto consolidare e mettere in pratica quanto app
 Inoltre ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni. 
 
 ### 6.2.4 Andrea
+
+Con questo progetto ho imparando a fare dei grafici in Java attraverso la libreria JFreeChart.
+
 # DA COMPLETARE
 
 ## 7 Bibliografia
