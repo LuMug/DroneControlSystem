@@ -172,7 +172,6 @@
   |**002**      | Traduzione comandi ed esecuzione modificando gli attributi di posizionamento |
   |**003**      | Lettura degli attributi di posizionamento e modifica dei grafici |
 
-
 ### 1.6 Pianificazione
 
 Questa è la pianificazione e struttura che abbiamo cercato di rispettare per
@@ -244,14 +243,14 @@ Sul lato sinistro si può vedere il sensore ed il controller che fanno da client
 
 ##### Interfaccia della posizione del drone
 
-Per la visualizzazione della posizione del drone nel simulatore é stato scelto un diagramma cartesiano in cui verra mostrato lo spostamento del drone su 2 assi.
-Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una con visuale di profilo (Assi X e Y)
+Per la visualizzazione della posizione del drone nel simulatore é stato scelto un diagramma cartesiano in cui verrà mostrato lo spostamento del drone su 2 assi.
+Sono state create 2 interfacce, una con la visuale dall'alto (Assi X e Z) e una con visuale di profilo (Assi X e Y).
 
 ![Interfaccia posizione](../media/mockup/MockPosizioneDallAlto.png)
 
 ##### Interfaccia della rotazione del drone
 
-Per la visualizzazione della rotazione del drone sui tre assi nel simulatore é stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
+Per la visualizzazione della rotazione del drone sui tre assi nel simulatore è stato scelto un diagramma a barre sulla quale mostrare i dati di beccheggio, imbardata e rollio.
 
 ![alt Interfaccia rotazione](../media/mockup/MockRotazioneAssi.png)
 
@@ -300,7 +299,7 @@ visualizzare tutte le impostazioni ed il loro relativo valore. I dati potranno e
 
 ### 2.4 Design procedurale
 
-Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone DJI Tello oppure a DroneSimulator.
+Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà i dati vengono inviati via socket UDP al drone DJI Tello oppure a DroneSimulator:
 
 ![Diagramma di flusso](../media/img/DiagrammaFlusso.png)
 
@@ -431,13 +430,13 @@ Tramite il metodo ```updateSettings()``` si possono ricaricare tutti i valori de
 
 #### 3.1.3 DroneController
 
-Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe ```FrameHelper```, che contiene i metodi utili per ricavare tutte le informazioni dall'oggetto ```Frame``` letto dal LeapMotion, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone utilizzando la classe ```Commands```. Una volta tradotti i valori vengono mandati al drone, grazie alla classe ```CommandManager```,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
+Il DroneController è la classe principale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe ```FrameHelper```, che contiene i metodi utili per ricavare tutte le informazioni dall'oggetto ```Frame``` letto dal LeapMotion, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone utilizzando la classe ```Commands```. Una volta tradotti i valori vengono mandati al drone, grazie alla classe ```CommandManager```,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare comandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
 
 La parte principale della classe sono i seguenti due metodi:
 
 #### CheckHeightControl
 
-Si occupa di leggere il valore Y della mano sinistra rispetto al punto d'origine (Il sensore LeapMotion). Per leggere i dati da interpretare si usa la classe *FrameHelper* che contine tutte le informationi catturate dal LeapMOtion nel istante corrente e di quello precedente.
+Si occupa di leggere il valore Y della mano sinistra rispetto al punto d'origine (Il sensore LeapMotion). Per leggere i dati da interpretare si usa la classe *FrameHelper* che contiene tutte le informationi catturate dal LeapMotion nel istante corrente e di quello precedente.
 Se il valore Y (l'altezza della mano) è superiore al minimo definito in un file di config, allora il commando viene formattato usando la classe *Commands* e viene aggiunto all'array commands. Alla fine del metodo viene usato il metodo *sendCommands* della classe *CommandsManager* per mandare al drone il commando. Per leggere il valore della soglia minima dell'altezza dal file di config si usa la classe *SettingsManager* nel costruttore della classe *DroneController*.
 In questo metodo oltre a interpretare l'altezza della mano sinistra si valuta anche l'inclinazione del rollio della mano per il controllo dell'imbardata del drone.
 
@@ -494,7 +493,7 @@ private void checkHeightControl() {
 ##### checkMovementControl
 
 Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*.
-*controllerDegreesSensibility* è la soglia minima dell'incl.inazione della mano definita nel file di config e letta usando la classe *SettingsManager*
+*controllerDegreesSensibility* è la soglia minima dell'inclinazione della mano definita nel file di config e letta usando la classe *SettingsManager*
 
 ```java
 /**
@@ -588,7 +587,7 @@ public float getRoll(Hand hand) {
 
 ### 3.1.2 DroneControllerMonitor
 
-Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo.
+Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare comandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo.
 
 #### Log tab
 
@@ -596,7 +595,7 @@ La tab di *Log* contiene una *JTextArea* sulla quale vengono mostrati i comandi 
 
 #### Fast Commands tab
 
-La *Fast Commands* tab contiene i commandi che si possono inviare singolarmente, i commandi disponibili:
+La *Fast Commands* tab contiene i comandi che si possono inviare singolarmente, i comandi disponibili:
 
 - up
 - down
@@ -613,7 +612,7 @@ Per il comando flip si può impostare in quale direzione.
 
 #### Recording tab
 
-La *Recording* tab contiene due bottoni che abilitano e disabilitano la registrazione dei comandi eseguitid al drone, permette l'esecuzione dei percorsi già registrati e si può fermare l'esecuzione del percorso già salvato. Si può selezionare il volo da eseguire tramite un dropdown menu che carica automaticamente tutti i voli salvati.
+La *Recording* tab contiene due bottoni che abilitano e disabilitano la registrazione dei comandi eseguiti dal drone, permette l'esecuzione dei percorsi già registrati e si può fermare l'esecuzione del percorso già salvato. Si può selezionare il volo da eseguire tramite un dropdown menu che carica automaticamente tutti i voli salvati.
 Tutti i voli vengono salvati nella cartella "records".
 
 #### Settings tab
@@ -622,7 +621,7 @@ La *Settings* tab contiene i campi che si trovano nel file di config, tramite qu
 
 ### 3.1.3 CommandManager
 
-Command manager è la classe usata dal DroneController e da DroneControllerMonitor per l'invio dei comandi e per la ricezione delle rispose dal drone.
+CommandManager è la classe usata dal DroneController e da DroneControllerMonitor per l'invio dei comandi e per la ricezione delle rispose dal drone.
 
 Il metodo principale è sendCommand:
 
@@ -670,7 +669,7 @@ Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l
 
 Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato.
 
-Il seguente pezzo di codice salva i commandi eseguiti con successo nel recordBuffer se la registrazione del volo è abilitata.
+Il seguente pezzo di codice salva i comandi eseguiti con successo nel recordBuffer se la registrazione del volo è abilitata.
 
 ```java
 if (isRecordingFlight) {
@@ -685,7 +684,7 @@ if (isRecordingFlight) {
 #### 3.2.1 TelloChartFrame
 
 Questa classe ha lo scopo di mostrare all'interno di un JFrame le informazioni sulla posizione del drone sui 3 assi con una vista di profilo e una vista dall'alto e la rotazione del drone sui 3 assi di rotazione (beccheggio, imbardata e rollio).
-La rappresentazione delle informazioni avvengono tramite grafici cartesiani per la posizione e tramite grafico a barre per la rotazione, i grafici sono stati costruiti grazie alla libreria gratuita JFreeChart.
+La rappresentazione delle informazioni avviene tramite grafici cartesiani per la posizione e tramite grafico a barre per la rotazione, i grafici sono stati costruiti grazie alla libreria gratuita JFreeChart.
 
 #### 3.2.2 Simulator
 
@@ -696,6 +695,7 @@ La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltr
 
 La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone modificando le tre variabili che rappresentano le tre assi X, Y e Z.
 Questo viene fatto ad esempio nel seguente modo:
+
 ```Java
 /**
 * All getter commands.
@@ -751,7 +751,7 @@ public int getterCommandExists(String command){
 #### 3.2.4 BatteryThread
 
 La classe BatteryThread monitora e gestisce la durata del volo del drone e la sua batteria.
-Quando la batteria del drone equivale allo 0%, questo comincierà automaticamente ad atterare attraverso il metodo emergency() della classe CommandReader.
+Quando la batteria del drone equivale allo 0%, questo comincerà automaticamente ad atterare attraverso il metodo emergency() della classe CommandReader.
 
 ```java
 public class BatteryThread extends Thread{
@@ -792,7 +792,7 @@ public class BatteryThread extends Thread{
 #### 3.2.5 PacketReceivingCheckerThread
 
 La classe PacketReceivingCkerThread controlla la frequenza di ricezione dei comandi della classe Simulator.
-Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincierà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader come descritto dalla SDK.
+Se per 15 secondi non viene ricevuto un qualsiasi pacchetto il drone comincerà automaticamente ad atterrare attraverso il metodo emergency() della classe CommandReader come descritto dalla SDK.
 
 ```java
 public class PacketReceivingCheckerThread extends Thread{
@@ -839,15 +839,13 @@ public class PacketReceivingCheckerThread extends Thread{
 |**Prerequisiti**| Aver scaricato la sdk e impostato il percorso giusto del sdk nelle impostazioni del progetto. |
 |**Procedura**     | Bisogna creare una classe che estende *com.leapmotion.leap.Listener* così da poter leggere i frame letti dal sensore. Una volta letti i dati vengono mandati al drone /simulatore grazie ad un DatagramSocket |
 
-
 |Test Case      | TC-002                               |
 |---------------|--------------------------------------|
 |**Nome**       | Movimento del drone attraverso la ricezione di comandi |
 |**Riferimento**|REQ-002                             |
 |**Descrizione**| Controllare che la formattazione dei comandi è fatta in un modo giusto e che il drone riconosce i comandi |
-|**Prerequisiti**| Collegare il pc al wifi del drone |
+|**Prerequisiti**| Collegare il pc alla rete WiFi del drone |
 |**Procedura**     | Mandare un commando letto dal leapmotion formattato tramite la classe *Commands* in modo da spostare il drone in qualsiasi direzione. Mandare il comando tramite il DatagramSocket all'indirizzo del drone (definito nella SDK) e sulla porta giusta (definita nella SDK). Aspettare una risposta da parte del drone. |
-
 
 |Test Case       | TC-003                               |
 |----------------|--------------------------------------|
@@ -861,9 +859,9 @@ public class PacketReceivingCheckerThread extends Thread{
 |----------------|--------------------------------------|
 |**Nome**        | Registrazione sequenza comandi del volo         |
 |**Riferimento** | REQ-004                              |
-|**Descrizione** | Avere la possibilità di registrare un percorso usando le mani e leapmotion e poi salvare i commandi eseguiti su un file, usando quel file si può rifare il percorso  |
+|**Descrizione** | Avere la possibilità di registrare un percorso usando le mani e leapmotion e poi salvare i comandi eseguiti su un file, usando quel file si può rifare il percorso  |
 |**Prerequisiti**| Collegare il pc al wifi del drone e iniziare il test mentre il drone è in volo  |
-|**Procedura**   | Cambaire la visualizzazione della gui sul tab *recording* dove schiacciando il bottone *"start recording"* inizia la registrazione dei commandi eseguiti e schiacciano il bottone *"stop recording"* si ferma la registrazione. Scegliendo un file e cliccando su *Start flight* il programma inizia a eseguire un commando alla volta dal file. Si può anche fermare l'esecuzione del file |
+|**Procedura**   | Cambiare la visualizzazione della gui sul tab *recording* dove schiacciando il bottone *"start recording"* inizia la registrazione dei comandi eseguiti e schiacciano il bottone *"stop recording"* si ferma la registrazione. Scegliendo un file e cliccando su *Start flight* il programma inizia a eseguire un commando alla volta dal file. Si può anche fermare l'esecuzione del file |
 
 |Test Case       | TC-005                               |
 |----------------|--------------------------------------|
@@ -871,7 +869,7 @@ public class PacketReceivingCheckerThread extends Thread{
 |**Riferimento** | REQ-005                             |
 |**Descrizione** | La visualizzazione dello stato del drone (livello batteria, altezza drone, velocità drone,...) su un sito web come. |
 |**Prerequisiti**| Collegare il pc al wifi del drone |
-|**Procedura**   | Non siamo riusciti a sviluppare questa parte del programma per questioni di tempistiche e complesità del lavoro. |
+|**Procedura**   | Non siamo riusciti a sviluppare questa parte del programma per questioni di tempistiche e complessità del lavoro. |
 
 |Test Case       | TC-006                               |
 |----------------|--------------------------------------|
@@ -879,25 +877,27 @@ public class PacketReceivingCheckerThread extends Thread{
 |**Riferimento** | REQ-006                             |
 |**Descrizione** | Implementare in una classe tutti i comandi presenti nella SDK del drone e metodi utili per la loro formattazione. |
 |**Prerequisiti**| Leggere attentamente la SDK |
-|**Procedura**   | Questo requisito è stato svolto da Luca Di Bello nella classe Commands.java |
+|**Procedura**   | Questo requisito è stato svolto da Luca Di Bello nella classe Commands |
 
 |Test Case       | TC-007                               |
 |----------------|--------------------------------------|
 |**Nome**        | Simulazione grafica del drone attraverso 4 Frame |
 |**Riferimento** | REQ-007                             |
-|**Descrizione** | Simulazione  |
+|**Descrizione** | Simulazione |
 |**Prerequisiti**| Nessuno |
-|**Procedura**   | Far partire il DroneSimulator e il DroneController, mandare i commandi dal DroneController e guardare i cambiamenti dalla parte del drone simulator |
-
+|**Procedura**   | Far partire il DroneSimulator e il DroneController, mandare i comandi dal DroneController e guardare i cambiamenti dalla parte del drone simulator |
 
 ### 4.2 Risultati test
 
-|Test      | Risultato test                               |
-|---------------|--------------------------------------|
-|TC-001      | Passato ✔                            |
-|TC-003      | Non passato ❌                               |
-|ECCETERA      | ECCETERA                               |
-
+|Test        | Risultato test                               |
+|------------|--------------------------------------------|
+|TC-001      | Passato ✔                                  |
+|TC-002      | Passato ✔                                  |
+|TC-003      | Non passato ❌                             |
+|TC-004      | Passato ✔                                  |
+|TC-005      | Non passato ❌                             |
+|TC-006      | Passato ✔                                  |
+|TC-007      | Passato ✔                                  |
 
 ### 4.3 Mancanze/limitazioni conosciute
 
@@ -933,18 +933,16 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 
 ### 6.2.2 Fadil
 
-Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della communicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
+Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della comunicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
 
 ### 6.2.3 Jari
 
 Attraverso questo progetto ho potuto consolidare e mettere in pratica quanto appreso sui socket, i loro vantaggi e svantaggi.
-Inoltre ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni.
+Inoltre, ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni.
 
 ### 6.2.4 Andrea
 
 Con questo progetto ho imparando a fare dei grafici in Java attraverso la libreria JFreeChart.
-
-# DA COMPLETARE
 
 ## 7 Bibliografia
 
