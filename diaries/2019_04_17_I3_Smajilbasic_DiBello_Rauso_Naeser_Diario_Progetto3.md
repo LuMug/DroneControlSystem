@@ -12,7 +12,7 @@ Fadil:
 Avendo ricevuto il drone ho iniziato a lavorare sul fine-tuning dei commandi per una esperienza migliore durante l'uso del LeapMotion e ho fatto vari test per verificare il giusto funzionamento del drone.
 
 Luca:
-
+Ho continuato a fare la GUI del controller del drone utile per poterlo controllare senza l'utilizzo del LeapMotion.
 
 Andrea:
 Ho creato il gantt consuntivo del progetto e ho aggiornato la javadoc della

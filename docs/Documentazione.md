@@ -340,9 +340,97 @@ Questa classe ha un metodo utilizzato per la creazione dei file di recording. Il
 
 Il metodo ```createBase()``` invece è utilizzato per creare automaticamente la cartella di base dove alloggeranno i file di registrazione.
 
-#### 3.1.2 DroneController
+#### 3.1.2 Setting
 
-Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe *FrameHelper*, che contiene i metodi utili per ricavare tutte le informazioni dal *Frame* letto dal *LeapMotion*, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone. Una volta tradotti i valori vengono mandati al drone, grazie alla classe *CommandManager*,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
+Questo package contiene tutte le classi che hanno a che fare con le impostazioni:
+
+- FlipCommands
+- SettingsManager
+- ControllerSettings
+
+#### FlipCommands
+
+Questa classe non è altro che un semplice enum di tipo stringa utilizzato per inviare i comandi di flip. FlipCommands infatti può avere soltanto 4 valori:
+
+- LEFT = "l"
+- RIGHT = "r"
+- FORWARD = "f"
+- BACK = "b"
+
+Questa classe è un aggregato della classe ```Commands```, infatti viene utilizzato per formattare il comando di flip:
+
+```java
+public static String flip(FlipCommand flip)
+```
+
+#### SettingsManager
+
+Questa è la classe più importante del package, questo perchè è la classe utilizzata per la gestione del file di config. Essa implementa dei metodi per la lettura e la modifica delle impostazioni scritte nel file di config. Tramite molteplici costruttori è possibile impostare la path del file di config, il carattere che separa il nome dell'impostazione ed il valore dell'impostazione (di default '=', esempio: ```nome[divisore]valore```) ed il carattere che identifica una riga commentata (di default '='):
+
+```java
+/*
+Costruttore che imposta path del file, carattere di divisione
+e carattere per riga commentata
+*/
+
+public SettingsManager(Path filePath, char settingDelimiter, char commentCharacter) {
+    this.filePath = filePath;
+    setSettingDelimiter(settingDelimiter);
+    setCommentCharacter(commentCharacter);
+}
+```
+
+Tramite il metodo ```getSettings()``` si può ricavare un oggetto di tipo *HashMap<String, String>*. Questo oggetto viene trattato come un vero e proprio dizionario, quindi permette di poter ricercare il valore di un oggetto nel "array" tramite una stringa e non un indice (esempio: ```impostazione['sensibilità']```).
+
+Invece tramite il metodo ```setSetting(nome, valore)``` si può impostare un valore passato come parametro ad una impostazione all'interno del file di config. Questo è il codice del metodo:
+
+```java
+/**
+ * This method allows you to set/modify a value of a specific setting just using
+ * it's name.
+ * 
+ * @param settingName Name of the setting.
+ * @param value Value which will be set as setting value.
+ * @throws IllegalArgumentException throwed when a
+ * setting is without value or non-existent 
+ */
+public void setSetting(String settingName, String value) throws IllegalArgumentException {
+    //Legge tutte le linee del file
+    try {
+        List<String> lines = Files.readAllLines(filePath);
+
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.length() > 0) {
+                //Opera solo sulle linee non commentate
+                if (line.charAt(0) != '#') {
+                    String scrapedSetting = line.split("" + getSettingDelimiter())[0];
+                    if (scrapedSetting.equals(settingName)) {
+                        //Ricostruisce la stringa di impostazione
+                        String setting = scrapedSetting + getSettingDelimiter() + value;
+                        lines.set(i, setting);
+                        break;
+                    }
+                }
+            }
+        }
+
+        //Scrive le modifiche fatta alla lista sul file di config
+        Files.write(filePath, lines, Charset.forName("UTF-8"));
+    } catch (IOException ex) {
+        System.err.println("IOException: " + ex.getMessage());
+    }
+}
+```
+
+### ControllerSettings
+
+Questa classe invece è utilizzata per caricare le impostazione dal file di config in degli attributi, questo per semplificare il loro utilizzo nelle altre classi.
+Tramite il metodo ```updateSettings()``` si possono ricaricare tutti i valori degli attributi rileggendoli dal file di config. Questa funzione è utilizzata dalla GUI per modificare in tempo reale le impostazioni di volo.
+
+#### 3.1.3 DroneController
+
+Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe ```FrameHelper```, che contiene i metodi utili per ricavare tutte le informazioni dall'oggetto ```Frame``` letto dal LeapMotion, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone utilizzando la classe ```Commands```. Una volta tradotti i valori vengono mandati al drone, grazie alla classe ```CommandManager```,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
 
 La parte principale della classe sono i seguenti due metodi:
 
@@ -404,7 +492,7 @@ private void checkHeightControl() {
 
 ##### checkMovementControl
 
-Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*. 
+Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*.
 *controllerDegreesSensibility* è la soglia minima dell'incl.inazione della mano definita nel file di config e letta usando la classe *SettingsManager*
 
 ```java
@@ -467,10 +555,12 @@ Soluzione trovata su due siti:
 - <https://math.stackexchange.com/questions/1201337/finding-the-angle-between-two-points>
 
 Codice:
-`Math.toDegrees(Math.atan2(Y1 - Y2, X1 - X2));`
+
+```java
+Math.toDegrees(Math.atan2(Y1 - Y2, X1 - X2));`
+```
 
 ---
-
 
 ```java
 /**
@@ -494,7 +584,7 @@ Codice:
 
 ### 3.1.2 DroneControllerMonitor
 
-Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo. 
+Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo.
 
 #### Log tab
 
@@ -580,11 +670,12 @@ public void sendCommand(String command) {
     }
 }
 ```
+
 Questo metodo crea un nuovo DatagramPacket usando il metodo `createPacket(command)` che non fa altro che creare il DatagramPacket usando con la porta definita nella SDK del drone che è *8889*.
 
 Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta. La risposta viene interpretata in modi diversi a dipendenza se il comando contiene il carattere ?, significa che è una richiesta sullo stato del drone, oppure se è un commando normale, commando di movimento.
 
-Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato. 
+Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato.
 
 Il seguente pezzo di codice salva i commandi eseguiti con successo nel recordBuffer se la registrazione del volo è abilitata.
 
@@ -593,7 +684,6 @@ if (isRecordingFlight) {
     recordBuffer.addCommand(command);
 }
 ```
-
 
 ### 3.1.4 CommandManager
 

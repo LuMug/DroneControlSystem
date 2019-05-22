@@ -12,7 +12,7 @@ Ho implementato il controllo completo del drone usando le estremità della mano 
 Ho fatto un paio di test insieme a Jari per controllare il giusto funzionamento della classe DroneController avendo implementato questi nuovi metodi.
 
 Luca:
--
+Ho finito la classe che gestisce le impostazioni sul file di config (SettingManager).
 
 Andrea:
 -

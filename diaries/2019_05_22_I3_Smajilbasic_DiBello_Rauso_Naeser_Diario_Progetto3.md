@@ -11,6 +11,7 @@ tutti i diari messi assieme e finito la documentazione.
 Fadil:
 
 Luca:
+Ho finito l'implementazione aggiungendo i capitoli dell'implementazione relativi al package "recording" ed il package "settings". Ho aiutato a finire il PowerPoint ed ho aiutato a preparare tutti i documenti per la consegna.
 
 Andrea:
 
