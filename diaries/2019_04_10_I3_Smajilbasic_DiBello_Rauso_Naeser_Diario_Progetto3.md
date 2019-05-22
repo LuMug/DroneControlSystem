@@ -14,7 +14,7 @@ Luca:
 -
 
 Andrea:
--
+Ho corretto l'UML del DroneSimulator aggiungendo classi, metodi e/o attributi mancanti.
 
 ## Problemi riscontrati e soluzioni adottate
 -

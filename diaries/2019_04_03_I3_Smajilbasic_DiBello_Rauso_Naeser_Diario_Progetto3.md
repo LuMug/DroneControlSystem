@@ -15,7 +15,7 @@ Luca:
 -
 
 Andrea:
--
+Ho lavorato sulla classe TelloChartFrame riducendo il codice necessario per mostrare i grafici di posizione e rotazione.
 
 ## Problemi riscontrati e soluzioni adottate
 Un calcolo preciso dei angoli della mano destra

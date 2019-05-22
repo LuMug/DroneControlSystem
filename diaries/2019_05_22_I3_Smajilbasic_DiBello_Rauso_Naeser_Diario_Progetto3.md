@@ -1,6 +1,6 @@
-# PROGETTO Drone Control System | Diario di lavoro - 15.05.2019
+# PROGETTO Drone Control System | Diario di lavoro - 22.05.2019
 ##### Luca Di Bello, Fadil Smajilbasic, Andrea Rauso, Jari Näser
-### Canobbio, 15.05.2019
+### Canobbio, 22.05.2019
 
 ## Lavori svolti
 
@@ -13,6 +13,8 @@ Fadil:
 Luca:
 
 Andrea:
+Ho finito la presentazione inserendo le parti mancanti quali l'implementazione e l'analisi 
+e le relative note.
 
 ## Problemi riscontrati e soluzioni adottate
 
