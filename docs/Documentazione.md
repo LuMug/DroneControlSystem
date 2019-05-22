@@ -1,8 +1,6 @@
 # Drone Control System
 
 #### Da Fare:
-- 1.5: Aggiungere eventuali requisiti
-- 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
 - 6.2: Da completare
 - Sommario: aggiornarlo
@@ -806,9 +804,11 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della communicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
 
 ### 6.2.3 Jari
-# DA COMPLETARE
 
-### 6.2.4 Rausone
+Attraverso questo progetto ho potuto consolidare e mettere in pratica quanto appreso sui socket, i loro vantaggi e svantaggi.
+Inoltre ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni. 
+
+### 6.2.4 Andrea
 # DA COMPLETARE
 
 ## 7 Bibliografia
