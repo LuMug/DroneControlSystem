@@ -4,8 +4,18 @@
 
 ## Lavori svolti
 
+Jari:
+Non presente
+
 Fadil:
 Io ho creato il diagramma delle classi sia per il DroneController che per il DroneSimulator. Ho apporato alcune modifiche alle classi DroneController e LeapMotionReader. Ho anche eliminato i file di configurazione del progetto dalla repo poichè avevamo dei problemi di compatibilità tra netbeans di windows, macos e ubuntu.
+
+Luca:
+Non presente
+
+Andrea:
+Non presente
+
 
 ##  Problemi riscontrati e soluzioni adottate
 

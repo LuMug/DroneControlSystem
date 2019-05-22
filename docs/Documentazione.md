@@ -1,8 +1,6 @@
 # Drone Control System
 
 #### Da Fare:
-- 1.5: Aggiungere eventuali requisiti
-- 3.1: Fare tutta la parte di implementazione Luca e Fadil
 - 4.1: Fare test-case
 - 6.2: Da completare
 - Sommario: aggiornarlo
@@ -199,6 +197,8 @@ risolvere conflitti.
 
 - SDK LeapMotion 2.3.1: Libreria che permette alle classi di Java di leggere i vari movimenti delle mani dal sensore LeapMotion.
 
+- JFreeChart 1.5.0: Libreria sviluppata in Java per la creazione di grafici quali diagrammi cartesiani, diagrammi a barre, ecc...
+
 - GanttProject 2.8.9: Software per creare una progettazione delle tempistiche per il progetto.
 
 ### 1.7.2 Hardware
@@ -306,15 +306,135 @@ Diagramma di flusso del progetto, a dipendenza della modalità che si sceglierà
 ## 3 Implementazione
 
 ---
+
 ### 3.1 Drone Controller
 
-### 3.1.1 DroneController
+#### 3.1.1 Recording
 
-Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe *FrameHelper*, che contiene i metodi utili per ricavare tutte le informazioni dal *Frame* letto dal *LeapMotion*, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone. Una volta tradotti i valori vengono mandati al drone, grazie alla classe *CommandManager*,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
+Per eseguire il recording dei voli vengono utilizzate le 3 classi presenti nel package "recorder":
+
+- FlightBuffer
+- FlightRecord
+- FlightRecorder
+
+#### FlightBuffer
+
+Questa classe descrive, come dice già il nome, un buffer che verrà utilizzato per la registrazione dei voli. Questa classe infatti presenta dei metodi utili per aggiungere, rimuovere e ricevere comandi dal buffer.
+Abbiamo deciso di utilizzare una linked list perchè il controller Leap Motion genera una grande mole di comandi. La Linked List oltre ad offrire una performance maggiore all'aggiunta e rimozione dei dati rispetto ad una Array List presenta dei metodi aggiuntivi molto utili come ```poll()``` e ```pick()```.
+
+#### FlightRecord
+
+Questa classe descrive invece il file di recording (file generato dopo il salvataggio di una registrazione). Esso presenta un attributo che tiene in memoria la path del file ed un metodo che permette di ricavare tutti i comandi di volo salvati nel file ritornando un buffer di tipo ```FlightBuffer``` con già salvati al suo interno tutti i comandi da eseguire.
+
+#### FlightRecorder
+
+Questa è la classe principale del package *recording*, essa infatti utilizza sia la classe ```FlightRecord``` e ```FlightBuffer``` per il salvataggio dei dati su file.
+
+Utilizzando il metodo sottostante si possono salvare tutti i comandi contenuti nel buffer in un file, la quale path è contenuta nell'oggetto FlightRecord:
+
+```java
+saveFlightPattern(FlightBuffer buffer, FlightRecord flightSaveLocation)
+```
+
+Questa classe ha un metodo utilizzato per la creazione dei file di recording. Il pattern utilizzato per il nome dei file di recording è il seguente: ```dcs-flight-yyyyMMdd-HHmmss.dcs```. Come si può vedere nel nome del file viene specificato il datetime (data e ora) di quando è avvenuta la registrazione.
+
+Il metodo ```createBase()``` invece è utilizzato per creare automaticamente la cartella di base dove alloggeranno i file di registrazione.
+
+#### 3.1.2 Setting
+
+Questo package contiene tutte le classi che hanno a che fare con le impostazioni:
+
+- FlipCommands
+- SettingsManager
+- ControllerSettings
+
+#### FlipCommands
+
+Questa classe non è altro che un semplice enum di tipo stringa utilizzato per inviare i comandi di flip. FlipCommands infatti può avere soltanto 4 valori:
+
+- LEFT = "l"
+- RIGHT = "r"
+- FORWARD = "f"
+- BACK = "b"
+
+Questa classe è un aggregato della classe ```Commands```, infatti viene utilizzato per formattare il comando di flip:
+
+```java
+public static String flip(FlipCommand flip)
+```
+
+#### SettingsManager
+
+Questa è la classe più importante del package, questo perchè è la classe utilizzata per la gestione del file di config. Essa implementa dei metodi per la lettura e la modifica delle impostazioni scritte nel file di config. Tramite molteplici costruttori è possibile impostare la path del file di config, il carattere che separa il nome dell'impostazione ed il valore dell'impostazione (di default '=', esempio: ```nome[divisore]valore```) ed il carattere che identifica una riga commentata (di default '='):
+
+```java
+/*
+Costruttore che imposta path del file, carattere di divisione
+e carattere per riga commentata
+*/
+
+public SettingsManager(Path filePath, char settingDelimiter, char commentCharacter) {
+    this.filePath = filePath;
+    setSettingDelimiter(settingDelimiter);
+    setCommentCharacter(commentCharacter);
+}
+```
+
+Tramite il metodo ```getSettings()``` si può ricavare un oggetto di tipo *HashMap<String, String>*. Questo oggetto viene trattato come un vero e proprio dizionario, quindi permette di poter ricercare il valore di un oggetto nel "array" tramite una stringa e non un indice (esempio: ```impostazione['sensibilità']```).
+
+Invece tramite il metodo ```setSetting(nome, valore)``` si può impostare un valore passato come parametro ad una impostazione all'interno del file di config. Questo è il codice del metodo:
+
+```java
+/**
+ * This method allows you to set/modify a value of a specific setting just using
+ * it's name.
+ * 
+ * @param settingName Name of the setting.
+ * @param value Value which will be set as setting value.
+ * @throws IllegalArgumentException throwed when a
+ * setting is without value or non-existent 
+ */
+public void setSetting(String settingName, String value) throws IllegalArgumentException {
+    //Legge tutte le linee del file
+    try {
+        List<String> lines = Files.readAllLines(filePath);
+
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.length() > 0) {
+                //Opera solo sulle linee non commentate
+                if (line.charAt(0) != '#') {
+                    String scrapedSetting = line.split("" + getSettingDelimiter())[0];
+                    if (scrapedSetting.equals(settingName)) {
+                        //Ricostruisce la stringa di impostazione
+                        String setting = scrapedSetting + getSettingDelimiter() + value;
+                        lines.set(i, setting);
+                        break;
+                    }
+                }
+            }
+        }
+
+        //Scrive le modifiche fatta alla lista sul file di config
+        Files.write(filePath, lines, Charset.forName("UTF-8"));
+    } catch (IOException ex) {
+        System.err.println("IOException: " + ex.getMessage());
+    }
+}
+```
+
+### ControllerSettings
+
+Questa classe invece è utilizzata per caricare le impostazione dal file di config in degli attributi, questo per semplificare il loro utilizzo nelle altre classi.
+Tramite il metodo ```updateSettings()``` si possono ricaricare tutti i valori degli attributi rileggendoli dal file di config. Questa funzione è utilizzata dalla GUI per modificare in tempo reale le impostazioni di volo.
+
+#### 3.1.3 DroneController
+
+Il DroneController è la classe pricipale del progetto, essa usa la libreria *LeapMotion.jar* fornita dai costruttori di LeapMotion per leggere la posizione della mano, questo comprende la posizione di ogni giunto della mano, la velocità, l'accelerazione e la posizione rispetto all'origine del punto centrale del palmo. Usando la classe ```FrameHelper```, che contiene i metodi utili per ricavare tutte le informazioni dall'oggetto ```Frame``` letto dal LeapMotion, si valutano tutti i valori della mano e vengono formattati secondo la SDK del drone utilizzando la classe ```Commands```. Una volta tradotti i valori vengono mandati al drone, grazie alla classe ```CommandManager```,  il programma aspetta che il drone invia una risposta. Il tempo che il drone ci mette a rispondere è il tempo durante quale il drone esegue il commando, perciò non si possono mandare commandi mentre un'altro è già in esecuzione. Questo ciclo viene ripetuto per tutta l'esecuzione del programma.
 
 La parte principale della classe sono i seguenti due metodi:
 
-##### CheckHeightControl
+#### CheckHeightControl
 
 Si occupa di leggere il valore Y della mano sinistra rispetto al punto d'origine (Il sensore LeapMotion). Per leggere i dati da interpretare si usa la classe *FrameHelper* che contine tutte le informationi catturate dal LeapMOtion nel istante corrente e di quello precedente.
 Se il valore Y (l'altezza della mano) è superiore al minimo definito in un file di config, allora il commando viene formattato usando la classe *Commands* e viene aggiunto all'array commands. Alla fine del metodo viene usato il metodo *sendCommands* della classe *CommandsManager* per mandare al drone il commando. Per leggere il valore della soglia minima dell'altezza dal file di config si usa la classe *SettingsManager* nel costruttore della classe *DroneController*.
@@ -353,12 +473,12 @@ private void checkHeightControl() {
             }
         }
 
-        if (Math.abs(lastY) > heightThreshold && lastY != 0.0 
-            && Math.abs(lastY) > 20 
+        if (Math.abs(lastY) > heightThreshold && lastY != 0.0
+            && Math.abs(lastY) > 20
             && Math.abs(lastY) < 500) {
 
             if (lastY != 0.0) {
-                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) : 
+                String message = lastY > 0 ? Commands.up((int) lastY - (int) heightThreshold) :
                 Commands.down(Math.abs((int) lastY + (int) heightThreshold));
                 commands[1] = message;
                 listener.commandSent(message + "\n");
@@ -372,7 +492,7 @@ private void checkHeightControl() {
 
 ##### checkMovementControl
 
-Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*. 
+Si occupa di leggere il rollio e imbardata della mano destra usando la stessa classe come il metodo CheckHeightControl. Il rollio della mano destra viene tradotta in spostamento trasversale del drone mentre il beccheggio della mano destra viene tradotto in spostamento saggittale del drone. Vengono usati i metodi *getPitch()* e *getRoll()* della classe *FrameHelper*.
 *controllerDegreesSensibility* è la soglia minima dell'incl.inazione della mano definita nel file di config e letta usando la classe *SettingsManager*
 
 ```java
@@ -426,43 +546,48 @@ private void checkMovementControl() {
 
 Questo metodo calcola l'angolo di rollio dell'oggetto mano passato come parametro. L'angolo è calcolato rispetto al piano trasversale del LeapMotion. Prima vengono estratti i Vettori delle dita agli estremi della mano e poi vengono svolti i calcoli usando la classe di java *Math*
 
---- 
+---
 Per il calcolo preciso dell angolo della mano.
 
 Soluzione trovata su due siti:
 
-- https://stackoverflow.com/questions/2676719/Calculating-the-angle-between-the-line-defined-by-two-points
-- https://math.stackexchange.com/questions/1201337/finding-the-angle-between-two-points
+- <https://stackoverflow.com/questions/2676719/Calculating-the-angle-between-the-line-defined-by-two-points>
+- <https://math.stackexchange.com/questions/1201337/finding-the-angle-between-two-points>
 
 Codice:
-`Math.toDegrees(Math.atan2(Y1 - Y2, X1 - X2));`
+
+```java
+Math.toDegrees(Math.atan2(Y1 - Y2, X1 - X2));`
+```
 
 ---
 
-
 ```java
 /**
-     * This method returns the roll angle of the hand
-     *
-     * @param hand the hand from which it needs to read the roll angle
-     * @return the roll angle in degrees
-     */
-    public float getRoll(Hand hand) {
-        try {
-            Vector lVector = hand.fingers().leftmost().tipPosition();
-            Vector rVector = hand.fingers().rightmost().tipPosition();
-            return (float) Math.toDegrees(Math.atan2(rVector.getY() - lVector.getY(),
-                                          rVector.getX() - lVector.getX()));
-
-        } catch (NullPointerException npe) {
-            return 0;
-        }
+* This method returns the roll angle of the hand
+*
+* @param hand the hand from which it needs to read the roll angle
+* @return the roll angle in degrees
+*/
+public float getRoll(Hand hand) {
+    try {
+        Vector lVector = hand.fingers().leftmost().tipPosition();
+        Vector rVector = hand.fingers().rightmost().tipPosition();
+        return (float) Math.toDegrees(
+            Math.atan2(
+                rVector.getY() - lVector.getY(),
+                rVector.getX() - lVector.getX()
+            )
+        );
+    } catch (NullPointerException npe) {
+        return 0;
     }
+}
 ```
 
 ### 3.1.2 DroneControllerMonitor
 
-Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo. 
+Drone controller monitor è la GUI del controller, essa contiene diverse view che servono all'utente per verificare i valori letti dal LeapMotion, per mandare commandi singoli al drone , per impostare nuove impostazioni nel file di config e per registrare e far riprodurre un volo.
 
 #### Log tab
 
@@ -471,6 +596,7 @@ La tab di *Log* contiene una *JTextArea* sulla quale vengono mostrati i comandi 
 #### Fast Commands tab
 
 La *Fast Commands* tab contiene i commandi che si possono inviare singolarmente, i commandi disponibili:
+
 - up
 - down
 - forward
@@ -486,7 +612,8 @@ Per il comando flip si può impostare in quale direzione.
 
 #### Recording tab
 
-La *Recording* tab contiene due bottoni che abilitano e disabiltiano la registrazione dei comandi eseguitid al drone, permette l'esecuzione dei percorsi già registrati e si può fermare l'esecuzione del percorso già salvato.
+La *Recording* tab contiene due bottoni che abilitano e disabilitano la registrazione dei comandi eseguitid al drone, permette l'esecuzione dei percorsi già registrati e si può fermare l'esecuzione del percorso già salvato. Si può selezionare il volo da eseguire tramite un dropdown menu che carica automaticamente tutti i voli salvati.
+Tutti i voli vengono salvati nella cartella "records".
 
 #### Settings tab
 
@@ -535,11 +662,12 @@ public void sendCommand(String command) {
     }
 }
 ```
+
 Questo metodo crea un nuovo DatagramPacket usando il metodo `createPacket(command)` che non fa altro che creare il DatagramPacket usando con la porta definita nella SDK del drone che è *8889*.
 
 Dopo aver mandato il pacchetto `commandSocket.send(packet);`, il metodo blocca l'esecuzione del programma finchè non riceve una risposta. 
 
-Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato. 
+Il drone non può percepire un overflow di comandi, visto che il drone risponde solo quando ha finito di eseguire un commando e durante questo tempo il programma è bloccato.
 
 Il seguente pezzo di codice salva i commandi eseguiti con successo nel recordBuffer se la registrazione del volo è abilitata.
 
@@ -548,7 +676,6 @@ if (isRecordingFlight) {
     recordBuffer.addCommand(command);
 }
 ```
-
 
 ### 3.1.4 CommandManager
 
@@ -567,6 +694,58 @@ La classe filtra, legge e controlla i comandi in entrata in modo da poter inoltr
 #### 3.2.3 CommandReader
 
 La classe CommmandReader riceve il metodo richiesto via socket per poi chiamare il rispettivo metodo per simulare nel miglior modo possibile il comportamento del drone modificando le tre variabili che rappresentano le tre assi X, Y e Z.
+Questo viene fatto ad esempio nel seguente modo:
+```Java
+/**
+* All getter commands.
+*/
+private final String[] GET_COMMANDS = {
+    "speed?",
+    "battery?",
+    "time?",
+    "height?",
+    "temp?",
+    "attitude?",
+    "baro?",
+    "acceleration?",
+    "tof?",
+    "wifi?"
+};
+
+...
+
+/**
+* Method that checks if the passed method exists and is a getter type.
+* @param command Method to check.
+* @return Respective value of get request.
+*/
+public int getterCommandExists(String command){
+    for(String s:GET_COMMANDS){
+        if(command.equals(s)){
+            switch(s){
+                case "speed?":
+                    return getSpeed();
+                case "battery?":
+                    return getBattery();
+                case "time?":
+                    return getTime();
+                case "height?":
+                    return getHeight();
+                case "temp?":
+                    return getTemperature();
+                case "baro?":
+                    return getBarometer();
+                case "tof?":
+                    return getTof();
+                case "wifi?":
+                    return getWifi();
+            }
+        }
+    }
+    return Integer.MIN_VALUE;
+}
+
+```
 
 #### 3.2.4 BatteryThread
 
@@ -756,9 +935,14 @@ Questo progetto mi ha aiutato molto a capire il funzionamento della comunicazion
 Lavorando su questo progetto ho imparato come lavorare e sfruttare al massimo le funzionalità a disposizione offerte dal LeapMotion, inoltre ho guadagnato esperienza nella gestione della communicazione tra un server sviluppato da me e un client di terze parti, in questo caso il drone DJI tello.
 
 ### 6.2.3 Jari
-# DA COMPLETARE
 
-### 6.2.4 Rausone
+Attraverso questo progetto ho potuto consolidare e mettere in pratica quanto appreso sui socket, i loro vantaggi e svantaggi.
+Inoltre ho imparato come fare dei grafici in java con JFreeChart e come fare un simulatore che può essere applicato in varie occasioni. 
+
+### 6.2.4 Andrea
+
+Con questo progetto ho imparando a fare dei grafici in Java attraverso la libreria JFreeChart.
+
 # DA COMPLETARE
 
 ## 7 Bibliografia

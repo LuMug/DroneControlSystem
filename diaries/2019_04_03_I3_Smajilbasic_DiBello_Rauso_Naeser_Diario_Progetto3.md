@@ -12,10 +12,10 @@ Ho implementato il controllo completo del drone usando le estremità della mano 
 Ho fatto un paio di test insieme a Jari per controllare il giusto funzionamento della classe DroneController avendo implementato questi nuovi metodi.
 
 Luca:
--
+Ho fatto delle piccole modifiche alla classe SettingManager ed ho implementato il pannello per gestire i config dalla GUI.
 
 Andrea:
--
+Ho lavorato sulla classe TelloChartFrame riducendo il codice necessario per mostrare i grafici di posizione e rotazione.
 
 ## Problemi riscontrati e soluzioni adottate
 Un calcolo preciso dei angoli della mano destra

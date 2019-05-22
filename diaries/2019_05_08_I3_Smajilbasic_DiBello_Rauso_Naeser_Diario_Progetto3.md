@@ -9,6 +9,7 @@ Ho continuato con lo sviluppo e correzione della documentazione.
 
 Fadil:
 Ho lavorato con luca sull'implementazione del flight recording e ho aggiunto il riconoscimento delle gesture per il controllo del yaw del drone.
+
 Luca:
 Ho continuato l'implementazione delle classi relative al recording dei 
 voli.

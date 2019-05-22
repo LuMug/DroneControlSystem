@@ -14,11 +14,10 @@ Jari:
 Ho continuato con lo sviluppo della classe CommandReader nella quale ho ristrutturato la struttura di vari metodi e ho continuato ad implementare le simulazioni dei vari metodi di movimento del drone.
 Inoltre ho anche creato la struttura delle variabili assieme ad Andrea per poter lavorare su di esse e per semplificare la simulazione disegnata del drone attraverso il loro utilizzo.
 
-Luca: 
--
+Luca:
+Aiutato fadil modificando la classe DroneController 
 
 ##  Problemi riscontrati e soluzioni adottate
-
 
 ##  Punto della situazione rispetto alla pianificazione
 Siamo al passo con il gantt preventivo.

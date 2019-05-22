@@ -11,13 +11,12 @@ Fadil:
 Ho aggiornato l'UML della parte del DroneController e ho fatto refactor del codice scritto sia da me che da luca.
 
 Luca:
--
+Problemi con le librerie di Leap Motion. Risolto con l'aiuto di Fadil.
 
 Andrea:
--
+Ho corretto l'UML del DroneSimulator aggiungendo classi, metodi e/o attributi mancanti.
 
 ## Problemi riscontrati e soluzioni adottate
--
 
 ## Punto della situazione rispetto alla pianificazione
 Siamo al passo con il gantt preventivo.
