@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Consuntivo" company="" webLink="http://" view-date="2019-02-09" view-index="0" gantt-divider-location="610" resource-divider-location="300" version="2.8.10" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="Consuntivo" company="" webLink="http://" view-date="2019-02-07" view-index="0" gantt-divider-location="641" resource-divider-location="300" version="2.8.10" locale="en_US">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd3" name="Name" width="326" order="0"/>
-        <field id="tpd4" name="Begin date" width="150" order="1"/>
-        <field id="tpd5" name="End date" width="132" order="2"/>
+    <view zooming-state="default:3" id="gantt-chart">
+        <field id="tpd3" name="Name" width="336" order="0"/>
+        <field id="tpd4" name="Begin date" width="160" order="1"/>
+        <field id="tpd5" name="End date" width="143" order="2"/>
         <option id="color.recent">
             <![CDATA[#ff3333 #0033cc #66ff00]]>
         </option>
@@ -64,9 +64,9 @@
                 <task id="47" name="Test Controller" color="#8cb6ce" meeting="false" start="2019-04-05" duration="9" complete="0" thirdDate="2019-03-01" thirdDate-constraint="0" expand="true"/>
             </task>
             <task id="10" name="Documentazione" color="#8cb6ce" meeting="false" start="2019-04-03" duration="13" complete="0" thirdDate="2019-01-09" thirdDate-constraint="0" expand="true">
-                <depend id="26" type="2" difference="0" hardness="Strong"/>
+                <depend id="26" type="2" difference="-1" hardness="Strong"/>
             </task>
-            <task id="26" name="Consegna Progetto" color="#8cb6ce" meeting="true" start="2019-05-24" duration="0" complete="0" thirdDate="2019-02-13" thirdDate-constraint="0" expand="true"/>
+            <task id="26" name="Consegna Progetto" color="#8cb6ce" meeting="true" start="2019-05-22" duration="0" complete="0" thirdDate="2019-02-13" thirdDate-constraint="0" priority="2" expand="true"/>
         </task>
     </tasks>
     <resources/>
