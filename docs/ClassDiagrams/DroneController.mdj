@@ -61,7 +61,7 @@
 											"top": 526,
 											"width": 551,
 											"height": 13,
-											"text": "Controller"
+											"text": "controller"
 										},
 										{
 											"_type": "LabelView",
@@ -178,7 +178,7 @@
 											"top": 592,
 											"width": 94.62451171875,
 											"height": 13,
-											"text": "(from Controller)"
+											"text": "(from controller)"
 										},
 										{
 											"_type": "LabelView",
@@ -4382,7 +4382,7 @@
 											"top": 600,
 											"width": 94.62451171875,
 											"height": 13,
-											"text": "(from Controller)"
+											"text": "(from controller)"
 										},
 										{
 											"_type": "LabelView",
@@ -4755,7 +4755,7 @@
 											"top": 142,
 											"width": 543,
 											"height": 13,
-											"text": "Gui"
+											"text": "gui"
 										},
 										{
 											"_type": "LabelView",
@@ -5148,7 +5148,7 @@
 											"top": -480,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Gui)"
+											"text": "(from gui)"
 										},
 										{
 											"_type": "LabelView",
@@ -5655,7 +5655,7 @@
 											"top": 16,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Gui)"
+											"text": "(from gui)"
 										},
 										{
 											"_type": "LabelView",
@@ -7338,7 +7338,7 @@
 									"left": 1944,
 									"top": 1278,
 									"width": 154.8916015625,
-									"height": 23
+									"height": 10
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -9091,7 +9091,7 @@
 											"top": 398,
 											"width": 463,
 											"height": 13,
-											"text": "Recorder"
+											"text": "recorder"
 										},
 										{
 											"_type": "LabelView",
@@ -15210,7 +15210,27 @@
 											"type": ""
 										}
 									]
-								},
+								}
+							]
+						}
+					]
+				},
+				{
+					"_type": "UMLPackage",
+					"_id": "AAAAAAFq3+G83uXYO74=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "recorder",
+					"ownedElements": [
+						{
+							"_type": "UMLClass",
+							"_id": "AAAAAAFq6POqTouHBKs=",
+							"_parent": {
+								"$ref": "AAAAAAFq3+G83uXYO74="
+							},
+							"name": "RecordBuffer",
+							"ownedElements": [
 								{
 									"_type": "UMLOperation",
 									"_id": "AAAAAAFq6Qpt3bQMubw=",
@@ -15373,11 +15393,21 @@
 											"_parent": {
 												"$ref": "AAAAAAFq6Qi9DqxjIAM="
 											},
-											"type": "String",
+											"type": "void",
 											"direction": "return"
 										}
 									]
-								},
+								}
+							]
+						},
+						{
+							"_type": "UMLClass",
+							"_id": "AAAAAAFq6Pgi7rAdlWo=",
+							"_parent": {
+								"$ref": "AAAAAAFq3+G83uXYO74="
+							},
+							"name": "FlightRecord",
+							"ownedElements": [
 								{
 									"_type": "UMLOperation",
 									"_id": "AAAAAAFq6Qjgpa1EX8M=",
@@ -15395,8 +15425,33 @@
 											"type": "void",
 											"direction": "return"
 										}
-									]
-								},
+									},
+									"end2": {
+										"_type": "UMLAssociationEnd",
+										"_id": "AAAAAAFq6Pt/B9EOKIk=",
+										"_parent": {
+											"$ref": "AAAAAAFq6Pt/BtEMA2s="
+										},
+										"reference": {
+											"$ref": "AAAAAAFq6POqTouHBKs="
+										},
+										"aggregation": "shared"
+									}
+								}
+							],
+							"attributes": [
+								{
+									"_type": "UMLAttribute",
+									"_id": "AAAAAAFq6PiczrH5Sf4=",
+									"_parent": {
+										"$ref": "AAAAAAFq6Pgi7rAdlWo="
+									},
+									"name": "fileRecordPath",
+									"visibility": "private",
+									"type": "Path"
+								}
+							],
+							"operations": [
 								{
 									"_type": "UMLOperation",
 									"_id": "AAAAAAFq6Qj3W64lJTI=",
@@ -15411,7 +15466,16 @@
 											"_parent": {
 												"$ref": "AAAAAAFq6Qj3W64lJTI="
 											},
-											"type": "int",
+											"name": "Path",
+											"type": ""
+										},
+										{
+											"_type": "UMLParameter",
+											"_id": "AAAAAAFq6PkdH7THmQw=",
+											"_parent": {
+												"$ref": "AAAAAAFq6PjpyrPn5WQ="
+											},
+											"type": "void",
 											"direction": "return"
 										}
 									]
@@ -15432,6 +15496,11 @@
 											},
 											"type": "boolean",
 											"direction": "return"
+										}
+									],
+									"raisedExceptions": [
+										{
+											"$ref": "AAAAAAFq6PoQJrdAFBg="
 										}
 									]
 								}
